@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 public class ScanSessionActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler   {
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView mScannerView;
-    String sessionId;
-
+    String scanContent;
+    int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,18 +73,21 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     @Override
     public void handleResult(Result result) {
         setContentView(R.layout.activity_main);
-        Pattern p = Pattern.compile("id=([A-z0-9-]*)");
-        String raw = result.getText();
-        Matcher m = p.matcher(raw);
-        m.find();
-        String id = m.group(1);
-        sessionId = id;
+        String txtScanedResult = result.getText();
+        if(scanQRType == 2){
+            Pattern p = Pattern.compile("id=([A-z0-9-]*)");
+            Matcher m = p.matcher(txtScanedResult);
+            m.find();
+            String id = m.group(1);
+            scanContent = id;
+        }
+
         showResult();
     }
 
     private  void showResult(){
         Intent intent = new Intent(getApplicationContext(), SessionInfoActivity.class);
-        intent.putExtra("xn_session", sessionId);
+        intent.putExtra("xn_session", scanContent);
         startActivity(intent);
     }
     private boolean checkPermission() {
