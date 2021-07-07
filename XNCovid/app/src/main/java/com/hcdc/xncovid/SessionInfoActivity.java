@@ -10,12 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.hcdc.xncovid.databinding.ActivitySessionInfoBinding;
 
 public class SessionInfoActivity extends AppCompatActivity {
     String xn_session;
