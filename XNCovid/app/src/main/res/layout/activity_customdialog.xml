@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/rectangle_2">
+    <!-- Xác nhận thoát khỏi phiên xét nghiệm -->
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="31dp"
+        android:paddingRight="31dp"
+        android:layout_marginTop="13dp"
+        android:text="Xác nhận thoát khỏi phiên xét nghiệm"
+        android:textAppearance="@style/black_24"
+        android:gravity="center_horizontal|top"
+        />
+    <!-- XN_Covid19_HCM_123 -->
+    <TextView
+        android:id="@+id/ten_phien"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:paddingLeft="31dp"
+        android:paddingRight="31dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/xn_covid19_"
+        android:textAppearance="@style/red_20"
+        android:gravity="center_horizontal|top"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- Điều này sẽ được thông báo đến trưởng nhóm Nguyễn Văn A ! -->
+        <TextView
+            android:id="@+id/content_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="21dp"
+            android:paddingTop="10dp"
+            android:text="Điều này sẽ được thông báo đến trưởng nhóm "
+            android:textAppearance="@style/black_18"
+            android:gravity="top"
+            />
+        <TextView
+            android:id="@+id/content_2"
+            android:layout_toRightOf="@+id/content_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Nguyễn Văn A "
+            android:textAppearance="@style/black_18"
+            android:gravity="top"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout >

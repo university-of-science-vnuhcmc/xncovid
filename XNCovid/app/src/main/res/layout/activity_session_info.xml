@@ -257,7 +257,7 @@
     </LinearLayout>
     <!-- Xác nhận ! -->
     <Button
-        android:id="@+id/x_c_nh_n_"
+        android:id="@+id/btnconfirm"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center_vertical|center_horizontal"

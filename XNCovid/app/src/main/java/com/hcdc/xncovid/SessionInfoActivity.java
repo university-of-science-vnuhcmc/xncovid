@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -23,6 +24,14 @@ public class SessionInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session_info);
         tenphien=(TextView) findViewById(R.id.xn_covid19_);
         tenphien.setText(xn_session);
+        final Button btnConfirm = findViewById(R.id.btnconfirm);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                intent.putExtra("xn_session", xn_session);
+                startActivity(intent);
+            }
+        });
     }
 
 }

@@ -30,6 +30,9 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scansession);
+        Intent intent=this.getIntent();
+        scanQRType = getIntent().getExtras().getInt("scan_qr_type");
+
         int apiVersion = android.os.Build.VERSION.SDK_INT;
         if (apiVersion >= android.os.Build.VERSION_CODES.M) {
             if (!checkPermission()) {
@@ -80,6 +83,8 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             m.find();
             String id = m.group(1);
             scanContent = id;
+        }else {
+            scanContent = txtScanedResult.trim();
         }
 
         showResult();
