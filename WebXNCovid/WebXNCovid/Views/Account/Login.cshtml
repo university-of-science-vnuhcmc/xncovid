@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Log in";
+}
+<meta name="google-signin-client_id" content="659370823302-i45mk7n3pb7acojr3tdj0u0i65svnnae.apps.googleusercontent.com">
+<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+</div>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script>
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var tokenSigninViewModel = {};
+        tokenSigninViewModel.Email = profile.getEmail();
+        tokenSigninViewModel.TokenID = googleUser.getAuthResponse().id_token;
+        console.log('onSignIn');
+        $.ajax({
+            url: '@Url.Action("TokenSignin","Account")',
+            data: JSON.stringify({ model: tokenSigninViewModel }),
+            contentType: 'application/json',
+            dataType: 'json',
+            type: 'POST',
+            success: function(data){
+                //call is successfully completed and we got result in data
+                window.location.replace('../../QRCodeGenerator/Index')
+            },
+            error: function (){
+                $.ajax({
+                    url: '@Url.Action("Login","Account")'
+                })
+            }
+        });
+    }
+</script>
