@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="province">
+        <item>Hồ Chí Minh</item>
+        <item>Hà Nội</item>
+        <item>Bình Dương</item>
+        <item>Đồng Nai</item>
+    </string-array>
+</resources>
