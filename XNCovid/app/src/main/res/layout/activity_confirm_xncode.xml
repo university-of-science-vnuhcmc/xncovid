@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConfirmXNCodeActivity"
+    android:background="#DCD6D8D6"
+    android:id="@+id/layout_staff_main"
+    android:paddingTop="10sp">
+    <!-- Tham gia phiên xét nghiệm -->
+    <TextView
+        android:id="@+id/txt_profress_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:text="Tạo nhóm xét nghiệm"
+        android:textAppearance="@style/black_28"
+        android:gravity="center_horizontal|top"
+        android:background="@drawable/rectangle_8"
+        />
+    <!-- Mã xét nghiệm -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="72dp"
+        android:text="Mã xét nghiệm"
+        android:textAppearance="@style/black_24"
+        android:gravity="top|center"
+        />
+    <!-- Covid19_ABC123 -->
+    <TextView
+        android:id="@+id/txt_xn_code"
+        android:layout_width="match_parent"
+        android:layout_height="22.11dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="35.51dp"
+        android:layout_marginRight="35.51dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="112.29dp"
+        android:text="Covid19_ABC123"
+        android:textAppearance="@style/red_18"
+        android:gravity="center_horizontal|top"
+        android:background="@drawable/rectangle_8"
+        />
+    <!-- image 12 -->
+    <View
+        android:id="@+id/image_12"
+        android:layout_width="match_parent"
+        android:layout_height="196.88dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/image_barcode"
+        />
+
+    <!-- Xác nhận ! -->
+    <Button
+        android:id="@+id/btnxncode_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/x_c_nh_n_"
+        android:textAppearance="@style/white_24"
+        android:background="@drawable/ractangle_1"
+        android:layout_marginLeft="62dp"
+        android:layout_marginRight="62dp"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20sp"
+        />
+    <!-- ! Mỗi nhóm sẽ có tối đa 10 người -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="! Mỗi nhóm sẽ có tối đa 10 người"
+        android:textAppearance="@style/red_16"
+        android:gravity="bottom|center_horizontal"
+        android:layout_above = "@+id/btnxncode_confirm"
+        android:layout_marginBottom="10dp"
+        />
+</RelativeLayout>

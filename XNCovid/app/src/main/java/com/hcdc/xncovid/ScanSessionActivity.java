@@ -30,8 +30,11 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scansession);
-        Intent intent=this.getIntent();
-        scanQRType = getIntent().getExtras().getInt("scan_qr_type");
+
+        if( getIntent().getExtras() != null){
+            scanQRType = getIntent().getExtras().getInt("scan_qr_type");
+
+        }
 
         int apiVersion = android.os.Build.VERSION.SDK_INT;
         if (apiVersion >= android.os.Build.VERSION_CODES.M) {
@@ -75,7 +78,6 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
     @Override
     public void handleResult(Result result) {
-        setContentView(R.layout.activity_main);
         String txtScanedResult = result.getText();
         if(scanQRType == 2){
             Pattern p = Pattern.compile("id=([A-z0-9-]*)");
@@ -91,7 +93,20 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     }
 
     private  void showResult(){
-        Intent intent = new Intent(getApplicationContext(), SessionInfoActivity.class);
+        Class tmpclass = null;
+        switch (scanQRType){
+            case 0:
+                tmpclass = SessionInfoActivity.class;
+                break;
+            case 1:
+                tmpclass = ConfirmXNCodeActivity.class;
+                break;
+
+            case 2:
+                tmpclass = ConfirmXNCodeActivity.class;
+                break;
+        }
+        Intent intent = new Intent(getApplicationContext(), tmpclass);
         intent.putExtra("xn_session", scanContent);
         startActivity(intent);
     }
