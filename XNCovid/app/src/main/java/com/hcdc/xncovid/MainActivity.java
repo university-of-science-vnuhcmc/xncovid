@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main_staff);
         }
         setTitle("Hồ Công Hoài");
-        CardView createTest = findViewById(R.id.createTest);
+        LinearLayout createTest = findViewById(R.id.createTest);
         createTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setTitle("Hồ Công Hoài 1");

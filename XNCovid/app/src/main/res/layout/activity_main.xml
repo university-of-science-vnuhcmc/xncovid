@@ -5,8 +5,9 @@
     android:orientation="vertical"
     android:background="@color/background_color">
     <ScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -19,31 +20,31 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1">
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        card_view:cardBackgroundColor="#54A9FF"
-                        card_view:cardCornerRadius="20dp"
+                    <LinearLayout
                         android:id="@+id/createTest"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:layout_width="125dp"
                         android:layout_height="100dp"
                         android:layout_marginTop="20dp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_menu_enable">
                         <View
                             android:id="@+id/image_7_1"
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:background="@drawable/image_7_1"
-                            android:layout_gravity="center"
+                            android:gravity="center"
                             />
-                    </androidx.cardview.widget.CardView>
+                    </LinearLayout>
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Tạo phiên xét nghiệm"
                         android:textStyle="bold"
+                        android:textSize="18dp"
                         android:gravity="center_horizontal|top"
                         android:layout_gravity="center"
                         />
@@ -52,31 +53,31 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1">
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        card_view:cardBackgroundColor="#54A9FF"
-                        card_view:cardCornerRadius="20dp"
+                    <LinearLayout
+                        android:id="@+id/listTest"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:clickable="true"
-                        android:id="@+id/listTest"
                         android:layout_width="125dp"
                         android:layout_height="100dp"
                         android:layout_marginTop="20dp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_menu_disable">
                         <View
                             android:id="@+id/image_8_1"
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:background="@drawable/image_8_1"
-                            android:layout_gravity="center"
+                            android:gravity="center"
                             />
-                    </androidx.cardview.widget.CardView>
+                    </LinearLayout>
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Danh sách các phiên xét nghiệm"
                         android:textStyle="bold"
+                        android:textSize="18dp"
                         android:gravity="center_horizontal|top"
                         android:layout_gravity="center"
                         />
@@ -88,12 +89,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <LinearLayout
+                    android:background="@drawable/rectangle_main_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    card_view:cardBackgroundColor="#54A9FF"
-                    card_view:cardCornerRadius="20dp">
+                    android:layout_marginTop="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -107,19 +107,18 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                            <LinearLayout
+                                android:background="@drawable/cycle_edit_session"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                card_view:cardBackgroundColor="#D0CBCB"
-                                card_view:cardCornerRadius="20dp">
+                                android:gravity="center">
 
                                 <ImageView
                                     android:id="@+id/editTest"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
-                                    android:layout_gravity="center"
                                     android:src="@drawable/edit_icon" />
-                            </androidx.cardview.widget.CardView>
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/testName"
@@ -128,7 +127,7 @@
                                 android:layout_marginLeft="20dp"
                                 android:text="Hiện tại chưa có phiên xét nghiệm"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
+                                android:textSize="18dp"
                                 android:textStyle="bold|italic" />
                         </LinearLayout>
 
@@ -147,6 +146,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="Địa điểm:"
+                                android:textSize="20dp"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
 
@@ -155,6 +155,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
+                                android:textSize="18dp"
                                 android:text="Block A0 chung cư Ehome3, phường An Lạc, quận Bình Tân, TpHCM"
                                 android:textColor="@color/white" />
                         </LinearLayout>
@@ -168,6 +169,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="Thời gian:"
+                                android:textSize="20dp"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
 
@@ -175,6 +177,7 @@
                                 android:id="@+id/time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textSize="18dp"
                                 android:layout_marginLeft="5dp"
                                 android:text="13:00 13/06/2021"
                                 android:textColor="@color/white" />
@@ -189,12 +192,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="Lý do:"
+                                android:textSize="20dp"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textSize="18dp"
                                 android:layout_marginLeft="5dp"
                                 android:text="Phát hiện F0 tầng 14 block A6"
                                 android:textColor="@color/white" />
@@ -209,6 +214,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="Số lượng nhân viên điều hành:"
+                                android:textSize="20dp"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
 
@@ -216,12 +222,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
+                                android:textSize="20dp"
                                 android:text="3"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        <LinearLayout
+                            android:background="@drawable/button_scan_qr_session_disable"
                             android:id="@+id/scanQR"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -229,9 +237,7 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:clickable="true"
                             android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            card_view:cardBackgroundColor="#AD9C9C"
-                            card_view:cardCornerRadius="25dp">
+                            android:layout_marginBottom="10dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -253,7 +259,7 @@
                                     android:layout_marginRight="10dp"
                                     android:text="Mã phiên xét nghiệm"
                                     android:textColor="@color/black"
-                                    android:textSize="20sp"
+                                    android:textSize="20dp"
                                     android:textStyle="bold" />
 
                                 <ImageView
@@ -262,15 +268,13 @@
                                     android:layout_gravity="center"
                                     android:src="@drawable/go_icon" />
                             </LinearLayout>
-                        </androidx.cardview.widget.CardView>
+                        </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                card_view:cardBackgroundColor="#998F8F"
-                card_view:cardCornerRadius="10dp"
+            <LinearLayout
+                android:background="@drawable/end_session_disable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -296,11 +300,11 @@
                         android:text="Kết thúc phiên xét nghiệm hiện tại"
                         android:textStyle="bold"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="18dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
