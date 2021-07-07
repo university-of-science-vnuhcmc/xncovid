@@ -34,17 +34,12 @@ public class MainActivity extends AppCompatActivity {
         // call CheckLogin api
         boolean isLeader = false;
         if(isLeader){
-            setContentView(R.layout.activity_main);
+            Intent intent = new Intent(this, MainLeaderActivity.class);
+            startActivity(intent);
         } else {
-            setContentView(R.layout.activity_main_staff);
+            Intent intent = new Intent(this, MainStaffActivity.class);
+            startActivity(intent);
         }
-        setTitle("Hồ Công Hoài");
-        LinearLayout createTest = findViewById(R.id.createTest);
-        createTest.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setTitle("Hồ Công Hoài 1");
-            }
-        });
     }
     private void getToken(){
         try {
