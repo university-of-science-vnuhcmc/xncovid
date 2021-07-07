@@ -1,0 +1,2 @@
+rootProject.name = "xncovid"
+include ':app'
