@@ -136,7 +136,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="37dp"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/image_remov"
+                android:background="@drawable/image_alarm"
                 android:layout_marginTop="10dp"
                 />
             <!-- 13 : 00 -->
@@ -161,7 +161,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="37dp"
                 android:layout_below="@id/image_clock"
-                android:background="@drawable/image_remov"
+                android:background="@drawable/icon_calendar"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
                 />

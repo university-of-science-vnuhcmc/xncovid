@@ -14,13 +14,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.XNCovid.NoActionBar">
+    <style name="Theme.XNCovid.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.XNCovid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.XNCovid.NoActionBar." parent="Theme.AppCompat.Light.NoActionBar"/>
     <style name="Theme.XNCovid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- styles.xml -->
