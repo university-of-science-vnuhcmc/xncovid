@@ -16,7 +16,7 @@ namespace CovidService.Controllers
     public class acc
     {
         public string username;
-        public string pass;
+        public string pass  ;
     }
 
     public class reponse
