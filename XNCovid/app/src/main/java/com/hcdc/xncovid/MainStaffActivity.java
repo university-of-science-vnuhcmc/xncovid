@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
@@ -54,16 +55,19 @@ String sessionId;
                     startActivity(intent);
                 }
             });
+            String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
 
             layoutensession.setEnabled(true);
             layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    showMessage("You need to allow access to both the permissions",
+                    showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                            "XN_Covid19_HCM_123",
+                            htmlcontent,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
                                     // intent.putExtra("xn_session", "");
                                     startActivity(intent);
                                 }
@@ -83,12 +87,30 @@ String sessionId;
             });
         }
     }
-    private void showMessage(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainStaffActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
+    private void showMessage(String tile, String subtitle, String message, DialogInterface.OnClickListener okListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainStaffActivity.this);
+        // set the custom layout
+        final View customLayout
+                = getLayoutInflater()
+                .inflate(
+                        R.layout.activity_customdialog,
+                        null);
+        final TextView txtTitle = customLayout.findViewById(R.id.dialog_title);
+        final TextView txtSubTitle = customLayout.findViewById(R.id.dialog_subtitle);
+        final TextView txtcontent = customLayout.findViewById(R.id.content_1);
+
+        txtTitle.setText(tile);
+        txtSubTitle.setText(subtitle);
+        txtcontent.setText(android.text.Html.fromHtml(message));
+
+        builder.setView(customLayout);
+
+        builder.setPositiveButton("Thoát", okListener)
+                .setNegativeButton("Hủy", null);
+
+        // create and show
+        // the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -94,4 +94,15 @@
         </item>
 
     </style>
+    <style name="red_16">
+
+        <item name="android:textSize">
+            16sp
+        </item>
+
+        <item name="android:textColor">
+            #DF1414
+        </item>
+
+    </style>
 </resources>
