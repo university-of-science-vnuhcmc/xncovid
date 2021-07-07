@@ -1,4 +1,68 @@
 <resources>
-    <string name="app_name">XNCovid</string>
     <color name="background_color">#E5E5E5</color>
+    <string name="app_name">XNCovid</string>
+    <string name="title_activity_session_info">SessionInfoActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- strings.xml -->
+    <string name="tham_gia_ph">
+        Tham gia phiên xét nghiệm
+</string>
+    <string name="t_n_phi_n_">
+
+Tên phiên:
+</string>
+    <!-- strings.xml -->
+    <string name="xn_covid19_">
+
+XN_Covid19_HCM_123
+</string>
+    <string name="a_i_m_">
+
+Địa điểm:
+</string>
+    <string name="block_a0_ch">
+
+Block A0 chung cư Ehome3, phường An Lạc, quận Bình Tân, TpHCM
+</string>
+    <string name="th_i_gian_">
+
+Thời gian:
+</string>
+    <string name="l_do_">
+
+Lý do:
+</string>
+    <!-- strings.xml -->
+    <string name="ph_t_hi_n_f">
+
+Phát hiện F0 tầng 14 block A6 chung cư Ehome3
+</string>
+    <string name="tr_ng_nh_m_">
+
+Trưởng nhóm:
+</string>
+    <string name="nguy_n_v_n_">
+
+Nguyễn Văn A
+</string>
+    <string name="x_c_nh_n_">
+
+Xác nhận !
+</string>
+    <string name="some_id">
+
+13 : 00
+</string>
+
+    <string name="some_date">
+
+13 / 06 / 2021
+</string>
 </resources>

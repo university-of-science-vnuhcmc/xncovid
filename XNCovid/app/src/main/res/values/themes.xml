@@ -13,4 +13,76 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.XNCovid.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.XNCovid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.XNCovid.NoActionBar." parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="Theme.XNCovid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- styles.xml -->
+    <style name="black_28">
+
+        <item name="android:textSize">
+            28sp
+        </item>
+        <item name="android:textColor">
+            #000000
+        </item>
+    </style>
+    <!-- styles.xml -->
+    <style name="black_24">
+        <item name="android:textSize">
+            24sp
+        </item>
+
+        <item name="android:textColor">
+            #000000
+        </item>
+    </style>
+    <!-- styles.xml -->
+    <style name="red_18">
+        <item name="android:textSize">
+            18sp
+        </item>
+        <item name="android:textColor">
+            #FF0000
+        </item>
+    </style>
+    <style name="black_22">
+
+        <item name="android:textSize">
+            22sp
+        </item>
+
+        <item name="android:textColor">
+            #000000
+        </item>
+
+    </style>
+    <style name="red_20">
+
+        <item name="android:textSize">
+            20sp
+        </item>
+
+        <item name="android:textColor">
+            #FF0000
+        </item>
+
+    </style>
+    <style name="white_24">
+
+        <item name="android:textSize">
+            24sp
+        </item>
+
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+
+    </style>
 </resources>
