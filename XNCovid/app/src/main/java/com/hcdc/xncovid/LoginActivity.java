@@ -35,8 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -55,12 +53,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
         Intent intent = this.getIntent();
         Bundle bundle = getIntent().getExtras();
         if(bundle != null && !bundle.isEmpty()){
             Boolean isLogout = bundle.getBoolean("isLogout");
             if(isLogout){
                 signOut();
+                return;
+            }
+        }
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account != null){
+            if(account.isExpired()){
+                signOut();
+            } else{
+                login(account);
             }
         }
     }
@@ -74,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         String filename = "token.txt";
-                        String fileContents = "token";
+                        String fileContents = "";
                         try{
                             File file = new File(getBaseContext().getFilesDir(),filename);
                             if(file.exists()){
@@ -94,14 +103,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null){
-            if(account.isExpired()){
-                signOut();
-            } else{
-                login(account);
-            }
-        }
     }
 
     @Override
