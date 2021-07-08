@@ -66,4 +66,7 @@ Xác nhận !
 
 13 / 06 / 2021
 </string>
+    <string name="label_xncode">
+    <u>Mã xét nghiệm</u>:
+</string>
 </resources>

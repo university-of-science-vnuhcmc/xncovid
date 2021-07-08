@@ -19,7 +19,9 @@ allprojects {
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
-
+ext {
+    retrofitVersion = '2.9.0'
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
