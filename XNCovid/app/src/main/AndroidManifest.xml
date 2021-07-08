@@ -25,8 +25,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateSessionActivity"
-            android:label="Tạo phiên xét nghiệm" />
+            android:name=".CreateSessionActivity"/>
+        <activity
+            android:name=".ConfirmSessionActivity"/>
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainStaffActivity" />
     </application>

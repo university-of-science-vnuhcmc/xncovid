@@ -14,9 +14,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hcdc.xncovid.util.Util;
 
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
@@ -65,7 +65,7 @@ String sessionId;
             layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                   new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
                             "XN_Covid19_HCM_123",
                             htmlcontent,
                             new DialogInterface.OnClickListener() {
@@ -75,7 +75,7 @@ String sessionId;
                                     // intent.putExtra("xn_session", "");
                                     startActivity(intent);
                                 }
-                            });
+                            }, null, MainStaffActivity.this);
 
                 }
             });
@@ -113,13 +113,5 @@ String sessionId;
         txtcontent.setText(android.text.Html.fromHtml(message));
 
         builder.setView(customLayout);
-
-        builder.setPositiveButton("Thoát", okListener)
-                .setNegativeButton("Hủy", null);
-
-        // create and show
-        // the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }

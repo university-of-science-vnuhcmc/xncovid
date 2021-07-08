@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -22,9 +23,9 @@ public class SessionInfoActivity extends AppCompatActivity {
         Intent intent=this.getIntent();
         xn_session = getIntent().getExtras().getString("xn_session");
         setContentView(R.layout.activity_session_info);
-        tenphien=(TextView) findViewById(R.id.xn_covid19_);
+        tenphien=(TextView) findViewById(R.id.sessionName);
         tenphien.setText(xn_session);
-        final Button btnConfirm = findViewById(R.id.btnconfirm);
+        final LinearLayout btnConfirm = findViewById(R.id.next);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
