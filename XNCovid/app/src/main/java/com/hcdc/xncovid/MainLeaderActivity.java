@@ -38,8 +38,17 @@ String sessionId;
                 .show();
     }
     public void signOut(View v) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra("isLogout", true);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Bạn muốn đăng xuất?")
+                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                        intent.putExtra("isLogout", true);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Hủy", null)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 }

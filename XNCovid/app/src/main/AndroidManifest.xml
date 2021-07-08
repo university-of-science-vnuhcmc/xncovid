@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hcdc.xncovid">
 
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -11,7 +15,14 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.XNCovid.NoActionBar">
-        <activity android:name=".ConfirmXNCodeActivity"></activity>
+        <activity android:name=".QRSessionActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ConfirmXNCodeActivity" />
         <activity android:name=".ScanSessionActivity" />
         <activity
             android:name=".SessionInfoActivity"
@@ -24,16 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CreateSessionActivity"/>
-        <activity
-            android:name=".ConfirmSessionActivity"/>
+        <activity android:name=".CreateSessionActivity" />
+        <activity android:name=".ConfirmSessionActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainStaffActivity" />
     </application>
-
-    <uses-feature android:name="android.hardware.camera" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>
