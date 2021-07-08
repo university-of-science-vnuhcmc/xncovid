@@ -68,6 +68,8 @@ String sessionId;
                    new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
                             "XN_Covid19_HCM_123",
                             htmlcontent,
+                            "Thoát",
+                            "Hủy",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

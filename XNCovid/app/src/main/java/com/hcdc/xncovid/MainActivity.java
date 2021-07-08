@@ -21,8 +21,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, MainStaffActivity.class);
-        startActivity(intent);
+        String token = ((MyApplication) this.getApplication()).getToken();
+        if(token == null || token == ""){
+            getToken();
+            token = ((MyApplication) this.getApplication()).getToken();
+            if(token == ""){
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
+        }
+        // call CheckLogin api
+        boolean isLeader = false;
+        if(isLeader){
+            Intent intent = new Intent(this, MainLeaderActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, MainStaffActivity.class);
+            startActivity(intent);
+        }
     }
     private void getToken(){
         try {

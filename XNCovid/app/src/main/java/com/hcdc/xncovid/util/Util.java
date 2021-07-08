@@ -14,7 +14,7 @@ import com.hcdc.xncovid.R;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Util  {
-    public void showMessage(String title, String subtitle, String message, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener, Context context) {
+    public void showMessage(String title, String subtitle, String message, String okLabel, String cancelLabel, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         // set the custom layout
         final View customLayout
@@ -32,8 +32,8 @@ public class Util  {
 
         builder.setView(customLayout);
 
-        builder.setPositiveButton("Thoát", okListener)
-                .setNegativeButton("Hủy", cancelListener);
+        builder.setPositiveButton(okLabel, okListener)
+                .setNegativeButton(cancelLabel, cancelListener);
 
         // create and show
         // the alert dialog
