@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hcdc.xncovid.util.Util;
+
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
 String sessionId;
@@ -61,7 +63,7 @@ String sessionId;
             layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                   new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
                             "XN_Covid19_HCM_123",
                             htmlcontent,
                             new DialogInterface.OnClickListener() {
@@ -71,7 +73,7 @@ String sessionId;
                                     // intent.putExtra("xn_session", "");
                                     startActivity(intent);
                                 }
-                            });
+                            }, null, MainStaffActivity.this);
 
                 }
             });
@@ -87,30 +89,5 @@ String sessionId;
             });
         }
     }
-    private void showMessage(String tile, String subtitle, String message, DialogInterface.OnClickListener okListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainStaffActivity.this);
-        // set the custom layout
-        final View customLayout
-                = getLayoutInflater()
-                .inflate(
-                        R.layout.activity_customdialog,
-                        null);
-        final TextView txtTitle = customLayout.findViewById(R.id.dialog_title);
-        final TextView txtSubTitle = customLayout.findViewById(R.id.dialog_subtitle);
-        final TextView txtcontent = customLayout.findViewById(R.id.content_1);
 
-        txtTitle.setText(tile);
-        txtSubTitle.setText(subtitle);
-        txtcontent.setText(android.text.Html.fromHtml(message));
-
-        builder.setView(customLayout);
-
-        builder.setPositiveButton("Thoát", okListener)
-                .setNegativeButton("Hủy", null);
-
-        // create and show
-        // the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 }
