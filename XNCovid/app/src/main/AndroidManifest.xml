@@ -14,6 +14,7 @@
         <activity android:name=".ListGroupXnActivity"></activity>
         <activity android:name=".ConfirmXNCodeActivity" />
         <activity android:name=".ScanSessionActivity" />
+        <activity android:name=".QRSessionActivity" />
         <activity
             android:name=".SessionInfoActivity"
             android:label="@string/title_activity_session_info"
