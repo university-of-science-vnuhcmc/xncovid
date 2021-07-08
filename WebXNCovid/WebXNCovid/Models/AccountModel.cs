@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace WebSupportCommunityScreening.Models
+namespace WebXNCovid.Models
 {
     public class TokenSigninViewModel
     {

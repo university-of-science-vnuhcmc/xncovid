@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -8,10 +9,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using WebXNCovid.Models;
 using ZXing;
 
 namespace WebForCommunityScreening.Controllers
 {
+    [Authorize]
     public class QRCodeGeneratorController : Controller
     {
         public ActionResult Index()
@@ -21,67 +24,113 @@ namespace WebForCommunityScreening.Controllers
 
         public ActionResult Generate(int QRCodeAmount)
         {
+            List<Bitmap> bitmaps = new List<Bitmap>();
+            List<byte[]> bytearrays = new List<byte[]>();
             try
             {
-                const int intGroup = 8;
                 string folderPath = "~/Images/";
                 if (!Directory.Exists(Server.MapPath(folderPath)))
                 {
                     Directory.CreateDirectory(Server.MapPath(folderPath));
                 }
 
-                int intFrom = 10000;
-                int intTo = intFrom + QRCodeAmount;
-                int intNumber = QRCodeAmount / intGroup + (QRCodeAmount % intGroup == 0 ? 0 : 1);
 
-                for (int i = 0; i < intNumber; i++)
+                for (int i = 0; i < QRCodeAmount; i++)
                 {
-                    List<Bitmap> bitmaps = new List<Bitmap>();
-                    int n = intFrom + (i + 1) * intGroup > intTo ? intTo : intFrom + (i + 1) * intGroup;
-                    for (int j = intFrom + i * intGroup; j < n; j++)
-                    {
-                        var bitmap = GenerateQR(j);
-                        bitmaps.Add(bitmap);
-                    }
+                    var bmp = GenerateQR(i);
+                    bitmaps.Add(bmp);
 
-                    Bitmap bmp = MergeImages(bitmaps, 2, 4);
-
-                    string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
-                    string barcodePath = Server.MapPath(imagePath);
-                    using (MemoryStream memory = new MemoryStream())
-                    {
-                        using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
-                        {
-                            bmp.Save(memory, ImageFormat.Jpeg);
-                            byte[] bytes = memory.ToArray();
-                            fs.Write(bytes, 0, bytes.Length);
-                        }
-                    }
+                    //string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
+                    //string barcodePath = Server.MapPath(imagePath);
+                    //using (MemoryStream memory = new MemoryStream())
+                    //{
+                    //    using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
+                    //    {
+                    //        bmp.Save(memory, ImageFormat.Jpeg);
+                    //        byte[] bytes = memory.ToArray();
+                    //        fs.Write(bytes, 0, bytes.Length);
+                    //    }
+                    //}
+                    bytearrays.Add(BitmapToBytes(bmp));
                 }
 
-                //ViewBag.Message = "QR Code Created successfully";
+                Session["QRCodeImg"] = bytearrays;
+
+                #region Comment
+                //int intFrom = 10000;
+                //int intTo = intFrom + QRCodeAmount;
+                //int intNumber = QRCodeAmount / intGroup + (QRCodeAmount % intGroup == 0 ? 0 : 1);
+
+                //for (int i = 0; i < intNumber; i++)
+                //{
+                //    List<Bitmap> bitmaps = new List<Bitmap>();
+                //    int n = intFrom + (i + 1) * intGroup > intTo ? intTo : intFrom + (i + 1) * intGroup;
+                //    for (int j = intFrom + i * intGroup; j < n; j++)
+                //    {
+                //        var bitmap = GenerateQR(j);
+                //        bitmaps.Add(bitmap);
+                //    }
+
+                //    Bitmap bmp = MergeImages(bitmaps, 2, 4);
+
+                //    string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
+                //    string barcodePath = Server.MapPath(imagePath);
+                //    using (MemoryStream memory = new MemoryStream())
+                //    {
+                //        using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
+                //        {
+                //            bmp.Save(memory, ImageFormat.Jpeg);
+                //            byte[] bytes = memory.ToArray();
+                //            fs.Write(bytes, 0, bytes.Length);
+                //        }
+                //    }
+                //}
+
+                //ViewBag.Message = "QR Code Created successfully"; 
+                #endregion
             }
             catch (Exception ex)
             {
                 //catch exception if there is any
             }
-            return RedirectToAction("ReviewQRCode", new { QRCodeAmount = QRCodeAmount });
+            return RedirectToAction("PreviewQRCode", new { page = 1 });
+            //return View("PreviewQRCode" , new PreviewQRCodeViewModel { bitmaps = bitmaps, bytearrays = bytearrays });
         }
-        public ActionResult ReviewQRCode(int QRCodeAmount)
+
+        //public ActionResult PreviewQRCode(int QRCodeAmount)
+        public ActionResult PreviewQRCode(int page)
         {
-
-
-            return View("About");
+            List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
+            var pagedList = imageBytes.ToPagedList(page, 20);
+            return View(pagedList);
+            //return View();
         }
+        //[HttpPost]
+        ////public ActionResult PreviewQRCode(int QRCodeAmount)
+        //public ActionResult PreviewQRCode(PreviewQRCodeViewModel model)
+        //{
+        //    string a = "2323";
+        //    PreviewQRCodeViewModel pagedList = new PreviewQRCodeViewModel();
+        //    pagedList.bytearrays = model.bytearrays.ToPagedList(1, 20).ToList();
+        //    return View(pagedList);
+        //}
 
+        private static byte[] BitmapToBytes(Bitmap img)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                img.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return stream.ToArray();
+            }
+        }
 
         private Bitmap GenerateQR(int Id)
         {
             string strID = Id.ToString();
             var barcodeWriter = new BarcodeWriter();
             barcodeWriter.Format = BarcodeFormat.QR_CODE;
-            barcodeWriter.Options.Height = 320;
-            barcodeWriter.Options.Width = 300;
+            barcodeWriter.Options.Height = 113;
+            barcodeWriter.Options.Width = 113;
             var result = barcodeWriter.Write(strID);
 
             var f = new NumberFormatInfo { NumberGroupSeparator = " " };
@@ -96,7 +145,7 @@ namespace WebForCommunityScreening.Controllers
             Bitmap bmp = barcodeBitmap;
 
             // Create a rectangle for the entire bitmap
-            RectangleF rectf = new RectangleF(0, 0, bmp.Width, bmp.Height - 15);
+            RectangleF rectf = new RectangleF(0, 0, bmp.Width, bmp.Height - 1);
 
             // Create graphic object that will draw onto the bitma p
             Graphics g = Graphics.FromImage(bmp);
@@ -126,7 +175,7 @@ namespace WebForCommunityScreening.Controllers
             };
 
             // Draw the text onto the image
-            g.DrawString(strID, new Font("Tahoma", 16), Brushes.Black, rectf, format);
+            g.DrawString(strID, new Font("Tahoma", 9), Brushes.Black, rectf, format);
 
             // Flush all graphics changes to the bitmap
             g.Flush();
@@ -135,7 +184,7 @@ namespace WebForCommunityScreening.Controllers
 
             using (Graphics gr = Graphics.FromImage(bmp))
             {
-                gr.DrawRectangle(new Pen(Brushes.Black, 5), new Rectangle(0, 0, bmp.Width, bmp.Height));
+                gr.DrawRectangle(new Pen(Brushes.Black, 2), new Rectangle(0, 0, bmp.Width, bmp.Height));
             }
             return bmp;
         }

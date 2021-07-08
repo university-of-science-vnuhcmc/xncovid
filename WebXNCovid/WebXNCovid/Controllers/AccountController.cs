@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebSupportCommunityScreening.Models;
+using System.Web.Security;
+using WebXNCovid.Models;
 
-namespace WebSupportCommunityScreening.Controllers
+namespace WebXNCovid.Controllers
 {
     public class AccountController : Controller
     {
@@ -16,23 +17,23 @@ namespace WebSupportCommunityScreening.Controllers
             return View();
         }
 
-        //// POST: /Account/Login
-        ////[HttpPost]
-        //[AllowAnonymous]
-        //public ActionResult TokenSignin(string Email, string TokenID)
-        //{
-        //    //Console.WriteLine(string.Format("Email: {0} , Token: {1}", model.Email, model.TokenID));
-        //    Console.WriteLine(string.Format("Email: {0} , Token: {1}", Email, TokenID));
-        //    return View();
-        //}
-
-        // POST: /Account/Login
+        // POST: /Account/TokenSignin
         [HttpPost]
         [AllowAnonymous]
         public ActionResult TokenSignin(TokenSigninViewModel model)
         {
-            Console.WriteLine(string.Format("Email: {0} , Token: {1}", model.Email, model.TokenID));
+            FormsAuthentication.SetAuthCookie(model.Email, false);
+            Session.Add("Email", model.Email);
+            Session.Add("GoogleTokenID", model.TokenID);
+
             return Json(new { success = false, responseText = "Successfully." }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult LogOut()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
     }
 }
