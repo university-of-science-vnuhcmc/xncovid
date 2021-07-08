@@ -45,4 +45,5 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion") {
         exclude group: 'com.squareup.retrofit2', module: 'retrofit'
     }
+    implementation 'com.android.volley:volley:1.2.0'
 }
