@@ -116,4 +116,40 @@
         </item>
 
     </style>
+    <style name="black_30">
+
+        <item name="android:textSize">
+            30sp
+        </item>
+
+        <item name="android:textColor">
+            #000000
+        </item>
+
+    </style>
+
+
+    <style name="blue_28">
+
+        <item name="android:textSize">
+            28sp
+        </item>
+
+        <item name="android:textColor">
+            #001AFF
+        </item>
+
+    </style>
+    <style name="green_28">
+
+        <item name="android:textSize">
+            28sp
+        </item>
+
+        <item name="android:textColor">
+            #08812A
+        </item>
+
+    </style>
+
 </resources>

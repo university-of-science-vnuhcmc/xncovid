@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp"
+    android:id="@+id/item_layout">
+
+    <!-- image 7 -->
+    <Button
+        android:id="@+id/btn_remove"
+        android:layout_width="30dp"
+        android:layout_height="22.5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_centerHorizontal="true"
+       android:layout_centerInParent="true"
+        android:background="@drawable/ic_remove"
+        />
+<TextView
+    android:layout_width="50dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/rectangle_item"
+    android:layout_toRightOf="@+id/btn_remove"
+    android:text="1"
+    android:layout_marginLeft="20dp"
+    android:layout_centerInParent="true"
+   android:textAppearance="@style/black_30"
+    android:textStyle="bold"
+    android:gravity="center"
+    android:id="@+id/item_idx"/>
+    <TextView
+        android:layout_toRightOf="@+id/item_idx"
+        android:id="@+id/txt_group_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       android:layout_centerInParent="true"
+        android:text="1111-1111-1111"
+        android:textAppearance="@style/blue_28"
+       android:layout_marginLeft="17dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        />
+</RelativeLayout>

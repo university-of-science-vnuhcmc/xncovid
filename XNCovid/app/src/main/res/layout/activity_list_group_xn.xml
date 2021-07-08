@@ -59,33 +59,125 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:layout_below="@+id/relative_top"
-        android:layout_marginTop="37dp"
-        android:gravity="center"
-        >
-        <!-- Danh sách xét nghiệm: (0/10) -->
-        <TextView
-            android:id="@+id/label_ds_xn"
-            android:layout_width="wrap_content"
+        android:layout_above="@+id/btn_confirm_new_group">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="Danh sách xét nghiệm:"
-            android:textAppearance="@style/black_20"
-            android:gravity="top|center_horizontal"
-            />
-        <TextView
-            android:id="@+id/txt_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
-            android:layout_toRightOf="@+id/label_ds_xn"
-            android:text="(0/10)"
-            android:textAppearance="@style/red_20"
-            android:gravity="top|center_horizontal"
-            />
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="37dp"
+            android:gravity="center"
+            android:id="@+id/relative_ds_sum">
+            <!-- Danh sách xét nghiệm: (0/10) -->
+            <TextView
+                android:id="@+id/label_ds_xn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Danh sách xét nghiệm:"
+                android:textAppearance="@style/black_20"
+                android:gravity="top|center_horizontal"
+                />
+            <TextView
+                android:id="@+id/txt_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:layout_toRightOf="@+id/label_ds_xn"
+                android:text="(0/10)"
+                android:textAppearance="@style/red_20"
+                android:gravity="top|center_horizontal"
+                />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:minHeight="10dp"
+            android:id="@+id/layout_listview"
+            android:orientation="vertical"
+            android:layout_below="@+id/relative_ds_sum"
+            android:layout_above="@+id/lst_xn_users">
+            <ListView
+                android:id="@+id/list_ds_xn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/rectangle_11"
+            android:gravity="center_vertical"
+            android:id="@+id/lst_xn_users"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+            <View
+                android:id="@+id/ic_scan_qr"
+                android:layout_width="44.31dp"
+                android:layout_height="45.6dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_scan"
+                android:layout_marginLeft="37dp"/>
+            <TextView
+                android:id="@+id/qu_t_th_m_"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="7dp"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/ic_scan_qr"
+                android:text="+ Quét để thêm ..."
+                android:textAppearance="@style/black_18"
+                android:gravity="center"
+                />
+        </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:background="@drawable/confirm_new_group_disable"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/btn_confirm_new_group"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thực hiện gom nhóm"
+                android:textStyle="bold"
+                android:textAppearance="@style/black_24"
+
+                android:layout_marginRight="10dp"
+                android:layout_alignParentLeft="true"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_plane"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -33,7 +33,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             "gent::pattern==gioi_tinh=(?<gioitinh>\\d{1})==>key==gioitinh\n" +
             "birthdateyear::pattern==namsinh=(?<namsinh>\\d{4})==>key==namsinh\n" +
             "address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
-    int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te
+    int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te lan dau
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,21 +87,22 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     @Override
     public void handleResult(Result result) {
         String txtScanedResult = result.getText();
-
-        if(scanQRType == 2 &&txtScanedResult.startsWith(urlKBYTOnline)){
+        boolean isOnline =false;
+        if((scanQRType == 2) &&txtScanedResult.startsWith(urlKBYTOnline)){
                 Pattern p = Pattern.compile(regexKBYTId);
                 Matcher m = p.matcher(txtScanedResult);
                 m.find();
                 String id = m.group(1);
                 scanContent = id;
+                isOnline = true;
         }else {
             scanContent = txtScanedResult.trim();
         }
 
-        showResult();
+        showResult(isOnline);
     }
 
-    private  void showResult(){
+    private  void showResult(boolean isOnline){
         Class tmpclass = null;
         switch (scanQRType){
             case 0:
@@ -115,9 +116,18 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                 tmpclass = ConfirmXNCodeActivity.class;
                 break;
         }
-        Intent intent = new Intent(getApplicationContext(), tmpclass);
-        intent.putExtra("xn_session", scanContent);
-        startActivity(intent);
+        if(scanQRType == 2){
+            Intent intent=new Intent();
+            intent.putExtra("kbyt_uid", scanContent);
+            intent.putExtra("is_online", isOnline);
+            setResult(2,intent);
+            finish();//finishing activity
+        }else {
+            Intent intent = new Intent(getApplicationContext(), tmpclass);
+            intent.putExtra("xn_session", scanContent);
+            startActivity(intent);
+        }
+
     }
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);

@@ -22,7 +22,7 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
         final Button btnConfirm = findViewById(R.id.btnxncode_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);
                 intent.putExtra("xn_session", xn_session);
                 startActivity(intent);
             }
