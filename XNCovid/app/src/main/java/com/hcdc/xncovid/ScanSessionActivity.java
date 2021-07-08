@@ -25,6 +25,14 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView mScannerView;
     String scanContent;
+    private  String urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
+    private  String regexKBYTId = "id=([A-z0-9-]*)";
+    private String urlGetUserInfo = "https://kbytcq.khambenh.gov.vn/";
+    private  String contentRegexs = "phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai\n" +
+            "fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten\n" +
+            "gent::pattern==gioi_tinh=(?<gioitinh>\\d{1})==>key==gioitinh\n" +
+            "birthdateyear::pattern==namsinh=(?<namsinh>\\d{4})==>key==namsinh\n" +
+            "address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
     int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +87,13 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     @Override
     public void handleResult(Result result) {
         String txtScanedResult = result.getText();
-        if(scanQRType == 2){
-            Pattern p = Pattern.compile("id=([A-z0-9-]*)");
-            Matcher m = p.matcher(txtScanedResult);
-            m.find();
-            String id = m.group(1);
-            scanContent = id;
+
+        if(scanQRType == 2 &&txtScanedResult.startsWith(urlKBYTOnline)){
+                Pattern p = Pattern.compile(regexKBYTId);
+                Matcher m = p.matcher(txtScanedResult);
+                m.find();
+                String id = m.group(1);
+                scanContent = id;
         }else {
             scanContent = txtScanedResult.trim();
         }

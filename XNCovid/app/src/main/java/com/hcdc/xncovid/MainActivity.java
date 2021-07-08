@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.hcdc.xncovid.model.LoginUserRes;
+import com.hcdc.xncovid.network.CoreCallBack;
+import com.hcdc.xncovid.network.CoreNetworkProvider;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // call CheckLogin api
+        CoreNetworkProvider.self().login(token, "", new CoreCallBack.With<LoginUserRes>() {
+            @Override
+            public void run(LoginUserRes info) {
+                if (info != null){
+                    String strRes = info.toString(); //get json object
+
+                }
+
+            }
+        });
         boolean isLeader = false;
         if(isLeader){
             Intent intent = new Intent(this, MainLeaderActivity.class);
