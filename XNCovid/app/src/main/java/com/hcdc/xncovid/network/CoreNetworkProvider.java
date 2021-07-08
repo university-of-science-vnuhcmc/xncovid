@@ -3,7 +3,6 @@ package com.hcdc.xncovid.network;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
-import com.hcdc.xncovid.model.LoginUserRes;
 import com.hcdc.xncovid.network.service.CoreService;
 
 import java.security.cert.CertificateException;

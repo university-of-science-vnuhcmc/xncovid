@@ -30,6 +30,7 @@
         <activity android:name=".ConfirmSessionActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainStaffActivity" />
+        <activity android:name=".MainLeaderActivity" />
     </application>
 
     <uses-feature android:name="android.hardware.camera" />

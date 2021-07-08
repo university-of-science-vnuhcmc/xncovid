@@ -55,6 +55,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_gravity="center"
                         android:gravity="center"
+                        android:onClick="createSession"
                         android:background="@drawable/rectangle_menu_enable">
                         <View
                             android:id="@+id/image_7_1"
