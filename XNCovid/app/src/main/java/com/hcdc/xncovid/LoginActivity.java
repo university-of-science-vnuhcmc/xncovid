@@ -55,10 +55,40 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        Intent intent = this.getIntent();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null && !bundle.isEmpty()){
+            Boolean isLogout = bundle.getBoolean("isLogout");
+            if(isLogout){
+                signOut();
+            }
+        }
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String filename = "token.txt";
+                        String fileContents = "token";
+                        try{
+                            File file = new File(getBaseContext().getFilesDir(),filename);
+                            if(file.exists()){
+                                FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+                                fos.write(fileContents.getBytes());
+                            }
+                        }  catch (FileNotFoundException ex){
+                            Log.w("Logout", ex.toString());
+                        }catch (IOException e) {
+                            Log.w("Logout", e.toString());
+                        }
+                        ((MyApplication) getApplication()).setToken("");
+                    }
+                });
     }
 
     @Override
@@ -66,7 +96,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null){
-            login(account);
+            if(account.isExpired()){
+                signOut();
+            } else{
+                login(account);
+            }
         }
     }
 

@@ -16,10 +16,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:background="@drawable/rectangle_title_bar">
-
+                <View
+                    android:id="@+id/image_14"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/back"
+                    />
                 <TextView
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tạo phiên xét nghiệm"
@@ -39,12 +49,14 @@
                     android:text="Tên phiên:"
                     android:textSize="24dp"
                     android:textStyle="bold" />
-                <EditText
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:padding="5dp"
-                    android:hint="Tên phiên xét nghiệm"
+                    android:textSize="18dp"
+                    android:textColor="@color/red"
+                    android:text="XN_Covid19_HCM_123"
                     android:background="@drawable/rectangle_name_session"/>
 
             </LinearLayout>
@@ -89,10 +101,13 @@
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:background="@drawable/rectangle_choose_address">
-                            <Spinner
+                            <TextView
                                 android:id="@+id/province"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/red"
+                                android:paddingLeft="5dp"
+                                android:text="TP. Hồ Chí Minh"
                                 />
                         </LinearLayout>
                     </LinearLayout>
@@ -117,10 +132,13 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:background="@drawable/rectangle_choose_address">
-                        <Spinner
+                        <TextView
                             android:id="@+id/district"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:paddingLeft="5dp"
+                            android:text="Quận Bình Tân"
                             />
                     </LinearLayout>
 
@@ -145,10 +163,13 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:background="@drawable/rectangle_choose_address">
-                        <Spinner
+                        <TextView
                             android:id="@+id/ward"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:paddingLeft="5dp"
+                            android:text="Phường An Lạc"
                             />
                     </LinearLayout>
 
@@ -172,17 +193,17 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <EditText
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:textColor="@color/red"
+                    android:textSize="18dp"
                     android:padding="5dp"
-                    android:gravity="top"
-                    android:minLines="2"
-                    android:scrollbars="vertical"
-                    android:inputType="textMultiLine"
-                    android:hint="Số nhà, tên tòa nhà, tên đường, tên khu vực"
-                    android:background="@drawable/rectangle_name_session"/>
+                    android:text="Block A0 chung cư Ehome 3"
+                    android:background="@drawable/rectangle_name_session"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -232,7 +253,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
                             android:textSize="18dp"
-                            android:hint="HH:MM"
+                            android:textColor="@color/red"
+                            android:text="13:00"
                             android:onClick="showTimePickerDialog"/>
                     </LinearLayout>
                     <LinearLayout
@@ -255,7 +277,8 @@
                             android:layout_marginLeft="30dp"
                             android:textSize="18dp"
                             android:onClick="showDatePickerDialog"
-                            android:hint="dd/mm/yyyy"/>
+                            android:textColor="@color/red"
+                            android:text="13/06/20201"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -277,17 +300,17 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-                <EditText
+                <TextView
+                    android:id="@+id/cause"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:gravity="top"
-                    android:minLines="4"
-                    android:scrollbars="vertical"
-                    android:inputType="textMultiLine"
-                    android:hint="Lý do xét nghiệm ..."
-                    android:background="@drawable/rectangle_time_session"/>
+                    android:textColor="@color/red"
+                    android:padding="5dp"
+                    android:textSize="18dp"
+                    android:text="Phát hiện F0 tầng 14 block A6 chung cư Ehome3"
+                    android:background="@drawable/rectangle_name_session"
+                    />
             </LinearLayout>
 
             <LinearLayout

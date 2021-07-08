@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class CreateSessionActivity extends AppCompatActivity {
+public class CreateSessionActivity extends AppCompatActivity implements IDatePicker, ITimePicker {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +24,57 @@ public class CreateSessionActivity extends AppCompatActivity {
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+    private int year;
+    @Override
+    public int getYear() {
+        return year;
+    }
+
+    private int month;
+    @Override
+    public int getMonth() {
+        return month;
+    }
+
+    private int day;
+    @Override
+    public int getDay() {
+        return day;
+    }
+
+
+    @Override
+    public void setDate(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        TextView chooseDate = findViewById(R.id.chooseDate);
+        chooseDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    private int hour;
+    @Override
+    public int getHour() {
+        return hour;
+    }
+
+    private int minute;
+    @Override
+    public int getMinute() {
+        return minute;
+    }
+
+    @Override
+    public void setTime(int hour, int minute) {
+        this.hour = hour;
+        this.minute = minute;
+        TextView chooseTime = findViewById(R.id.chooseTime);
+        chooseTime.setText(String.format("%02d:%02d", hour, minute));
     }
 }

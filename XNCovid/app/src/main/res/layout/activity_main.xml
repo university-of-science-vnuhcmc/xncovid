@@ -12,6 +12,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/rectangle_title_bar">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Văn A"
+                    android:layout_weight="1"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+                <View
+                    android:id="@+id/image_14"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/logout"
+                    android:onClick="signOut"
+                    />
+
+            </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
                 android:baselineAligned="false"
                 android:layout_height="wrap_content"

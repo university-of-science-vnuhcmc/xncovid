@@ -1,5 +1,6 @@
 package com.hcdc.xncovid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -13,6 +14,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
@@ -86,6 +90,11 @@ String sessionId;
                 }
             });
         }
+    }
+    public void signOut(View v) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("isLogout", true);
+        startActivity(intent);
     }
     private void showMessage(String tile, String subtitle, String message, DialogInterface.OnClickListener okListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainStaffActivity.this);

@@ -1,5 +1,6 @@
 <resources>
     <color name="background_color">#E5E5E5</color>
+    <color name="red">#FF0000</color>
     <string name="app_name">XNCovid</string>
     <string name="title_activity_session_info">SessionInfoActivity</string>
     <!-- Strings used for fragments for navigation -->
