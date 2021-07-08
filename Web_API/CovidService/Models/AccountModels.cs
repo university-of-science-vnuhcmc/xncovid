@@ -26,7 +26,10 @@ namespace CovidService.Models
     {
         public string Token;
         public string Url;
+        public string Domain;
         public string Form;
+        public string Id;
+        public string Role;
        
     }
     public class ProviderUserDetails

@@ -2,8 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,27 +30,69 @@ namespace CovidService.Controllers
             return "value";
         }
 
+        private bool CheckValidRequest()
+        {
+            if(!Request.Headers.Contains("token"))
+            {
+                return false;
+            }
+            var token = Request.Headers.GetValues("token").First();
+            //goi db
+            return true;
+        }
+
         // POST api/<controller>
         public LoginReponse Post([FromBody]LoginRequest value)
         {
             LoginReponse loginRes = new LoginReponse();
             try
             {
-                GoogleApiTokenInfo ggTokenInfo = GetUserDetails(value.TokenID);
-                if(ggTokenInfo.email != value.Email)
+                bool checkTonken= CheckValidRequest();
+                string strRes="";
+                GoogleApiTokenInfo ggTokenInfo = null;// GetUserDetails(value.TokenID, out strRes);
+                if (ggTokenInfo != null)
                 {
-                    loginRes.returnCode = 0;
-                    loginRes.returnMess = "Thất bại , email ko đúng";
-                    
+                    if (ggTokenInfo.email != value.Email)
+                    {
+                        loginRes.returnCode = 0;
+                        loginRes.returnMess = "Thất bại , email ko đúng";
+
+                    }
+                    else
+                    {
+                        //goi db 
+                        loginRes.returnCode = 1;
+                        loginRes.returnMess = "Thành công";
+                        loginRes.Token = Guid.NewGuid().ToString();
+                        loginRes.Url = " https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
+                        loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
+                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
+                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
+                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
+                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                    }
                 }
                 else
                 {
-                    //goi db 
+                    //loginRes.returnCode = 2;
+                    //loginRes.returnMess = strRes;
+                    
                     loginRes.returnCode = 1;
                     loginRes.returnMess = "Thành công";
                     loginRes.Token = Guid.NewGuid().ToString();
-                    loginRes.Url = " https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
-                    loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                    loginRes.Url = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
+                    loginRes.Domain = "https://kbytcq.khambenh.gov.vn/#tokhai_yte/model";
+                    loginRes.Id = "([A-z0-9-]*)";
+                    loginRes.Role = "Staff";
+                    loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
+                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
+                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
+                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
+                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                    if (value.Email.ToLower().Contains("hoconghoai"))
+                    {
+                        loginRes.Role = "Leader";
+                    }
                 }
                 return loginRes;
             }
@@ -73,8 +113,9 @@ namespace CovidService.Controllers
         public void Delete(int id)
         {
         }
-        private GoogleApiTokenInfo GetUserDetails(string providerToken)
+        private GoogleApiTokenInfo GetUserDetails(string providerToken, out string strRes)
         {
+            strRes = "";
             var httpClient = new HttpClient();
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
@@ -85,24 +126,27 @@ namespace CovidService.Controllers
             {
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(TrustAllValidationCallback);
                 httpResponseMessage = httpClient.GetAsync(requestUri).Result;
+               
             }
             catch (Exception ex)
             {
+                strRes = ex.ToString();
                 return null;
             }
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
+                strRes = httpResponseMessage.StatusCode + " | " + httpResponseMessage.RequestMessage;
                 return null;
             }
 
             var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            strRes = response;
             var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
 
             return googleApiTokenInfo;
            
         }
-
         private void CallDB()
         {
             string sqlString = SqlHelper.sqlString;
