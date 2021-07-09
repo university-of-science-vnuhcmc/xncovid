@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quay về trang chủ để tiếp tục"
                     android:textStyle="bold"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textColor="#AEAAAA"
                     android:layout_margin="10dp"/>
                 <LinearLayout

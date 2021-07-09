@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textSize="18dp"
-                        android:text="Danh sách các phiên xét nghiệm"
+                        android:text="Danh sách phiên đã tham gia"
                         android:textStyle="bold"
                         android:gravity="center_horizontal|top"
                         android:layout_gravity="center"

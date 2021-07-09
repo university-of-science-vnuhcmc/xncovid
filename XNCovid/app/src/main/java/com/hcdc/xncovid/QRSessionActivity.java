@@ -10,5 +10,16 @@ public class QRSessionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrsession);
+        Bundle bundle = getIntent().getExtras();
+        String sessionName = bundle.getString("SessionName");
+        Long sessionID = bundle.getLong("SessionID");
+        isNew = bundle.getBoolean("IsNew");
+    }
+    private boolean isNew;
+    @Override
+    public void onBackPressed() {
+        if(!isNew){
+            super.onBackPressed();
+        }
     }
 }
