@@ -1,5 +1,6 @@
 package com.hcdc.xncovid.util;
 
 public interface ICallback {
-    public void callback(APIResponse response);
+    public void callback(Object response);
+
 }

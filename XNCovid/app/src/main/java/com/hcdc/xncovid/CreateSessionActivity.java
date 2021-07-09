@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.hcdc.xncovid.model.GetLocateReq;
 import com.hcdc.xncovid.model.GetLocateRes;
 import com.hcdc.xncovid.model.LocateInfor;
@@ -41,14 +42,14 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
         GetLocateReq req = new GetLocateReq();
         req.Value = code;caller.call(this, "getlocate", req, GetLocateRes.class, new ICallback() {
             @Override
-            public void callback(APIResponse response) {
+            public void callback(Object response) {
                 GetLocateRes res = (GetLocateRes) response;
                 ArrayAdapter<LocateInfor> adapter = new ArrayAdapter(getBaseContext(),
                         android.R.layout.simple_spinner_item, res.locateInfors);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
             }
-        });
+        }, null, Request.Method.POST);
     }
 
     public void showTimePickerDialog(View v) {

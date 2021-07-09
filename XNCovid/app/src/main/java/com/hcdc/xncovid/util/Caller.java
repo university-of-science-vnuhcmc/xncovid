@@ -17,17 +17,23 @@ import com.hcdc.xncovid.MainLeaderActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.Optional;
 
 public class Caller {
-    public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback){
+    public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback, String url, int method){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "https://xncovid.uit.edu.vn:7070/api/";
+        if(url == null || url.isEmpty()){
+            url = "https://xncovid.uit.edu.vn:7070/api/";
+        }
         url = url + apiName;
-        JSONObject jsonReq;
+        JSONObject jsonReq = null;
         try{
-            jsonReq = new JSONObject(new Gson().toJson(req));
+            if(req != null){
+                jsonReq = new JSONObject(new Gson().toJson(req));
+            }
         } catch (JSONException e)
         {
             Log.w("Call " + apiName, "Parse request object fail.");
@@ -38,25 +44,49 @@ public class Caller {
                     .show();
             return;
         }
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonReq,
-                new Response.Listener<JSONObject>() {
+        switch (method){
+            case Request.Method.POST:
+                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonReq,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                APIResponse res = new Gson().fromJson(response.toString(), type);
+                                callback.callback(res);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
+                        new AlertDialog.Builder(context)
+                                .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
+                                .setNegativeButton("OK", null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+
+                queue.add(jsonRequest);
+                break;
+            case Request.Method.GET:
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        APIResponse res = new Gson().fromJson(response.toString(), type);
-                        callback.callback(res);
+                        callback.callback(new Gson().fromJson(response.toString(), type));
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
-                new AlertDialog.Builder(context)
-                        .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
-                        .setNegativeButton("OK", null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
+                        new AlertDialog.Builder(context)
+                                .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
+                                .setNegativeButton("OK", null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+                break;
+        }
 
-        queue.add(jsonRequest);
     }
 }
