@@ -13,4 +13,11 @@ namespace WebXNCovid.Models
         public int IdFrom;
         public int IdTo;
     }
+
+    public class PrintCodeViewModel
+    {
+        public int Amount;
+        public int IdFrom;
+        public int IdTo;
+    }
 }

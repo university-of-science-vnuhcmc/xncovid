@@ -1,12 +1,11 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
+﻿@*@{
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}*@
 
 <div class="row">
     <div class="input-dialog">
 
-        @using (Html.BeginForm("Generate", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("PrintCode", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <h4>Nhập số lượng mã QR cần dùng</h4>
             <hr />
@@ -18,7 +17,7 @@
             <h6 style="margin: 20px auto">Lưu ý: chỉ tạo tối đa <span style="color:red">10000</span> mã một lần</h6>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10 h-align-center">
-                    <input type="submit" class="btn btn-custom" value="Tạo mã" />
+                    <input type="submit" class="btn btn-custom" value="In mã" />
                 </div>
             </div>
         }

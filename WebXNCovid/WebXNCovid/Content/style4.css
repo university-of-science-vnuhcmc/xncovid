@@ -63,8 +63,7 @@ span {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    /*background: #7386D5;*/
-    background: #aad0f0;
+    background: #379FFF;
     color: #fff;
     transition: all 0.3s;
 }
@@ -116,7 +115,7 @@ span {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #63baf7;
+    background: #379FFF;
 }
 
 #sidebar .sidebar-header strong {
@@ -126,7 +125,6 @@ span {
 
 #sidebar ul.components {
     padding: 20px 0;
-    /*border-bottom: 1px solid #47748b;*/
 }
 
 #sidebar ul li a {
@@ -136,8 +134,7 @@ span {
 }
 
 #sidebar ul li a:hover {
-    /*color: #7386D5;*/
-    color: #aad0f0;
+    color: #379FFF;
     background: #fff;
 }
 
@@ -145,10 +142,10 @@ span {
     margin-right: 10px;
 }
 
-#sidebar ul li.active>a,
+#sidebar ul li.active > a,
 a[aria-expanded="true"] {
     color: #fff;
-    background: #63baf7;
+    background: #379FFF;
 }
 
 a[data-toggle="collapse"] {
@@ -166,7 +163,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #63baf7;
+    background: #379FFF;
 }
 
 ul.CTAs {
@@ -182,7 +179,7 @@ ul.CTAs a {
 }
 
 a.article, a.article:hover {
-    background: #63baf7 !important;
+    background: #379FFF !important;
     color: #fff !important;
 }
 
@@ -200,6 +197,9 @@ a.article, a.article:hover {
     transition: all 0.3s;
 }
 
+#content > div {
+    vertical-align: middle;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

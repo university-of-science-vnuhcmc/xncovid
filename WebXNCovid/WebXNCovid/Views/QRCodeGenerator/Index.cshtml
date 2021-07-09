@@ -1,10 +1,13 @@
-﻿@{
+﻿@*@{
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}*@
+@{
     ViewBag.Title = "Generate QR Code";
 }
 <div class="row">
     <div class="input-dialog">
 
-        @using (Html.BeginForm("Generate", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("GenerateCode", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <h4>Nhập số lượng mã QR cần dùng</h4>
             <hr />

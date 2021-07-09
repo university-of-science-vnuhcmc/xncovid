@@ -131,11 +131,13 @@
     <Content Include="Views\web.config" />
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\QRCodeGenerator\PreviewQRCode.cshtml" />
     <Content Include="Views\QRCodeGenerator\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\QRCodeGenerator\GenerateQRSuccess.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

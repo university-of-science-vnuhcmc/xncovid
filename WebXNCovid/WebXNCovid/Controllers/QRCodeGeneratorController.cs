@@ -22,7 +22,20 @@ namespace WebForCommunityScreening.Controllers
             return View();
         }
 
-        public ActionResult Generate(int QRCodeAmount)
+        public ActionResult GenerateCode(int QRCodeAmount)
+        {
+            try
+            {
+                return View("GenerateQRSuccess");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public ActionResult PrintCode(PrintCodeViewModel model)
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
             List<byte[]> bytearrays = new List<byte[]>();
@@ -35,7 +48,7 @@ namespace WebForCommunityScreening.Controllers
                 }
 
 
-                for (int i = 0; i < QRCodeAmount; i++)
+                for (int i = 0; i < model.Amount; i++)
                 {
                     var bmp = GenerateQR(i);
                     bitmaps.Add(bmp);
@@ -96,17 +109,16 @@ namespace WebForCommunityScreening.Controllers
             return RedirectToAction("PreviewQRCode", new { page = 1 });
         }
 
-        //public ActionResult GenerateQRSuccess()
-        //{
-        //    return View();
-        //}
+        public ActionResult GenerateQRSuccess()
+        {
+            return View();
+        }
 
         public ActionResult PreviewQRCode(int page)
         {
             List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
             var pagedList = imageBytes.ToPagedList(page, 20);
             return View(pagedList);
-            //return View();
         }
 
         private static byte[] BitmapToBytes(Bitmap img)
