@@ -16,7 +16,7 @@ public class MainLeaderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_leader);
         MyApplication myapp = (MyApplication) getApplication();
         TextView nameView = findViewById(R.id.name);
-        nameView.setText(myapp.getName());
+        nameView.setText(myapp.getUserInfo().Name);
     }
     public void signOut(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

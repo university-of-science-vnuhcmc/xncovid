@@ -21,8 +21,10 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 import com.hcdc.xncovid.model.LoginReq;
 import com.hcdc.xncovid.model.LoginRes;
+import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.APIResponse;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
@@ -88,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String filename = "token.txt";
+                        String filename = "userinfo";
                         String fileContents = "";
                         try{
                             File file = new File(getBaseContext().getFilesDir(),filename);
@@ -101,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                         }catch (IOException e) {
                             Log.w("Logout", e.toString());
                         }
-                        ((MyApplication) getApplication()).setToken("");
+                        ((MyApplication) getApplication()).setUserInfo(null);
                     }
                 });
     }
@@ -148,27 +150,30 @@ public class LoginActivity extends AppCompatActivity {
             public void callback(Object response) {
                 LoginRes res = (LoginRes) response;
                 if(res.returnCode == 1){
-                    String filename = "token.txt";
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.Email = account.getEmail();
+                    userInfo.Name = res.CustomerName;
+                    userInfo.Role = res.Role;
+                    userInfo.Token = res.Token;
+                    String filename = "userinfo";
                     try{
                         File file = new File(getFilesDir(),filename);
                         if(!file.exists()){
                             file.createNewFile();
                         }
                         FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-                        fos.write(res.Token.getBytes());
+                        fos.write(new Gson().toJson(userInfo).getBytes());
                     }  catch (FileNotFoundException ex){
                         Log.w("Login", ex.toString());
                     }catch (IOException e) {
                         Log.w("Login", e.toString());
                     }
                     MyApplication myapp = ((MyApplication) getApplication());
-                    myapp.setToken(res.Token);
                     myapp.setDomain(res.Domain);
                     myapp.setForm(res.Form);
                     myapp.setUrl(res.Url);
                     myapp.setId(res.Id);
-                    myapp.setRole(res.Role);
-                    myapp.setName(res.CustomerName);
+                    myapp.setUserInfo(userInfo);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else if(res.returnCode == 2) {

@@ -28,15 +28,13 @@ String sessionId;
         setContentView(R.layout.activity_main_staff);
         MyApplication myapp = (MyApplication) getApplication();
         TextView nameView = findViewById(R.id.name);
-        nameView.setText(myapp.getName());
-        Intent intent=this.getIntent();
+        nameView.setText(myapp.getUserInfo().Name);
+        Intent intent = this.getIntent();
         if(intent.getExtras() != null){
             sessionId = intent.getExtras().getString("xn_session");
         }
 
-        setContentView(R.layout.activity_main_staff);
-
-       layoutJoinTest =findViewById(R.id.joinTest);
+        layoutJoinTest =findViewById(R.id.joinTest);
         layoutListTest =findViewById(R.id.listTest);
         layoutnewGroup =findViewById(R.id.newGroup);
         layoutlistGroup =findViewById(R.id.listGroup);

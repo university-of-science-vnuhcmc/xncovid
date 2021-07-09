@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.hcdc.xncovid.model.UserInfo;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,19 +19,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String token = ((MyApplication) this.getApplication()).getToken();
-        if(token == null || token == ""){
-            getToken();
-            token = ((MyApplication) this.getApplication()).getToken();
-            if(token == ""){
+        UserInfo userInfo = ((MyApplication)getApplication()).getUserInfo();
+        if(userInfo == null){
+            getUserInfo();
+            userInfo = ((MyApplication)getApplication()).getUserInfo();
+            if(userInfo == null){
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 return;
             }
         }
 
-        boolean isLeader = true;
-        if(isLeader){
+        if(userInfo.Role.equals("Leader")){
             Intent intent = new Intent(this, MainLeaderActivity.class);
             startActivity(intent);
         } else {
@@ -35,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-    private void getToken(){
+    private void getUserInfo(){
         try {
-            FileInputStream fis = new FileInputStream(this.getFilesDir() + "/token.txt");
+            FileInputStream fis = new FileInputStream(this.getFilesDir() + "/userinfo");
             InputStreamReader inputStreamReader =
                     new InputStreamReader(fis);
             StringBuilder stringBuilder = new StringBuilder();
@@ -50,11 +53,19 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 // Error occurred when opening raw file for reading.
             } finally {
-                String token = stringBuilder.toString();
-                ((MyApplication) this.getApplication()).setToken(token);
+                String strUserInfo = stringBuilder.toString();
+                if(strUserInfo == null || strUserInfo == ""){
+                    return;
+                }
+                UserInfo userInfo;
+                try {
+                    userInfo = new Gson().fromJson(strUserInfo, UserInfo.class);
+                } catch (JsonSyntaxException ex){
+                    return;
+                }
+                ((MyApplication) this.getApplication()).setUserInfo(userInfo);
             }
         } catch (FileNotFoundException ex){
-            ((MyApplication) this.getApplication()).setToken("");
         }
     }
 }
