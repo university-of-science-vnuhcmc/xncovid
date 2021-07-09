@@ -26,6 +26,9 @@ String sessionId;
         super.onCreate(savedInstanceState);
         sessionId = null;
         setContentView(R.layout.activity_main_staff);
+        MyApplication myapp = (MyApplication) getApplication();
+        TextView nameView = findViewById(R.id.name);
+        nameView.setText(myapp.getName());
         Intent intent=this.getIntent();
         if(intent.getExtras() != null){
             sessionId = intent.getExtras().getString("xn_session");
