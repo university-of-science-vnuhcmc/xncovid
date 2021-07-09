@@ -2,26 +2,18 @@ package com.hcdc.xncovid;
 
 import android.app.Application;
 
+import com.hcdc.xncovid.model.UserInfo;
+
 public class MyApplication extends Application {
 
-    private String token;
+    private UserInfo userInfo;
 
-    public String getToken() {
-        return token;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    private String role;
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     private String id;
@@ -61,14 +53,5 @@ public class MyApplication extends Application {
 
     public void setForm(String form) {
         Form = form;
-    }
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

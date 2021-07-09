@@ -1,5 +1,6 @@
 package com.hcdc.xncovid.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +14,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.hcdc.xncovid.MainLeaderActivity;
+import com.hcdc.xncovid.MyApplication;
+import com.hcdc.xncovid.model.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +32,11 @@ public class Caller {
             url = "https://xncovid.uit.edu.vn:7070/api/";
         }
         url = url + apiName;
+        UserInfo userInfo = ((MyApplication)((Activity)(context)).getApplication()).getUserInfo();
+        if(userInfo != null){
+            req.Email = userInfo.Email;
+            req.Token = userInfo.Token;
+        }
         JSONObject jsonReq = null;
         try{
             if(req != null){
