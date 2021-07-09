@@ -35,6 +35,8 @@ namespace CovidService.Models
         public string Form;
         public string Id;
         public string Role;
+        public string CustomerName;
+
        
     }
     public class ProviderUserDetails
@@ -142,6 +144,18 @@ namespace CovidService.Models
     public class CreateTestSessionResponse: Response
     {
         public long SessionID { get; set; }
+    }
+
+
+    public class JoinTestSessionRequest : Request
+    {
+        public string TestID { get; set; }
+      
+    }
+
+    public class JoinTestSessionReponse : Response
+    {
+        
     }
 
 }
