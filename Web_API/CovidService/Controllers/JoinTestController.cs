@@ -26,7 +26,7 @@ namespace CovidService.Controllers
                 }
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
-                //return objRes;
+                return objRes;
                 //string sqlString = SqlHelper.sqlString;
                 //List<SqlParameter> parameters = new List<SqlParameter>();               
                 //SqlHelper.AddParameter(ref parameters, "@TestID", System.Data.SqlDbType.NChar, objReq.TestID);
