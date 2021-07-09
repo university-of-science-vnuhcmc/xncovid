@@ -2,7 +2,6 @@ package com.hcdc.xncovid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -38,10 +37,10 @@ public class ConfirmSessionActivity extends AppCompatActivity {
         TextView chooseDate = findViewById(R.id.chooseDate);
         chooseDate.setText(String.format("%02d/%02d/%04d", day, month, year));
         TextView viewProvince = findViewById(R.id.province);
-        viewProvince.setText(province.VName);
+        viewProvince.setText(province.Name);
         TextView viewDistrict = findViewById(R.id.district);
-        viewDistrict.setText(district.VName);
+        viewDistrict.setText(district.Name);
         TextView viewWard = findViewById(R.id.ward);
-        viewWard.setText(ward.VName);
+        viewWard.setText(ward.Name);
     }
 }
