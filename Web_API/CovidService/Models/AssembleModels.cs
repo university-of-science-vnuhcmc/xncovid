@@ -103,7 +103,7 @@ namespace CovidService.Models
         public long CovidSpecimenID { get; set; }
     }
 
-    public class GetLocateRequest
+    public class GetLocateRequest : Request
     {
         public string Value { get; set; }
     }

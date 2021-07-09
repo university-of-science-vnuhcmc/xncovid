@@ -81,10 +81,11 @@ namespace CovidService.Controllers
                     
                     loginRes.returnCode = 1;
                     loginRes.returnMess = "Thành công";
+                    loginRes.CustomerName = "Rô Béo";
                     loginRes.Token = Guid.NewGuid().ToString();
                     loginRes.Url = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
                     loginRes.Domain = "https://kbytcq.khambenh.gov.vn/#tokhai_yte/model";
-                    loginRes.Id = "([A-z0-9-]*)";
+                    loginRes.Id = "Id=([A-z0-9-]*)";
                     loginRes.Role = "Staff";
                     loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
                                     fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
@@ -149,22 +150,7 @@ namespace CovidService.Controllers
             return googleApiTokenInfo;
            
         }
-        public bool CheckLogin(string Email,string Token)
-        {
-            bool isOK = false;
-
-            try
-            {
-                //goi db check
-                isOK = true;
-                return isOK;
-            }
-            catch (Exception)
-            {
-                return isOK;
-                throw;
-            }
-        }
+       
         private void Login(string Email, string Token)
         {
             string sqlString = SqlHelper.sqlString;
@@ -177,17 +163,6 @@ namespace CovidService.Controllers
             int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
         }
 
-        private void CheckSessionToken(string Email, string Token)
-        {
-            string sqlString = SqlHelper.sqlString;
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
-            SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.BigInt, Token);
-     //       SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
-          //  SqlHelper.AddParameter(ref parameters, "@CovidSpecimenID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-            SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-            SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspCheckAccountLogin", parameters.ToArray());
-            int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
-        }
+     
     }
 }
