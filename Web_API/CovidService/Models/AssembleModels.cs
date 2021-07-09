@@ -5,12 +5,12 @@ using System.Web;
 
 namespace CovidService.Models
 {
-    public class Reponse
+    public class Response
     {
         public int returnCode;
         public string returnMess;
     }
-    public class AccountModels
+    public class AssembleModels
     {
         public string Email;
         public string Token;
@@ -22,7 +22,7 @@ namespace CovidService.Models
         public string Email;
     }
 
-    public class LoginReponse : Reponse
+    public class LoginReponse : Response
     {
         public string Token;
         public string Url;
@@ -91,12 +91,17 @@ namespace CovidService.Models
 
     }
 
+    public class GroupTestResponse: Response
+    {
+        public long CovidSpecimenID { get; set; }
+    }
+
     public class GetLocateRequest
     {
         public string Value { get; set; }
     }
 
-    public class GetLocateResponse: Reponse
+    public class GetLocateResponse: Response
     {
         public List<LocateInfor> locateInfors;
     }
@@ -113,5 +118,32 @@ namespace CovidService.Models
         Province = 0,
         District = 1,
         Ward = 2,
+    }
+
+    public class CreateTestSessionRequest
+    {
+        public string SessionName { get; set; }
+        public string Purpose { get; set; }
+        public DateTime FromTestingDate { get; set; }
+        public DateTime ToTestingDate { get; set; }
+        public string FullLocation { get; set; }
+        public string ApartmentNo { get; set; }
+        public string StreetName { get; set; }
+        public string WardID { get; set; }
+        public string DistrictID { get; set; }
+        public string ProvinceID { get; set; }
+    }
+
+    public class CreateTestSessionResponse: Response
+    {
+        public long SessionID { get; set; }
+    }
+
+    public class JoinTestSessionRequest
+    {
+        public string SessionName { get; set; }
+        public string Purpose { get; set; }
+        public string Date { get; set; }
+        public string FullLocation { get; set; }
     }
 }

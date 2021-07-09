@@ -18,7 +18,7 @@ public sealed class SqlHelper
 
     // Since this class provides only static methods, make the default constructor private to prevent 
     // instances from being created with "new SqlHelper()"
-    public static string sqlString = "";
+    public static string sqlString = @"Data Source=10.102.11.138,8088;Initial Catalog=XNCovid;User ID=sa;Password=mhWZ9PvOwDQSViFO0d1S";
     private SqlHelper()
     {
     }

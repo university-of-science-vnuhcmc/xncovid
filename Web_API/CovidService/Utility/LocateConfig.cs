@@ -155,8 +155,8 @@ public class LocateConfig
                     break;
 
             }
-            locateInfor.VName = row["Ten"] is null || row["Ten"] == DBNull.Value ? "" : row["Ten"].ToString();
-            locateInfor.EName = row["TenTiengAnh"] is null || row["TenTiengAnh"] == DBNull.Value ? "" : row["TenTiengAnh"].ToString();
+            locateInfor.VName = row["Ten"] == null || row["Ten"] == DBNull.Value ? "" : row["Ten"].ToString();
+            locateInfor.EName = row["TenTiengAnh"] == null || row["TenTiengAnh"] == DBNull.Value ? "" : row["TenTiengAnh"].ToString();
         }
         return locateInfor;
     }

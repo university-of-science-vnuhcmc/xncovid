@@ -13,9 +13,9 @@ namespace CovidService.Controllers
 {
     public class GroupTestController : ApiController
     {
-        public Reponse Post([FromBody]GroupTestRequest objReq)
+        public GroupTestResponse Post([FromBody]GroupTestRequest objReq)
         {
-            Reponse objRes = new Reponse();
+            GroupTestResponse objRes = new GroupTestResponse();
             try
             {
                 if(objReq == null)
@@ -38,8 +38,8 @@ namespace CovidService.Controllers
                 SqlHelper.AddParameter(ref parameters, "@SpecimenAmount", System.Data.SqlDbType.NChar, objReq.SpecimenAmount);
                 SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
                 SqlHelper.AddParameter(ref parameters, "@Note", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
-                SqlHelper.AddParameter(ref parameters, "@Note", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenDetailList", System.Data.SqlDbType.Structured, data);
+                SqlHelper.AddParameter(ref parameters, "@CovidSpecimenID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
@@ -49,6 +49,8 @@ namespace CovidService.Controllers
                     objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
+                long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
+                objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
                 return objRes;
@@ -61,7 +63,7 @@ namespace CovidService.Controllers
             }
         }
 
-        public DataTable ConvertToDataTable<T>(List<T> lstObject)
+        private DataTable ConvertToDataTable<T>(List<T> lstObject)
         {
             PropertyDescriptorCollection properties =
         TypeDescriptor.GetProperties(typeof(T));

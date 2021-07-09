@@ -17,13 +17,13 @@ namespace CovidService.Controllers
             {
                 List<LocateInfor> lstLocate = new List<LocateInfor>();
                 lstLocate = LocateConfig.Instance.GetLocateInfor(objReq.Value);
-                if(string.IsNullOrEmpty(objReq.Value) && lstLocate.Count == 0)
+                if(string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
                     objRes.returnCode = 1000;
                     objRes.returnMess = "Get list Province return fail";
                     return objRes;
                 }
-                if (!string.IsNullOrEmpty(objReq.Value) && lstLocate.Count == 0)
+                if (!string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
                     objRes.returnCode = 1001;
                     objRes.returnMess = "Get list locate return fail";
