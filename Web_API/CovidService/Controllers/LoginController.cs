@@ -147,6 +147,22 @@ namespace CovidService.Controllers
             return googleApiTokenInfo;
            
         }
+        public bool CheckLogin(string Email,string Token)
+        {
+            bool isOK = false;
+
+            try
+            {
+                //goi db check
+                isOK = true;
+                return isOK;
+            }
+            catch (Exception)
+            {
+                return isOK;
+                throw;
+            }
+        }
         //private void CallDB()
         //{
         //    string sqlString = SqlHelper.sqlString;

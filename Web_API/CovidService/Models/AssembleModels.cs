@@ -5,6 +5,11 @@ using System.Web;
 
 namespace CovidService.Models
 {
+    public class Request
+    {
+        public string Token;
+        public string Email;
+    }
     public class Response
     {
         public int returnCode;
