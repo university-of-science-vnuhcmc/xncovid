@@ -23,7 +23,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/rectangle_title_bar">
 
-                <TextView
+                <TextView android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nguyễn Văn A"

@@ -9,4 +9,5 @@ public class LoginRes extends APIResponse {
     public String Form;
     public String Id;
     public String Role;
+    public String CustomerName;
 }

@@ -5,16 +5,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainLeaderActivity extends AppCompatActivity {
-String sessionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionId = null;
         setContentView(R.layout.activity_main_leader);
+        MyApplication myapp = (MyApplication) getApplication();
+        TextView nameView = findViewById(R.id.name);
+        nameView.setText(myapp.getName());
     }
     public void signOut(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
