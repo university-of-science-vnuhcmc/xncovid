@@ -3,6 +3,7 @@ using Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,16 +11,7 @@ using System.Web;
 
 public class LocateConfig
 {
-    static long bnlFlagNotify = 0;
-    static FileSystemWatcher watcher = null;
-    static AutoResetEvent w = new AutoResetEvent(false);
-    static string strPath = null;
-    static string strDirectory = null;
-    static string strConfig = null;
     private static LocateConfig instance;
-    private static string strProvincePath = HttpContext.Current.Server.MapPath("~/bin/Province.xlsx");//@"D:\Projects\SI4Covid\SI4Covid\bin\Debug\Province.xlsx";
-    private static string strDistrictPath = HttpContext.Current.Server.MapPath("~/bin/District.xlsx");//@"D:\Projects\SI4Covid\SI4Covid\bin\Debug\District.xlsx";
-    private static string strWardPath = HttpContext.Current.Server.MapPath("~/bin/Ward.xlsx");//@"D:\Projects\SI4Covid\SI4Covid\bin\Debug\Ward.xlsx";
     public static LocateConfig Instance
     {
         get
@@ -28,17 +20,6 @@ public class LocateConfig
             {
                 instance = new LocateConfig();
             }
-            if (watcher == null)
-            {
-                watcher = new FileSystemWatcher();
-            }
-            strDirectory = HttpContext.Current.Server.MapPath("~/bin");
-            watcher.Path = strDirectory;
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
-            watcher.Filter = ".xlsx";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.Created += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
             return instance;
         }
     }
@@ -48,7 +29,7 @@ public class LocateConfig
         OnLoad();
     }
 
-    private static Dictionary<string, LocateInfor> dicProvince = new Dictionary<string, LocateInfor>();
+    private static List<LocateInfor> lstProvince = new List<LocateInfor>();
     private static Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
     private static Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
     private DataTable tbPrince = new DataTable();
@@ -59,52 +40,68 @@ public class LocateConfig
     {
         try
         {
+            string connect = SqlHelper.sqlString;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+            //SqlHelper.ExecuteNonQuery(connect, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
+            DataSet dts = SqlHelper.GetDataTable(connect, "uspGetMetaDataList", parameters.ToArray());
+            int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+            if (intReturnValue != 1)
+            {
+                return;
+            }
             DataTable dtInfor = null;
-            dtInfor = ReadFileExcel(strProvincePath);
+            dtInfor = dts.Tables[0];
+
+            LocateInfor objSpecial = new LocateInfor();
             foreach (DataRow item in dtInfor.Rows)
             {
                 LocateInfor provinceInfor = LocateInfor(item, LocateType.Province);
-                if (!dicProvince.ContainsKey(provinceInfor.Code))
+                if (provinceInfor.Code == "79")
                 {
-                    dicProvince.Add(provinceInfor.Code, provinceInfor);
+                    objSpecial = provinceInfor;
                 }
+                lstProvince.Add(provinceInfor);
             }
+            int index = lstProvince.IndexOf(objSpecial);
+            lstProvince.RemoveAt(index);
+            lstProvince.Insert(0, objSpecial);
             dtInfor = null;
-            dtInfor = ReadFileExcel(strDistrictPath);
+            dtInfor = dts.Tables[1];
             for (int i = 0; i < dtInfor.Rows.Count; i++)
             {
-                DataRow[] temp = dtInfor.Select("MaTP = '" + dtInfor.Rows[i]["MaTP"].ToString() + "'");
+                DataRow[] temp = dtInfor.Select("DistrictCode = '" + dtInfor.Rows[i]["DistrictCode"].ToString() + "'");
                 List<LocateInfor> lstAddressInfor = new List<LocateInfor>();
                 foreach (var item in temp)
                 {
                     LocateInfor districtInfor = LocateInfor(item, LocateType.District);
                     lstAddressInfor.Add(districtInfor);
                 }
-                string key = dtInfor.Rows[i]["MaTP"].ToString().PadLeft(2, '0');
+                string key = dtInfor.Rows[i]["DistrictCode"].ToString();
                 if (!dicDistrict.ContainsKey(key))
                 {
                     dicDistrict.Add(key, lstAddressInfor);
                 }
-                i += temp.Length;
-
+                i += (temp.Length - 1);
             }
             dtInfor = null;
-            dtInfor = ReadFileExcel(strWardPath);
+            dtInfor = dts.Tables[2]; ;
             for (int i = 0; i < dtInfor.Rows.Count; i++)
             {
-                DataRow[] temp = dtInfor.Select("MaTP = '" + dtInfor.Rows[i]["MaTP"].ToString() + "' and MaQH = '" + dtInfor.Rows[i]["MaQH"].ToString() + "'");
+                DataRow[] temp = dtInfor.Select("WardCode = '" + dtInfor.Rows[i]["WardCode"].ToString() + "'");
                 List<LocateInfor> lstAddressInfor = new List<LocateInfor>();
                 foreach (var item in temp)
                 {
                     LocateInfor wardInfor = LocateInfor(item, LocateType.Ward);
                     lstAddressInfor.Add(wardInfor);
                 }
-                string key = dtInfor.Rows[i]["MaTP"].ToString().PadLeft(2, '0') + "_" + dtInfor.Rows[i]["MaQH"].ToString().PadLeft(3, '0');
+                //string key = dtInfor.Rows[i]["MaTP"].ToString().PadLeft(2, '0') + "_" + dtInfor.Rows[i]["MaQH"].ToString().PadLeft(3, '0');
+                string key = dtInfor.Rows[i]["WardCode"].ToString();
                 if (!dicWard.ContainsKey(key))
                 {
                     dicWard.Add(key, lstAddressInfor);
                 }
-                i += temp.Length;
+                i += (temp.Length - 1);
             }
         }
         catch (Exception objEx)
@@ -112,29 +109,6 @@ public class LocateConfig
         }
     }
 
-    private static DataTable ReadFileExcel(string Path)
-    {
-        FileStream stream = null;
-        IExcelDataReader excelReader = null;
-        DataSet result = null;
-        DataTable dtInfor = null;
-        using (stream = File.Open(Path, FileMode.Open, FileAccess.Read))
-        {
-            if (strProvincePath.EndsWith(".xls"))
-            {
-                excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
-            }
-            else
-            {
-                excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-            }
-            excelReader.IsFirstRowAsColumnNames = true;
-            result = excelReader.AsDataSet();
-            excelReader.Close();
-        }
-        dtInfor = result.Tables[0];
-        return dtInfor;
-    }
 
     private static LocateInfor LocateInfor(DataRow row, LocateType LocateType)
     {
@@ -145,63 +119,35 @@ public class LocateConfig
             switch (LocateType)
             {
                 case LocateType.Province:
-                    locateInfor.Code = row["Ma"].ToString().PadLeft(2, '0');
+                    locateInfor.ID = long.Parse(row["ProvinceID"].ToString());
+                    locateInfor.Code = row["ProvinceCode"].ToString();
                     break;
                 case LocateType.District:
-                    locateInfor.Code = row["Ma"].ToString().PadLeft(3, '0');
+                    locateInfor.ID = long.Parse(row["DistrictID"].ToString());
+                    locateInfor.Code = row["DistrictCode"].ToString();
                     break;
                 case LocateType.Ward:
-                    locateInfor.Code = row["Ma"].ToString().PadLeft(5, '0');
+                    locateInfor.ID = long.Parse(row["WardID"].ToString());
+                    locateInfor.Code = row["WardCode"].ToString();
                     break;
 
             }
-            locateInfor.VName = row["Ten"] == null || row["Ten"] == DBNull.Value ? "" : row["Ten"].ToString();
-            locateInfor.EName = row["TenTiengAnh"] == null || row["TenTiengAnh"] == DBNull.Value ? "" : row["TenTiengAnh"].ToString();
+            locateInfor.Name = row["Name"] == null || row["Name"] == DBNull.Value ? "" : row["Name"].ToString();
         }
         return locateInfor;
     }
 
-    public static void OnChanged(object source, FileSystemEventArgs e)
-    {
-        if (Interlocked.Equals(bnlFlagNotify, (long)0))
-        {
-            Interlocked.Increment(ref bnlFlagNotify);
-            w.Reset();
-            Thread thread = new Thread(ReadFile);
-            thread.Start();
-        }
-        else
-        {
-            w.Set();
-        }
-    }
-    private static void ReadFile()
-    {
-        w.WaitOne(2000);
-        if (bnlFlagNotify > 0)
-        {
-            OnLoad();
-            Interlocked.Decrement(ref bnlFlagNotify);
-        }
-    }
 
     public List<LocateInfor> GetLocateInfor(string searchKey)
     {
         List<LocateInfor> locateInfors = new List<LocateInfor>();
         if (string.IsNullOrEmpty(searchKey))
         {
-            if (dicProvince != null)
-            {
-                foreach (var item in dicProvince)
-                {
-                    locateInfors.Add(item.Value);
-                }
-                return locateInfors;
-            }
+            return lstProvince;
         }
         else
         {
-            if (!searchKey.Contains('_'))
+            if (searchKey.Length == 2)
             {
                 if (dicDistrict != null)
                 {

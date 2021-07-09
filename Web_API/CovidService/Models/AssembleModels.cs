@@ -68,7 +68,7 @@ namespace CovidService.Models
         public string typ { get; set; }
     }
 
-    public class GroupTestRequest
+    public class GroupTestRequest: Request
     {
         public string CovidSpecimenCode { get; set; }
         public long CovidTestingSessionID { get; set; }
@@ -101,7 +101,7 @@ namespace CovidService.Models
         public long CovidSpecimenID { get; set; }
     }
 
-    public class GetLocateRequest
+    public class GetLocateRequest: Request
     {
         public string Value { get; set; }
     }
@@ -113,9 +113,9 @@ namespace CovidService.Models
 
     public class LocateInfor
     {
+        public long ID;
         public string Code;
-        public string VName;
-        public string EName;
+        public string Name;
     }
 
     public enum LocateType
@@ -125,7 +125,7 @@ namespace CovidService.Models
         Ward = 2,
     }
 
-    public class CreateTestSessionRequest
+    public class CreateTestSessionRequest: Request
     {
         public string SessionName { get; set; }
         public string Purpose { get; set; }
@@ -144,11 +144,4 @@ namespace CovidService.Models
         public long SessionID { get; set; }
     }
 
-    public class JoinTestSessionRequest
-    {
-        public string SessionName { get; set; }
-        public string Purpose { get; set; }
-        public string Date { get; set; }
-        public string FullLocation { get; set; }
-    }
 }
