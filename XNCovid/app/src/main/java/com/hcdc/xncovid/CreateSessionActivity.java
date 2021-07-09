@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.hcdc.xncovid.model.GetLocateReq;
 import com.hcdc.xncovid.model.GetLocateRes;
@@ -79,7 +80,7 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
         req.Value = code;
         caller.call(this, "getlocate", req, GetLocateRes.class, new ICallback() {
             @Override
-            public void callback(APIResponse response) {
+            public void callback(Object response) {
                 GetLocateRes res = (GetLocateRes) response;
                 if(res.returnCode != 1){
                     new AlertDialog.Builder(CreateSessionActivity.this)
@@ -94,7 +95,7 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
             }
-        });
+        }, null, Request.Method.POST);
     }
 
     public void createSession(View v) {

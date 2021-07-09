@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.android.volley.Request;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -144,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
         req.tokenid = account.getIdToken();
         caller.call(this, "login", req, LoginRes.class, new ICallback() {
             @Override
-            public void callback(APIResponse response) {
+            public void callback(Object response) {
                 LoginRes res = (LoginRes) response;
                 if(res.returnCode == 1){
                     String filename = "token.txt";
@@ -184,6 +185,6 @@ public class LoginActivity extends AppCompatActivity {
                             .show();
                 }
             }
-        });
+        }, null, Request.Method.POST);
     }
 }
