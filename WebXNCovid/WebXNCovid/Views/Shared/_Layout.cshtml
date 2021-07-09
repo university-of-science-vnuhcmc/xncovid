@@ -15,14 +15,16 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="active">
             <div class="sidebar-header">
-                <a href="#" id="sidebarCollapse">
+                <a href="#" id="sidebarCollapse" data-toggle="sidebar-colapse">
                     <i class="fas fa-align-left"></i>
                 </a>
             </div>
@@ -30,14 +32,14 @@
             <ul class="list-unstyled components">
                 <li @*class="active"*@>
                     <a href="/QRCodeGenerator/Index">
-                        <i class="fas fa-align-justify"></i>
-                        Tạo mã
+                        <i class="fas fa-plus"></i>
+                        <span class="menu-collapsed d-none">Tạo mã</span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <i class="fas fa-image"></i>
-                        Tra cứu mã
+                        <i class="fas fa-search"></i>
+                        <span class="menu-collapsed d-none">Tra cứu mã</span>
                     </a>
                 </li>
             </ul>
@@ -79,6 +81,16 @@
                 $('#sidebar').toggleClass('active');
             });
         });
+    </script>
+    <script>
+        // Collapse click
+        $('[data-toggle=sidebar-colapse]').click(function () {
+            SidebarCollapse();
+        });
+
+        function SidebarCollapse() {
+            $('.menu-collapsed').toggleClass('d-none');
+        }
     </script>
 </body>
 </html>

@@ -6,9 +6,11 @@ using System.Web;
 
 namespace WebXNCovid.Models
 {
-    public class PreviewQRCodeViewModel
+    public class GenerateQRSuccessViewModel
     {
-        public List<Bitmap> bitmaps;
-        public List<byte[]> bytearrays;
+        public DateTime CreateDate;
+        public int Amount;
+        public int IdFrom;
+        public int IdTo;
     }
 }

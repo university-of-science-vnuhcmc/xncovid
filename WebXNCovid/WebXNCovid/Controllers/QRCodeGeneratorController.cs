@@ -94,10 +94,13 @@ namespace WebForCommunityScreening.Controllers
                 //catch exception if there is any
             }
             return RedirectToAction("PreviewQRCode", new { page = 1 });
-            //return View("PreviewQRCode" , new PreviewQRCodeViewModel { bitmaps = bitmaps, bytearrays = bytearrays });
         }
 
-        //public ActionResult PreviewQRCode(int QRCodeAmount)
+        //public ActionResult GenerateQRSuccess()
+        //{
+        //    return View();
+        //}
+
         public ActionResult PreviewQRCode(int page)
         {
             List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
@@ -105,15 +108,6 @@ namespace WebForCommunityScreening.Controllers
             return View(pagedList);
             //return View();
         }
-        //[HttpPost]
-        ////public ActionResult PreviewQRCode(int QRCodeAmount)
-        //public ActionResult PreviewQRCode(PreviewQRCodeViewModel model)
-        //{
-        //    string a = "2323";
-        //    PreviewQRCodeViewModel pagedList = new PreviewQRCodeViewModel();
-        //    pagedList.bytearrays = model.bytearrays.ToPagedList(1, 20).ToList();
-        //    return View(pagedList);
-        //}
 
         private static byte[] BitmapToBytes(Bitmap img)
         {
@@ -188,6 +182,7 @@ namespace WebForCommunityScreening.Controllers
             }
             return bmp;
         }
+
 
         private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
         {

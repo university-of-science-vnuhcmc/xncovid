@@ -1,4 +1,54 @@
 ﻿body {
     background-image: url('../Assets/people-wearing-masks.png');
-    /*background-color: aliceblue;*/
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-frame {
+    background-color: #E0EDE5;
+    padding: 30px 80px;
+    margin: auto;
+    text-align: center;
+    border: 1px solid #379FFF;
+    box-sizing: border-box;
+}
+
+#my-signin2 > div {
+    margin: auto;
+}
+
+.login-header {
+    margin: 10px auto;
+    /*font-size: 48px;*/
+    font-size: 2rem;
+    line-height: 59px;
+}
+
+.login-note {
+    margin: 30px auto 10px;
+    font-family: 'Montserrat', sans-serif;
+    /*font-size: 24px;*/
+    font-size: 1rem;
+    line-height: 29px;
+}
+
+.input-dialog {
+    background-color: white;
+    padding: 20px 80px 10px 80px;
+    margin: auto;
+    text-align: center;
+    border: 1px solid #a6dfed;
+}
+
+.h-align-center {
+    margin: auto;
+}
+
+.btn-custom {
+    background-color: #379FFF;
+    border-radius: 10px;
+    color: white;
+}
+
+.center-text-align {
+    text-align: center;
 }

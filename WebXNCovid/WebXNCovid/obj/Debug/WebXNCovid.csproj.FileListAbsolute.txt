@@ -58,3 +58,5 @@ E:\Tech4Covid\WebXNCovid\WebXNCovid\obj\Debug\WebXNCovid.g.resources
 E:\Tech4Covid\WebXNCovid\WebXNCovid\obj\Debug\WebXNCovid.Properties.Resources.resources
 E:\Tech4Covid\WebXNCovid\WebXNCovid\obj\Debug\WebXNCovid.dll
 E:\Tech4Covid\WebXNCovid\WebXNCovid\obj\Debug\WebXNCovid.pdb
+E:\Tech4Covid\WebXNCovid\WebXNCovid\bin\Newtonsoft.Json.dll
+E:\Tech4Covid\WebXNCovid\WebXNCovid\bin\Newtonsoft.Json.xml
