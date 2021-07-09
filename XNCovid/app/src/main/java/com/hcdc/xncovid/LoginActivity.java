@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login(GoogleSignInAccount account){
         Caller caller = new Caller();
         LoginReq req = new LoginReq();
-        req.email = "account.getEmail()";
+        req.email = account.getEmail();
         req.tokenid = account.getIdToken();
         caller.call(this, "login", req, LoginRes.class, new ICallback() {
             @Override
