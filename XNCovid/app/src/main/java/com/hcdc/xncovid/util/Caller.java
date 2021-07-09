@@ -23,7 +23,7 @@ import java.util.Map;
 public class Caller {
     public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://45.122.249.68:7070/api/";
+        String url = "https://xncovid.uit.edu.vn:7070/api/";
         url = url + apiName;
         JSONObject jsonReq;
         try{
@@ -34,7 +34,7 @@ public class Caller {
             new AlertDialog.Builder(context)
                     .setMessage("Lỗi xử lý.")
                     .setNegativeButton("OK", null)
-                    .create()
+                    .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
             return;
         }
@@ -52,7 +52,7 @@ public class Caller {
                 new AlertDialog.Builder(context)
                         .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
                         .setNegativeButton("OK", null)
-                        .create()
+                        .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
         });
