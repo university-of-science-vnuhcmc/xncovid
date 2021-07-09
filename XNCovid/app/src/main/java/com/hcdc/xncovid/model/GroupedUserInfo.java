@@ -1,7 +1,5 @@
 package com.hcdc.xncovid.model;
 
-import com.google.gson.Gson;
-
 public class GroupedUserInfo {
 
     private String uid;
@@ -27,10 +25,6 @@ public class GroupedUserInfo {
     }
 
 
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
-    }
 
     public String getFullname() {
         return fullname;

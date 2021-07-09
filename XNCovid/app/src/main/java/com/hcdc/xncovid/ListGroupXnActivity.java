@@ -3,9 +3,11 @@ package com.hcdc.xncovid;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,10 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hcdc.xncovid.adapter.GroupItemAdapter;
 import com.hcdc.xncovid.model.GroupedUserInfo;
-import com.hcdc.xncovid.util.Util;
+
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -33,6 +36,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
     String kbyt_id; //ma dinh danh ng khai bao y te
    SortedSet<String> setUID;
    LinearLayout btnStartGroup;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +84,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
                //kt co trung uid ko, co thi bao loi va bo qua
                 if(setUID.contains(kbyt_id)){
-                    new AlertDialog.Builder(this)
-                            .setTitle("Thêm mã định danh không thành công")
-                            .setMessage("Mã đinh danh đã tồn tại trong mẫu xét nghiệm này!")
-                            .setIcon(android.R.drawable.ic_delete)
-                            .setNeutralButton("OK",null)
-                            .show();
+                    Toast.makeText(this, "Mã đinh danh đã tồn tại trong mẫu xét nghiệm này!",
+                            Toast.LENGTH_LONG).show();
                 }
                 else {
                     newObj = new GroupedUserInfo(kbyt_id, isOnline);
@@ -99,5 +99,58 @@ public class ListGroupXnActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    public void AddNewGroupItem(GroupedUserInfo info){
+
+    }
+
+    private class CrawlKBYTAsyncTask extends AsyncTask<String, Void, GroupedUserInfo> {
+
+        //khai báo Activity để lưu trữ địa chỉ của MainActivity
+        private String urlGetUserInfo = "https://kbytcq.khambenh.gov.vn/";
+        private  String contentRegexs = "phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai\n" +
+                "fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten\n" +
+                "gent::pattern==gioi_tinh=(?<gioitinh>\\d{1})==>key==gioitinh\n" +
+                "birthdateyear::pattern==namsinh=(?<namsinh>\\d{4})==>key==namsinh\n" +
+                "address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+
+        Activity contextCha;
+        //constructor này được truyền vào là MainActivity
+        public CrawlKBYTAsyncTask(Activity ctx)
+        {
+            contextCha=ctx;
+
+        }
+
+        @Override
+        protected GroupedUserInfo doInBackground(String... kbytID) {
+
+             GroupedUserInfo obj = new GroupedUserInfo("1",true);
+
+            return obj;
+        }
+
+
+        //hàm này sẽ được thực hiện đầu tiên
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+
+        }
+
+
+        /**
+         * sau khi tiến trình thực hiện xong thì hàm này sảy ra
+         */
+        @Override
+        protected void onPostExecute(GroupedUserInfo result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            AddNewGroupItem(result);
+        }
+
+
     }
 }
