@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 public class ScanSessionActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler   {
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView mScannerView;
-    String scanContent;
+    String scanContent, xn_session;
     private  String urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
     private  String regexKBYTId = "id=([A-z0-9-]*)";
     int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te lan dau
@@ -35,7 +35,9 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
         if( getIntent().getExtras() != null){
             scanQRType = getIntent().getExtras().getInt("scan_qr_type");
-
+            if(getIntent().hasExtra("xn_session")){
+                xn_session = getIntent().getExtras().getString("xn_session");
+            }
         }
 
         int apiVersion = android.os.Build.VERSION.SDK_INT;
@@ -73,7 +75,6 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
     public void clickCancel(View view)
     {
-
         onBackPressed();
     }
 
@@ -114,11 +115,13 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             Intent intent=new Intent();
             intent.putExtra("kbyt_uid", scanContent);
             intent.putExtra("is_online", isOnline);
+            //intent.putExtra("xn_session", xn_session);
             setResult(2,intent);
             finish();//finishing activity
         }else {
             Intent intent = new Intent(getApplicationContext(), tmpclass);
             intent.putExtra("xn_session", scanContent);
+            intent.putExtra("session_code", xn_session);
             startActivity(intent);
         }
 

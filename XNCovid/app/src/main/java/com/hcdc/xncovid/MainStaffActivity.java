@@ -34,9 +34,7 @@ String sessionId;
             sessionId = intent.getExtras().getString("xn_session");
         }
 
-        setContentView(R.layout.activity_main_staff);
-
-       layoutJoinTest =findViewById(R.id.joinTest);
+        layoutJoinTest =findViewById(R.id.joinTest);
         layoutListTest =findViewById(R.id.listTest);
         layoutnewGroup =findViewById(R.id.newGroup);
         layoutlistGroup =findViewById(R.id.listGroup);
@@ -59,6 +57,7 @@ String sessionId;
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
                     intent.putExtra("scan_qr_type", 1);
+                    intent.putExtra("xn_session", sessionId);
                     startActivity(intent);
                 }
             });

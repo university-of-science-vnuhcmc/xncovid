@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        boolean isLeader = true;
+        boolean isLeader = false;
         if(isLeader){
             Intent intent = new Intent(this, MainLeaderActivity.class);
             startActivity(intent);

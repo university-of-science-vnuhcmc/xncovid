@@ -1,15 +1,17 @@
 package com.hcdc.xncovid;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,17 +20,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.google.gson.JsonObject;
 import com.hcdc.xncovid.adapter.GroupItemAdapter;
 import com.hcdc.xncovid.model.GroupedUserInfo;
+import com.hcdc.xncovid.model.LoginRes;
+import com.hcdc.xncovid.util.Caller;
+import com.hcdc.xncovid.util.DetectKBYTPattern;
+import com.hcdc.xncovid.util.ICallback;
+import com.hcdc.xncovid.util.Util;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+
+
 public class ListGroupXnActivity extends AppCompatActivity {
-    String xn_session; //ma ong nghiem
+    String xn_session, session_code; //ma ong nghiem
     private TextView xn_code, txt_total;
     GroupItemAdapter groupAdapter;
      ArrayList<GroupedUserInfo> list;
@@ -36,8 +52,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
     String kbyt_id; //ma dinh danh ng khai bao y te
    SortedSet<String> setUID;
    LinearLayout btnStartGroup;
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    Hashtable<String, GroupedUserInfo> hashObj;
+    Boolean isStop  = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +61,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
         xn_session = getIntent().getExtras().getString("xn_session");
         xn_code=(TextView) findViewById(R.id.txt_xncode);
         xn_code.setText(xn_session);
+
+        if(getIntent().hasExtra("session_code")){
+            session_code = getIntent().getExtras().getString("session_code");
+        }
+
         if(setUID == null){
             setUID = new TreeSet<>();
         }
@@ -66,10 +87,47 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
             }
         });
-
         txt_total = findViewById(R.id.txt_count);
         btnStartGroup = findViewById(R.id.btn_confirm_new_group);
+        btnStartGroup.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if(groupAdapter.getCount() < 10){
+                    String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
+                    String htmlcontent = "<font color='#FF0000'><i>! Hiện chỉ mới có "
+                            +groupAdapter.getCount()
+                            +" / 10 người, bạn muốn có tiếp tục</i></font>";
+                    new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
+                            txtUId,
+                            htmlcontent,
+                            "Tiếp tục",
+                            "Hủy",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    isStop = true;
+                                    if(UploadGroupXN()){
+                                        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                        intent.putExtra("xn_session", session_code);//ma phien xet nghiem
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    isStop = false;
+                                }
+                            }, ListGroupXnActivity.this);
+                }
+            }
+        });
     }
+
+    public  Boolean UploadGroupXN(){
+        return  true;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -92,7 +150,20 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     list.add(newObj);
                     setUID.add((kbyt_id));
                     txt_total.setText("("+groupAdapter.getCount()+"/10)");
+                    if(groupAdapter.getCount() < 10){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            txt_total.setTextAppearance(R.style.blue_20);
+                        }else {
+                            txt_total.setTextAppearance(this , R.style.blue_20);
+                        }
+                    }
                     btnStartGroup.setBackground(getResources().getDrawable(R.drawable.rectangle_btn_group_enable));
+                    if(isOnline){
+                        new CrawlKBYTAsyncTask(this).execute(kbyt_id);
+                    }
+                   else {
+                        AddNewGroupItem(newObj);
+                    }
                     groupAdapter.notifyDataSetChanged();
                 }
 
@@ -103,32 +174,55 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
     public void AddNewGroupItem(GroupedUserInfo info){
 
+        if(info == null){
+            return;
+        }
+
+        String uid = info.getUid();
+
+        if(!setUID.contains(uid)){
+            return;
+        }
+        if(hashObj == null){
+            hashObj = new Hashtable<String, GroupedUserInfo>();
+        }
+        if(hashObj.containsKey(uid)){
+            return;
+        }
+        hashObj.put(uid, info);
     }
 
     private class CrawlKBYTAsyncTask extends AsyncTask<String, Void, GroupedUserInfo> {
 
         //khai báo Activity để lưu trữ địa chỉ của MainActivity
-        private String urlGetUserInfo = "https://kbytcq.khambenh.gov.vn/";
-        private  String contentRegexs = "phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai\n" +
-                "fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten\n" +
-                "gent::pattern==gioi_tinh=(?<gioitinh>\\d{1})==>key==gioitinh\n" +
-                "birthdateyear::pattern==namsinh=(?<namsinh>\\d{4})==>key==namsinh\n" +
-                "address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
-
         Activity contextCha;
+        private String urlGetUserInfo  = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte/";
         //constructor này được truyền vào là MainActivity
         public CrawlKBYTAsyncTask(Activity ctx)
         {
             contextCha=ctx;
+            //urlGetUserInfo = ((MyApplication) ctx.getApplication()).getUrl(); //"https://kbytcq.khambenh.gov.vn/";
 
         }
 
         @Override
         protected GroupedUserInfo doInBackground(String... kbytID) {
+            final GroupedUserInfo[] obj = {null};
+            if(!isStop){
+                Caller caller = new Caller();
 
-             GroupedUserInfo obj = new GroupedUserInfo("1",true);
+                String api =  kbytID[0];
+                caller.call(ListGroupXnActivity.this, api, null, String.class, new ICallback() {
+                    @Override
+                    public void callback(Object response) {
+                        String strContent = (String) response;
+                        obj[0] = DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]);
+                    }
+                }, urlGetUserInfo, Request.Method.GET);
 
-            return obj;
+            }
+
+            return obj[0];
         }
 
 
@@ -148,7 +242,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
         protected void onPostExecute(GroupedUserInfo result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            AddNewGroupItem(result);
+            if(!isStop){
+                AddNewGroupItem(result);
+            }
         }
 
 

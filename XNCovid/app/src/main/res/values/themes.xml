@@ -140,6 +140,17 @@
         </item>
 
     </style>
+    <style name="blue_20">
+
+        <item name="android:textSize">
+            20sp
+        </item>
+
+        <item name="android:textColor">
+            #001AFF
+        </item>
+
+    </style>
     <style name="green_28">
 
         <item name="android:textSize">
