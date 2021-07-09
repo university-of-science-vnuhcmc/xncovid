@@ -35,6 +35,8 @@ namespace CovidService.Models
         public string Form;
         public string Id;
         public string Role;
+        public string CustomerName;
+
        
     }
     public class ProviderUserDetails
@@ -144,11 +146,14 @@ namespace CovidService.Models
         public long SessionID { get; set; }
     }
 
-    public class JoinTestSessionRequest
+    public class JoinTestSessionRequest : Request
     {
-        public string SessionName { get; set; }
-        public string Purpose { get; set; }
-        public string Date { get; set; }
-        public string FullLocation { get; set; }
+        public string TestID { get; set; }
+      
+    }
+
+    public class JoinTestSessionReponse : Response
+    {
+        
     }
 }

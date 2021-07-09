@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -163,18 +165,30 @@ namespace CovidService.Controllers
                 throw;
             }
         }
-        //private void CallDB()
-        //{
-        //    string sqlString = SqlHelper.sqlString;
-        //    List<SqlParameter> parameters = new List<SqlParameter>();
-        //    //AddParameter(ref parameters, "@PaySystem", System.Data.SqlDbType.Int, 1);
-        //    SqlHelper.AddParameter(ref parameters, "@SystemTraceId", System.Data.SqlDbType.VarChar, 64, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@PrimeId", System.Data.SqlDbType.BigInt, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@CustomerCode", System.Data.SqlDbType.VarChar, 128, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@CashAmount", System.Data.SqlDbType.Decimal, 22);
-        //    SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-        //    SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "abc", parameters.ToArray());
-        //    int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
-        //}
+        private void Login(string Email, string Token)
+        {
+            string sqlString = SqlHelper.sqlString;
+            List<SqlParameter> parameters = new List<SqlParameter>();          
+            SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
+            SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.BigInt, Token);
+            SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
+           
+            SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+            SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAccountLogin", parameters.ToArray());
+            int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+        }
+
+        private void CheckSessionToken(string Email, string Token)
+        {
+            string sqlString = SqlHelper.sqlString;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
+            SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.BigInt, Token);
+     //       SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
+          //  SqlHelper.AddParameter(ref parameters, "@CovidSpecimenID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
+            SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+            SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspCheckAccountLogin", parameters.ToArray());
+            int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+        }
     }
 }
