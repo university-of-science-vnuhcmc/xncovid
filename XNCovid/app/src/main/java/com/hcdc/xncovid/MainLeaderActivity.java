@@ -43,4 +43,11 @@ public class MainLeaderActivity extends AppCompatActivity {
         intent.putExtra("IsNew", false);
         startActivity(intent);
     }
+    public void endSession(View v){
+        Intent intent = new Intent(this, QRSessionActivity.class);
+        intent.putExtra("SessionName", "");
+        intent.putExtra("SessionID", (long)1000);
+        intent.putExtra("IsNew", false);
+        startActivity(intent);
+    }
 }

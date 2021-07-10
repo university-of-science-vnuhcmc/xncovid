@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.util.Util;
 
 public class MainStaffActivity extends AppCompatActivity {
@@ -39,16 +40,17 @@ String sessionId;
         if(flag == 1){ // tu man hinh gom nhom ve
 
         } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-
+            myapp.setSessionInfo(null);
         } else { // tu MainActivity hoac tu join phien xet nghiem
-
+            SessionInfo sessionInfo = new SessionInfo();
+            myapp.setSessionInfo(sessionInfo);
         }
 
-        layoutJoinTest =findViewById(R.id.joinTest);
-        layoutListTest =findViewById(R.id.listTest);
-        layoutnewGroup =findViewById(R.id.newGroup);
-        layoutlistGroup =findViewById(R.id.listGroup);
-        layoutensession =findViewById(R.id.endSession);
+        layoutJoinTest = findViewById(R.id.joinTest);
+        layoutListTest = findViewById(R.id.listTest);
+        layoutnewGroup = findViewById(R.id.newGroup);
+        layoutlistGroup = findViewById(R.id.listGroup);
+        layoutensession = findViewById(R.id.endSession);
 
         //layoutJoinTest.setEnabled(false);
         layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
