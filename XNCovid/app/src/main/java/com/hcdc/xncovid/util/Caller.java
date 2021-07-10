@@ -27,6 +27,7 @@ import java.util.Optional;
 
 public class Caller {
     public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback, String url, int method){
+        HttpsTrustManager.allowAllSSL();
         RequestQueue queue = Volley.newRequestQueue(context);
         if(url == null || url.isEmpty()){
             url = "https://xncovid.uit.edu.vn:7070/api/";
@@ -81,7 +82,7 @@ public class Caller {
                         new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        callback.callback(new Gson().fromJson(response.toString(), type));
+                        callback.callback(response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -94,6 +95,7 @@ public class Caller {
                                 .show();
                     }
                 });
+                queue.add(jsonObjectRequest);
                 break;
         }
 
