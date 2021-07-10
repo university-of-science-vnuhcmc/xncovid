@@ -148,10 +148,11 @@ namespace CovidService.Models
         public long SessionID { get; set; }
     }
 
-
     public class JoinTestSessionRequest : Request
     {
-        public string TestID { get; set; }
+        public int AccountID { get; set; }
+        
+        public int TestSessionID { get; set; }
 
     }
 
@@ -193,5 +194,33 @@ namespace CovidService.Models
         public int Status; //1: Hoạt động, 2: Đóng
         public string RoleCode;
         public string RoleName;
+    }
+
+    public class UpdateCitizenInfoRequest : Request
+    {
+        public long DeclarationID;
+        public string FullName;
+        public bool Gender;
+        public string DayOfBirth;
+        public string CitizenID;
+        public string Phone;
+        public string Address;
+        public string DeclarationDate;
+    }
+
+    public class UpdateCitizenInfoResponse : Response
+    {
+
+    }
+
+    public class CreateQRManualDeclarationRequest : Request
+    {
+        public int QRAmount;
+    }
+
+    public class CreateQRManualDeclarationResponse : Response
+    {
+        public int IdFrom;
+        public int IdTo;
     }
 }

@@ -152,12 +152,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CreateQRManualDeclarationController.cs" />
+    <Compile Include="Controllers\UpdateCitizenInfoController.cs" />
     <Compile Include="Controllers\CreateTestSessionController.cs" />
     <Compile Include="Controllers\EndTestSession4LeadController.cs" />
     <Compile Include="Controllers\GetLocateController.cs" />
     <Compile Include="Controllers\GroupTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\JoinTestSesionController.cs" />
+    <Compile Include="Controllers\JoinTestSessionController.cs" />
     <Compile Include="Controllers\GetStaffConfigController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\TestController.cs" />
