@@ -30,8 +30,18 @@ String sessionId;
         TextView nameView = findViewById(R.id.name);
         nameView.setText(myapp.getUserInfo().Name);
         Intent intent = this.getIntent();
+        int flag = 0;
         if(intent.getExtras() != null){
             sessionId = intent.getExtras().getString("xn_session");
+            flag = intent.getExtras().getInt("flag");
+        }
+
+        if(flag == 1){ // tu man hinh gom nhom ve
+
+        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+
+        } else { // tu MainActivity hoac tu join phien xet nghiem
+
         }
 
         layoutJoinTest =findViewById(R.id.joinTest);
