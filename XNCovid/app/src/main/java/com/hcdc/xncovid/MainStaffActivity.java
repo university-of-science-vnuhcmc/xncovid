@@ -57,19 +57,6 @@ long accountID;
            // sessionId = intent.getExtras().getString("xn_session");
         }
 
-         objSession = ((MyApplication) getApplication()).getSessionInfo();
-        if(objSession != null){
-            sessionId = objSession.ID + "";
-        }
-
-
-        if(flag == 1){ // tu man hinh gom nhom ve
-
-        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-            myapp.setSessionInfo(null);
-        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
-
-        }
 
         layoutJoinTest = findViewById(R.id.joinTest);
         layoutListTest = findViewById(R.id.listTest);
@@ -79,12 +66,29 @@ long accountID;
 
         //layoutJoinTest.setEnabled(false);
         layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-       // layoutListTest.setEnabled(false);
+        // layoutListTest.setEnabled(false);
         layoutListTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
         //layoutnewGroup.setEnabled(false);
         layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
         //layoutJoinTest.setEnabled(false);
         layoutlistGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+
+        if(flag == 1){ // tu man hinh gom nhom ve
+            objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
+            if(objSession != null){
+                sessionId = objSession.ID + "";
+                SetupActivit(1);//Da co join vao session
+            }else {
+                checkAccount();// chua co thi check account lai
+            }
+        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+            myapp.setSessionInfo(null); //set la null
+            SetupActivit(0);//chua join
+        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+            checkAccount();
+        }
+
+
 
 
     }
@@ -185,9 +189,6 @@ long accountID;
                         sessionInfo.ProvinceName = res.session.ProvinceName;
                         sessionInfo.Leader = new UserInfo();
                         sessionInfo.Leader.Name = res.session.Account;
-                       // sessionInfo.District = res.session.DistrictName;
-                       // sessionInfo.Ward = res.session.WardName;
-                       // sessionInfo.Leader = res.session.Account
                         if(myapp == null){
                             myapp = new MyApplication();
                         }
