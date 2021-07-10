@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,7 +34,7 @@ namespace CovidService.Controllers
 
         private bool CheckValidRequest()
         {
-            if(!Request.Headers.Contains("token"))
+            if (!Request.Headers.Contains("token"))
             {
                 return false;
             }
@@ -47,8 +49,8 @@ namespace CovidService.Controllers
             LoginReponse loginRes = new LoginReponse();
             try
             {
-                bool checkTonken= CheckValidRequest();
-                string strRes="";
+                bool checkTonken = CheckValidRequest();
+                string strRes = "";
                 GoogleApiTokenInfo ggTokenInfo = null;// GetUserDetails(value.TokenID, out strRes);
                 if (ggTokenInfo != null)
                 {
@@ -61,34 +63,36 @@ namespace CovidService.Controllers
                     else
                     {
                         //goi db 
-                        loginRes.returnCode = 1;
-                        loginRes.returnMess = "Thành công";
-                        loginRes.Token = Guid.NewGuid().ToString();
-                        loginRes.Url = " https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
-                        loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
-                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
-                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
-                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
-                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                        string token = Guid.NewGuid().ToString();
+                        AccountInfo accInfo = new AccountInfo();
+                        int intReturn = CallDB(value.Email, token, out accInfo);
+                        if (intReturn == 1)
+                        {
+                            loginRes.returnCode = 1;
+                            loginRes.returnMess = "Thành công";
+                            loginRes.Token = token;
+                            loginRes.AccountID = accInfo.AccountID.ToString();
+                            loginRes.CustomerName = accInfo.AccountName;
+                            loginRes.Role = accInfo.RoleName;
+                        }
+                        else
+                        {
+                            loginRes.returnCode = intReturn;
+                            loginRes.returnMess = "Thất bại , gọi db fail";
+                        }
+
                     }
                 }
                 else
                 {
                     //loginRes.returnCode = 2;
                     //loginRes.returnMess = strRes;
-                    
+
                     loginRes.returnCode = 1;
                     loginRes.returnMess = "Thành công";
                     loginRes.Token = Guid.NewGuid().ToString();
-                    loginRes.Url = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
-                    loginRes.Domain = "https://kbytcq.khambenh.gov.vn/#tokhai_yte/model";
-                    loginRes.Id = "([A-z0-9-]*)";
                     loginRes.Role = "Staff";
-                    loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
-                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
-                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
-                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
-                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                    loginRes.AccountID = "1224";
                     if (value.Email.ToLower().Contains("hoconghoai"))
                     {
                         loginRes.Role = "Leader";
@@ -126,7 +130,7 @@ namespace CovidService.Controllers
             {
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(TrustAllValidationCallback);
                 httpResponseMessage = httpClient.GetAsync(requestUri).Result;
-               
+
             }
             catch (Exception ex)
             {
@@ -145,9 +149,9 @@ namespace CovidService.Controllers
             var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
 
             return googleApiTokenInfo;
-           
+
         }
-        public bool CheckLogin(string Email,string Token)
+        public bool CheckLogin(string Email, string Token)
         {
             bool isOK = false;
 
@@ -163,18 +167,42 @@ namespace CovidService.Controllers
                 throw;
             }
         }
-        //private void CallDB()
-        //{
-        //    string sqlString = SqlHelper.sqlString;
-        //    List<SqlParameter> parameters = new List<SqlParameter>();
-        //    //AddParameter(ref parameters, "@PaySystem", System.Data.SqlDbType.Int, 1);
-        //    SqlHelper.AddParameter(ref parameters, "@SystemTraceId", System.Data.SqlDbType.VarChar, 64, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@PrimeId", System.Data.SqlDbType.BigInt, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@CustomerCode", System.Data.SqlDbType.VarChar, 128, "a");
-        //    SqlHelper.AddParameter(ref parameters, "@CashAmount", System.Data.SqlDbType.Decimal, 22);
-        //    SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-        //    SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "abc", parameters.ToArray());
-        //    int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
-        //}
+        private int CallDB(string Email, string Token, out AccountInfo info)
+        {
+            info = new AccountInfo();
+            int intReturnValue = 0;
+            try
+            {
+                string sqlString = SqlHelper.sqlString;
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
+                SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.VarChar, 256, Token);
+                SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
+                SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "AccountLogin", parameters.ToArray());
+                intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                DataTable objDT1 = ds.Tables[0];
+                DataTable objDT2 = ds.Tables[1];
+                foreach (DataRow objRow in objDT1.Rows)
+                {
+                    info.AccountID = long.Parse(objRow["AccountID"].ToString());
+                    info.AccountName = objRow["AccountName"].ToString();
+                    info.AccountType = int.Parse(objRow["AccountType"].ToString());
+                    info.RoleID = long.Parse(objRow["RoleID"].ToString());
+                }
+                foreach (DataRow objRow in objDT2.Rows)
+                {
+                    info.RoleName = objRow["RoleName"].ToString();
+                    info.RoleCode = objRow["RoleCode"].ToString();
+                }
+                return intReturnValue;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+
+            }
+
+        }
     }
 }

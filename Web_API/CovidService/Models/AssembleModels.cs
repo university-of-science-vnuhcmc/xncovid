@@ -185,4 +185,17 @@ namespace CovidService.Models
     {
 
     }
+
+    public class AccountInfo
+    {
+        public long AccountID;
+        public int AccountType;
+        public long RoleID;
+        public int Status;
+        public string AccountName;
+        public string HandPhone;
+        public int Status; //1: Hoạt động, 2: Đóng
+        public string RoleCode;
+        public string RoleName;
+    }
 }
