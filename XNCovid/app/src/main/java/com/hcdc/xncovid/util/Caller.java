@@ -30,6 +30,11 @@ public class Caller {
         RequestQueue queue = Volley.newRequestQueue(context);
         if(url == null || url.isEmpty()){
             url = "https://xncovid.uit.edu.vn:7070/api/";
+            UserInfo userInfo = ((MyApplication)((Activity)(context)).getApplication()).getUserInfo();
+            if(userInfo != null){
+                req.Email = userInfo.Email;
+                req.Token = userInfo.Token;
+            }
         }
         url = url + apiName;
         UserInfo userInfo = ((MyApplication)((Activity)(context)).getApplication()).getUserInfo();
