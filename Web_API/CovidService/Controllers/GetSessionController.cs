@@ -70,7 +70,7 @@ namespace CovidService.Controllers
                 objSession.TestingDate = DateTime.Now;
                 objSession.Account = "Test";
                 objSession.Purpose = "TestCovid";
-                objRes.data = objSession;
+                objRes.Data = objSession;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
                 return objRes;
