@@ -21,15 +21,21 @@ public class DetectKBYTPattern {
             "fullname::pattern==\"so_dien_thoai\":\"[0-9]+\",\"ten\":\"(?<hoten>[^,]*)\",==>key==hoten\n" +
             "gent::pattern==\"gioi_tinh\":(?<gioitinh>\\d{1})==>key==gioitinh\n" +
             "birthdateyear::pattern==\"namsinh\":(?<namsinh>\\d{4})==>key==namsinh\n" +
+            "ward::pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong\n" +
+            "district::pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen\n" +
+            "province::pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh\n" +
+            "provinceid::parttern==},\"tinhthanh_id\":\"(?<provinceid>.*)\",\"tinhthanh\"==>key==provinceid\n" +
+            "districtid::parttern==},\"quanhuyen_id\":\"(?<districtid>.*)\",\"quanhuyen\"==>key==districtid\n" +
+            "wardid::parttern==\"xaphuong_id\":\"(?<wardid>.*)\",\"xaphuong\"==>key==wardid\n" +
             "address::pattern==\"dia_chi\":\"(?<diadiem>[^,]*)\"==>key==diadiem##pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong##pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen##pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
     private Hashtable<String, KBYTRegex> dic = null;
     private DetectKBYTPattern(Activity context) {
-        //contentRegexs = ((MyApplication)  context.getApplication()).getForm();
+        contentRegexs = ((MyApplication)  context.getApplication()).getForm();
         if(contentRegexs == null || contentRegexs.isEmpty()){
             Log.e("DetectKBYTPattern", "Regex Content is null or empty");
             return;
         }
-        String[] arr = contentRegexs.split("\r\n");
+        String[] arr = contentRegexs.split("\n");
         if(arr == null || arr.length < 1 ){
             Log.e("DetectKBYTPattern", "Regex Arr is empty or null.");
             return;
@@ -53,7 +59,7 @@ public class DetectKBYTPattern {
                     String extractKey = "";
                     for (String pk: arr3) {
                         String[] txt = pk.split("==");
-                        if(txt[0].trim().toLowerCase() == "pattern"){
+                        if(txt[0].trim().toLowerCase().equals( "pattern")){
                             pattern = txt[1];
                         }else {
                             extractKey = txt[1];
@@ -67,10 +73,12 @@ public class DetectKBYTPattern {
                 }
 
                 if(arrEx.length > 2){
-                    String[] outputContens = arrEx[2].split("###");
+                    String[] kvOut = arrEx[2].split("==");
+                    String[] outputContens = kvOut[1].split("###");
                     for (String content : outputContens) {
-                        obj.setOutputKey(content);
+                        obj.setOutContent(content);
                     }
+                    obj.setRegexType(1);//out many
                 }
                 dicTmp.put(keyword, obj);
             }catch (Exception e){
@@ -115,6 +123,15 @@ public class DetectKBYTPattern {
                     break;
                 case "province":
                     obj.setProvince(content);
+                    break;
+                case "districtid":
+                    obj.setDistrictID(content);
+                    break;
+                case "wardid":
+                    obj.setWardID(content);
+                    break;
+                case "provinceid":
+                    obj.setProvinceID(content);
                     break;
             }
 

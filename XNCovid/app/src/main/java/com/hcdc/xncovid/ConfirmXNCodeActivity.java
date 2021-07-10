@@ -20,15 +20,15 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
         xn_code=(TextView) findViewById(R.id.txt_xn_code);
         xn_code.setText(xn_session);
 
-        if(getIntent().hasExtra("session_code")){
-            session_code = getIntent().getExtras().getString("session_code");
-        }
+        //if(getIntent().hasExtra("session_code")){
+        //    session_code = getIntent().getExtras().getString("session_code");
+        //}
         final Button btnConfirm = findViewById(R.id.btnxncode_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);
                 intent.putExtra("xn_session", xn_session);
-                intent.putExtra("session_code", session_code);
+                //intent.putExtra("session_code", session_code);
                 startActivity(intent);
             }
         });

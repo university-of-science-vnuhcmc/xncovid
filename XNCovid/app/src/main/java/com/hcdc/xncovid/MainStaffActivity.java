@@ -69,7 +69,7 @@ String sessionId;
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
                     intent.putExtra("scan_qr_type", 1);
-                    intent.putExtra("xn_session", sessionId);
+                   // intent.putExtra("xn_session", sessionId);
                     startActivity(intent);
                 }
             });

@@ -13,4 +13,11 @@ public class CitizenInfor {
     public String ProvinceID ;
     public String QRCode ;
     public int QRCodeType ;
+    public  String PartnerWardID;
+    public  String PartnerWardName;
+    public  String PartnerDistrictID;
+    public  String PartnerDistrictName;
+    public  String PartnerProvinceID;
+    public  String PartnerProvinceName;
+
 }

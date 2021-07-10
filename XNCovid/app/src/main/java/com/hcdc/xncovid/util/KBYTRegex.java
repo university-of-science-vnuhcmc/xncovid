@@ -15,6 +15,8 @@ public class KBYTRegex {
 
     private ArrayList<String> outContent;
 
+    private  int regexType;
+
     public String getOutputKey() {
         return outputKey;
     }
@@ -40,6 +42,14 @@ public class KBYTRegex {
             this.outContent = new ArrayList<String>();
         }
          this.outContent.add((outContent));
+    }
+
+    public int getRegexType() {
+        return regexType;
+    }
+
+    public void setRegexType(int regexType) {
+        this.regexType = regexType;
     }
 
     public static class RegexObj{
@@ -72,13 +82,19 @@ public class KBYTRegex {
             }
 
             for (String key: outContent) {
-                if(key.startsWith("%") && key.endsWith("%")) //param thi ley trong Hash
+                if(regexType == 1) //Many
                 {
-                    String objKey = key.substring(1,key.length()-2);
-                    txtContent += kv.get(objKey);
-                    continue;
+                    if(key.startsWith("%") && key.endsWith("%")) //param thi ley trong Hash
+                    {
+                        String objKey = key.substring(1,key.length()-1);
+                        txtContent += kv.get(objKey);
+                        continue;
+                    }
+                    txtContent += key;
+                }else {
+                    txtContent += kv.get(key);
                 }
-                txtContent += key;
+
             }
 
             return  txtContent;

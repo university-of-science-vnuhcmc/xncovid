@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+import com.hcdc.xncovid.model.SessionInfo;
+import com.hcdc.xncovid.model.UserInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,12 +37,25 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scansession);
 
+        try{
+            urlKBYTOnline = ((MyApplication)  getApplication()).getDomain();
+
+            regexKBYTId = ((MyApplication) getApplication()).getId();
+        }catch (Exception e){
+            urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
+            regexKBYTId = "id=([A-z0-9-]*)";
+        }
+
         if( getIntent().getExtras() != null){
             scanQRType = getIntent().getExtras().getInt("scan_qr_type");
-            if(getIntent().hasExtra("xn_session")){
-                xn_session = getIntent().getExtras().getString("xn_session");
-            }
         }
+        SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+
+        if(sessionInfo != null){
+            xn_session = sessionInfo.ID + "";
+        }
+
+        xn_session = getIntent().getExtras().getString("xn_session");
 
         int apiVersion = android.os.Build.VERSION.SDK_INT;
         if (apiVersion >= android.os.Build.VERSION_CODES.M) {
@@ -127,7 +143,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
         }else {
             Intent intent = new Intent(getApplicationContext(), tmpclass);
             intent.putExtra("xn_session", scanContent);
-            intent.putExtra("session_code", xn_session);
+            //intent.putExtra("session_code", xn_session);
             startActivity(intent);
         }
 

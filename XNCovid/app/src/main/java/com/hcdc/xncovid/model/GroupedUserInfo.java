@@ -27,7 +27,11 @@ public class GroupedUserInfo {
 
     private String  province;
 
+    private String  districtID;
 
+    private String  wardID;
+
+    private String  provinceID;
 
     public GroupedUserInfo(String uid, boolean isOnline) {
         this.uid = uid;
@@ -114,5 +118,29 @@ public class GroupedUserInfo {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getDistrictID() {
+        return districtID;
+    }
+
+    public void setDistrictID(String districtID) {
+        this.districtID = districtID;
+    }
+
+    public String getWardID() {
+        return wardID;
+    }
+
+    public void setWardID(String wardID) {
+        this.wardID = wardID;
+    }
+
+    public String getProvinceID() {
+        return provinceID;
+    }
+
+    public void setProvinceID(String provinceID) {
+        this.provinceID = provinceID;
     }
 }

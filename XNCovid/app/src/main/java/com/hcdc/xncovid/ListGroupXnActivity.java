@@ -29,6 +29,7 @@ import com.hcdc.xncovid.model.GroupTestReq;
 import com.hcdc.xncovid.model.GroupTestRes;
 import com.hcdc.xncovid.model.GroupedUserInfo;
 import com.hcdc.xncovid.model.LoginRes;
+import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.DetectKBYTPattern;
@@ -69,9 +70,27 @@ public class ListGroupXnActivity extends AppCompatActivity {
         xn_code=(TextView) findViewById(R.id.txt_xncode);
         xn_code.setText(xn_session);
 
-        if(getIntent().hasExtra("session_code")){
-            session_code = getIntent().getExtras().getString("session_code");
+        SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+
+        if(sessionInfo != null){
+            session_code = sessionInfo.ID + "";
+        }else {
+            new AlertDialog.Builder(ListGroupXnActivity.this)
+                    .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
+                    .setNegativeButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    StartMainStaffAcitivity();
+                                }
+                            })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
+
+        //if(getIntent().hasExtra("session_code")){
+        //    session_code = getIntent().getExtras().getString("session_code");
+        //}
 
         if(setUID == null){
             setUID = new TreeSet<>();
@@ -128,6 +147,13 @@ public class ListGroupXnActivity extends AppCompatActivity {
         });
     }
 
+    private  void StartMainStaffAcitivity(){
+        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+        // intent.putExtra("xn_session", "");
+        intent.putExtra("flag", 1);//co cho biet la tu view list group
+        startActivity(intent);
+        finish();
+    }
     public  Boolean UploadGroupXN(){
         final Boolean[] isOK = {true};
         GroupTestReq req  = new GroupTestReq();
@@ -145,8 +171,14 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 objReq.FullName = obj.getFullname();
                 objReq.HandPhone = obj.getPhone();
                 objReq.QRCode = obj.getUid();
-                objReq.QRCodeType = obj.isOnline() == true ? 1 : 0;
+                objReq.QRCodeType = obj.isOnline() == true ? 1 : 2;
                 objReq.YearOfBirth = obj.getBirthYear();
+                objReq.PartnerWardID = obj.getWardID();
+                objReq.PartnerWardName = obj.getWard();
+                objReq.PartnerDistrictID = obj.getDistrictID();
+                objReq.PartnerDistrictName = obj.getDistrict();
+                objReq.PartnerProvinceID = obj.getProvinceID();
+                objReq.PartnerProvinceName = obj.getProvince();
                 tmp.add(objReq);
                 continue;
             }
@@ -162,10 +194,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             public void callback(Object response) {
                 GroupTestRes res = (GroupTestRes) response;
                 if(res.returnCode == 1){
-                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                    intent.putExtra("xn_session", session_code);//ma phien xet nghiem
-                    startActivity(intent);
-                    finish();
+                    StartMainStaffAcitivity();
                 }  else{
                     Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
                     new AlertDialog.Builder(ListGroupXnActivity.this)
@@ -203,7 +232,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     list.add(newObj);
                     setUID.add((kbyt_id));
                     txt_total.setText("("+groupAdapter.getCount()+"/10)");
-                    if(groupAdapter.getCount() < 10){
+                    if(groupAdapter.getCount() >= 10){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             txt_total.setTextAppearance(R.style.blue_20);
                         }else {
@@ -254,13 +283,13 @@ public class ListGroupXnActivity extends AppCompatActivity {
         public CrawlKBYTAsyncTask(Activity ctx)
         {
             contextCha=ctx;
-            //urlGetUserInfo = ((MyApplication) ctx.getApplication()).getUrl(); //"https://kbytcq.khambenh.gov.vn/";
+            urlGetUserInfo = ((MyApplication) ctx.getApplication()).getUrl(); //"https://kbytcq.khambenh.gov.vn/";
 
         }
 
         @Override
         protected GroupedUserInfo doInBackground(String... kbytID) {
-            final GroupedUserInfo[] obj = {null};
+
             if(!isStop){
                 Caller caller = new Caller();
 
@@ -270,13 +299,12 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     public void callback(Object response) {
                         JSONObject objJSON = (JSONObject) response;
                         String strContent = objJSON.toString();
-                        obj[0] = DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]);
+                       AddNewGroupItem( DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]));
                     }
                 }, urlGetUserInfo, Request.Method.GET);
 
             }
-
-            return obj[0];
+            return  null;
         }
 
 
