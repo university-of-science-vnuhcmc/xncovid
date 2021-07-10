@@ -7,7 +7,8 @@ namespace CovidService.Models
 {
     public class JoinTestSessionRequest : Request
     {
-        public string TestID { get; set; }
+        public long AccountID { get; set; }
+        public long TestSessionID { get; set; }
 
     }
 
