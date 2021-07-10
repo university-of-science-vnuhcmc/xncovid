@@ -36,25 +36,26 @@ namespace CovidService.Controllers
                     return objRes;
                 }
 
-                //string sqlString = SqlHelper.sqlString;
-                //List<SqlParameter> parameters = new List<SqlParameter>();
-                //SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionName", System.Data.SqlDbType.NVarChar, 64, objReq.CovidSpecimenCode);
-                //SqlHelper.AddParameter(ref parameters, "@Address", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
-                //SqlHelper.AddParameter(ref parameters, "@ApartmentNo", System.Data.SqlDbType.NChar, objReq.SpecimenAmount);
-                //SqlHelper.AddParameter(ref parameters, "@StreetName", System.Data.SqlDbType.BigInt, objReq.AccountID);
-                //SqlHelper.AddParameter(ref parameters, "@WardID", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
-                //SqlHelper.AddParameter(ref parameters, "@DistrictID", System.Data.SqlDbType.Structured, data);
-                //SqlHelper.AddParameter(ref parameters, "@ProvinceID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-                //SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                //SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
-                //int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
-                //if (intReturnValue != 1)
-                //{
-                //    objRes.returnCode = 1002;
-                //    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
-                //    return objRes;
-                //}
-                //long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
+                string sqlString = SqlHelper.sqlString;
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionName", System.Data.SqlDbType.NVarChar, 64, objReq.SessionName);
+                SqlHelper.AddParameter(ref parameters, "@Address", System.Data.SqlDbType.BigInt, objReq.FullLocation);
+                SqlHelper.AddParameter(ref parameters, "@ApartmentNo", System.Data.SqlDbType.VarChar, 64, objReq.ApartmentNo);
+                SqlHelper.AddParameter(ref parameters, "@StreetName", System.Data.SqlDbType.NVarChar, 128, objReq.StreetName);
+                SqlHelper.AddParameter(ref parameters, "@WardID", System.Data.SqlDbType.BigInt, objReq.WardID);
+                SqlHelper.AddParameter(ref parameters, "@DistrictID", System.Data.SqlDbType.BigInt, objReq.DistrictID);
+                SqlHelper.AddParameter(ref parameters, "@ProvinceID", System.Data.SqlDbType.BigInt, objReq.ProvinceID);
+                SqlHelper.AddParameter(ref parameters, "@Note", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
+                SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
+                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                if (intReturnValue != 1)
+                {
+                    objRes.returnCode = 1002;
+                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    return objRes;
+                }
+                long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 Random rd = new Random();
                 int i = rd.Next(7, 30);
                 objRes.SessionID = i;
