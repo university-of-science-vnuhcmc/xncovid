@@ -155,6 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                     userInfo.Name = res.CustomerName;
                     userInfo.Role = res.Role;
                     userInfo.Token = res.Token;
+                    userInfo.AccountID = res.AccountID;
                     String filename = "userinfo";
                     try{
                         File file = new File(getFilesDir(),filename);

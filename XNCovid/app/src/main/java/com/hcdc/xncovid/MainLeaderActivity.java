@@ -36,4 +36,11 @@ public class MainLeaderActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateSessionActivity.class);
         startActivity(intent);
     }
+    public void showQR(View v){
+        Intent intent = new Intent(this, QRSessionActivity.class);
+        intent.putExtra("SessionName", "");
+        intent.putExtra("SessionID", (long)1000);
+        intent.putExtra("IsNew", false);
+        startActivity(intent);
+    }
 }
