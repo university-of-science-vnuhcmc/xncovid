@@ -40,8 +40,8 @@ namespace CovidService.Controllers
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@QRAmount", System.Data.SqlDbType.Int, objReq.QRAmount);
                 SqlHelper.AddParameter(ref parameters, "@CreateUser", System.Data.SqlDbType.NVarChar, 128, objReq.Email);
-                SqlHelper.AddParameter(ref parameters, "@IdFrom", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-                SqlHelper.AddParameter(ref parameters, "@IdTo", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
+                SqlHelper.AddParameter(ref parameters, "@IdFrom", System.Data.SqlDbType.Int, ParameterDirection.Output);
+                SqlHelper.AddParameter(ref parameters, "@IdTo", System.Data.SqlDbType.Int, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidTestingSession", parameters.ToArray());
                 int intReturnValue = 1;// Convert.ToInt32(parameters[parameters.Count - 1].Value);
