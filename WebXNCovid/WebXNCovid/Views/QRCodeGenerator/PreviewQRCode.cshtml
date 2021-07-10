@@ -1,32 +1,63 @@
 ﻿@using PagedList.Mvc
 @model  PagedList.IPagedList<byte[]>
-@*@{
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
-}*@
-@{
-    ViewBag.Title = "Preview QR Code";
-}
-
-<h2>@ViewBag.Title</h2>
 
 @if (Model.Count > 0)
 {
     using (Html.BeginForm())
     {
-        <div class="row">
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                <img src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(Model[i]))" />
-            }
+        <div class="container">
+            <div class="print-area">
+                @foreach (var item in Model)
+                {
+                    <div class="info-section">
+                        <div class="row">
+                            <div class="col-2 qr-section">
+                                <img src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(item))" />
+                            </div>
+                            <div class="col-10 data-section">
+                                <h5 class="header-section">PHIẾU THÔNG TIN XÉT NGHIỆM</h5>
+                                <div class="dots">
+                                    <span class="field">Họ và tên: </span>
+                                    <span class="offset-7 field">Nam: &#11036 Nữ: &#11036 </span>
+                                </div>
+                                <div class="dots">
+                                    <span class="field">Ngày sinh: </span>
+                                    <span class="offset-4 field">Số điện thoại: </span>
+                                </div>
+                                <div class="dots">
+                                    <span class="field">Sống tại: Số nhà/Tổ/Xóm </span>
+                                    <span class="offset-3 field">Đường/Phố/Thôn: </span>
+                                </div>
+                                <div class="dots">
+                                    <span class="field">Phường/Xã </span>
+                                    <span class="offset-2 field">Quận/Huyện: </span>
+                                    <span class="offset-2 field">Tỉnh/Thành phố: </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-
         <div id="container" style="margin-left: 20px">
             <p></p>
             <p></p>
-            <div class="pagination" style="margin-left: 400px">
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("PreviewQRCode", new { page }))
+            <div class="pagination paging-custom">
+                @Html.PagedListPager(Model, page => Url.Action("PreviewQRCode", new { page }), new PagedListRenderOptions { })
             </div>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
     }
 }

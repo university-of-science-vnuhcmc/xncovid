@@ -1,20 +1,23 @@
-﻿@*@{
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
-}*@
+﻿@using WebXNCovid.Models
+@model  GenerateQRSuccessViewModel
 
 <div class="row">
     <div class="input-dialog">
 
-        @using (Html.BeginForm("PrintCode", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("GenerateQRSuccess", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
-            <h4>Nhập số lượng mã QR cần dùng</h4>
-            <hr />
-            <div class="form-group">
-                <div class="col-md-10 h-align-center">
-                    <input type="text" name="QRCodeAmount" class="form-control center-text-align" />
-                </div>
+            var info = ViewData["GenerateQRInfo"] as GenerateQRSuccessViewModel;
+
+            <p class="success-header">Tạo mã thành công!</p>
+            <div class="success-info">
+                <p>Ngày tạo: <span class="info-display">@info.CreateDate.ToString("dd/MM/yyyy hh:mm")</span></p>
+                <p>Người tạo: <span class="info-display">@info.CreatedUser</span></p>
+                <p>Số lượng: <span class="info-display">@info.AmountQR</span></p>
+                <p>Đã xuất các mã từ <span class="info-display">@info.IdFrom</span> - <span class="info-display">@info.IdTo</span></p>
+                <p>Gồm <span class="info-display">@info.AmountPage</span> trang A4</p>                
+                @Html.HiddenFor(m => m.IdFrom, Model.IdFrom)
+                @Html.HiddenFor(m => m.IdTo, Model.IdTo)
             </div>
-            <h6 style="margin: 20px auto">Lưu ý: chỉ tạo tối đa <span style="color:red">10000</span> mã một lần</h6>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10 h-align-center">
                     <input type="submit" class="btn btn-custom" value="In mã" />

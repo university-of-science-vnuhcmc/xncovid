@@ -63,6 +63,16 @@ namespace WebXNCovid.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap otJN0 {
+            get {
+                object obj = ResourceManager.GetObject("otJN0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap people_wearing_masks {
             get {
                 object obj = ResourceManager.GetObject("people_wearing_masks", resourceCulture);

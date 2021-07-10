@@ -14,9 +14,8 @@ namespace WebXNCovid.Controllers
     public class AccountController : Controller
     {
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -27,26 +26,49 @@ namespace WebXNCovid.Controllers
         {
             try
             {
-                FormsAuthentication.SetAuthCookie(model.Email, false);
-                Session.Add("Email", model.Email);
-                Session.Add("GoogleTokenID", model.TokenID);
-
                 string postData = JsonConvert.SerializeObject(model);
 
                 var response = await CallWebAPI.Instance().Call("Login", postData);
-                if (response.IsSuccessStatusCode == true)
-                {
-                    var result = await response.Content.ReadAsStringAsync();
 
-                    string a = result;
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                 }
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+
+                LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
+
+                if (objRes.returnCode != 1)
+                {
+                    if (objRes.returnCode == 0)
+                    {
+                        return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (objRes.returnCode == 2)
+                    {
+                        return Json(new { success = false, responseText = "Email không tồn tại." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, responseText = "Lỗi hệ thống." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                FormsAuthentication.SetAuthCookie(model.Email, false);
+                Session.Add("Token", objRes.Token);
+                Session.Add("Email", model.Email);
+                Session.Add("GoogleTokenID", model.TokenID);
 
                 return Json(new { success = true, responseText = "Succeed." }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception objEx)
             {
-                Console.WriteLine(objEx.ToString());
-                return Json(new { success = false, responseText = "Failed." }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, responseText = "System error." }, JsonRequestBehavior.AllowGet);
             }
         }
 

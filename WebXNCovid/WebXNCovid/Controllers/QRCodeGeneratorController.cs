@@ -26,7 +26,17 @@ namespace WebForCommunityScreening.Controllers
         {
             try
             {
-                return View("GenerateQRSuccess");
+                const int amtQRInPerPage = 6;
+                GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
+                model.CreateDate = DateTime.Now;
+                model.CreatedUser = Session["Email"].ToString();
+                model.AmountQR = QRCodeAmount;
+                model.IdFrom = 10000;
+                model.IdTo = model.IdFrom + QRCodeAmount - 1;
+                model.AmountPage = QRCodeAmount / amtQRInPerPage + (QRCodeAmount % amtQRInPerPage == 0 ? 0 : 1);
+                ViewData["GenerateQRInfo"] = model;
+                return View("GenerateQRSuccess", model);
+                //return View("GenerateQRSuccess");
             }
             catch (Exception)
             {
@@ -35,8 +45,17 @@ namespace WebForCommunityScreening.Controllers
             }
         }
 
-        public ActionResult PrintCode(PrintCodeViewModel model)
+        [HttpGet]
+        public ActionResult GenerateQRSuccess()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GenerateQRSuccess(FormCollection formCollection)
+        {
+            int IdFrom = Convert.ToInt16(formCollection["IdFrom"]);
+            int IdTo = Convert.ToInt16(formCollection["IdTo"]);
             List<Bitmap> bitmaps = new List<Bitmap>();
             List<byte[]> bytearrays = new List<byte[]>();
             try
@@ -47,23 +66,11 @@ namespace WebForCommunityScreening.Controllers
                     Directory.CreateDirectory(Server.MapPath(folderPath));
                 }
 
-
-                for (int i = 0; i < model.Amount; i++)
+                for (int i = IdFrom; i <= IdTo; i++)
                 {
                     var bmp = GenerateQR(i);
                     bitmaps.Add(bmp);
 
-                    //string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
-                    //string barcodePath = Server.MapPath(imagePath);
-                    //using (MemoryStream memory = new MemoryStream())
-                    //{
-                    //    using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
-                    //    {
-                    //        bmp.Save(memory, ImageFormat.Jpeg);
-                    //        byte[] bytes = memory.ToArray();
-                    //        fs.Write(bytes, 0, bytes.Length);
-                    //    }
-                    //}
                     bytearrays.Add(BitmapToBytes(bmp));
                 }
 
@@ -109,15 +116,10 @@ namespace WebForCommunityScreening.Controllers
             return RedirectToAction("PreviewQRCode", new { page = 1 });
         }
 
-        public ActionResult GenerateQRSuccess()
-        {
-            return View();
-        }
-
         public ActionResult PreviewQRCode(int page)
         {
             List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
-            var pagedList = imageBytes.ToPagedList(page, 20);
+            var pagedList = imageBytes.ToPagedList(page, 6);
             return View(pagedList);
         }
 

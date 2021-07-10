@@ -1,20 +1,26 @@
 ﻿
-@if (Session["Email"] != null)
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + Session["Email"] + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        @*<li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>*@
-        <li><a href="/Account/LogOut" onclick="signOut()">Log out</a></li>
-    </ul>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
+<div class="row Header">
+    @if (Session["Email"] != null)
+    {
+        <div class="col-6 text-info mt-3">
+            <div class="mb-show">
+                @Html.ActionLink(Session["Email"].ToString(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </div>
+        </div>
+        <div class="col-6 text-right mt-3 pr-5">
+            <a href="/Account/LogOut" onclick="signOut()">Log out</a>
+        </div>
+    }
+    else
+    {
+        
+        <div class="col-12 text-left">
+            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        </div>
+    }
+</div>
+
+
 <script>
     function signOut() {
         var auth2 = gapi.auth2.getAuthInstance();

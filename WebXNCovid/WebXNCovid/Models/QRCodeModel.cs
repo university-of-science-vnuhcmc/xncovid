@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
 using System.Web;
@@ -9,15 +10,16 @@ namespace WebXNCovid.Models
     public class GenerateQRSuccessViewModel
     {
         public DateTime CreateDate;
-        public int Amount;
+
+        public string CreatedUser;
+
+        public int AmountQR;
+
         public int IdFrom;
+
         public int IdTo;
+
+        public int AmountPage;
     }
 
-    public class PrintCodeViewModel
-    {
-        public int Amount;
-        public int IdFrom;
-        public int IdTo;
-    }
 }
