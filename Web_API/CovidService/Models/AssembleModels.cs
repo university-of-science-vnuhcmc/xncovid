@@ -144,6 +144,7 @@ namespace CovidService.Models
         public long WardID { get; set; }
         public long DistrictID { get; set; }
         public long ProvinceID { get; set; }
+        public string Note { get; set; }
     }
 
     public class CreateTestSessionResponse : Response
