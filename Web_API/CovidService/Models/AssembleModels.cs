@@ -29,13 +29,10 @@ namespace CovidService.Models
 
     public class LoginReponse : Response
     {
-        public string Token;
-        public string Url;
-        public string Domain;
-        public string Form;
-        public string Id;
+        public string Token;       
         public string Role;
         public string CustomerName;
+        public string AccountID;
 
        
     }
@@ -158,4 +155,16 @@ namespace CovidService.Models
         
     }
 
+    public class GetStaffConfigRequest : Request
+    {
+
+    }
+
+    public class GetStaffConfigResponse: Response
+    {
+        public string Url;
+        public string Domain;
+        public string Form;
+        public string Id;
+    }
 }

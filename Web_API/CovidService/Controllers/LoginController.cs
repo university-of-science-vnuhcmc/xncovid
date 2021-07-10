@@ -64,12 +64,7 @@ namespace CovidService.Controllers
                         loginRes.returnCode = 1;
                         loginRes.returnMess = "Thành công";
                         loginRes.Token = Guid.NewGuid().ToString();
-                        loginRes.Url = " https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
-                        loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
-                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
-                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
-                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
-                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                        loginRes.AccountID = "1224";
                     }
                 }
                 else
@@ -80,15 +75,8 @@ namespace CovidService.Controllers
                     loginRes.returnCode = 1;
                     loginRes.returnMess = "Thành công";
                     loginRes.Token = Guid.NewGuid().ToString();
-                    loginRes.Url = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
-                    loginRes.Domain = "https://kbytcq.khambenh.gov.vn/#tokhai_yte/model";
-                    loginRes.Id = "([A-z0-9-]*)";
                     loginRes.Role = "Staff";
-                    loginRes.Form = @"phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai
-                                    fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten
-                                    gent::pattern==gioi_tinh=(?<gioitinh>\d{1})==>key==gioitinh
-                                    birthdateyear::pattern==namsinh=(?<namsinh>\d{4})==>key==namsinh
-                                    address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                    loginRes.AccountID = "1224";
                     if (value.Email.ToLower().Contains("hoconghoai"))
                     {
                         loginRes.Role = "Leader";
