@@ -11,3 +11,4 @@ Web_API/CovidService/obj/Debug/CovidService.pdb
 /.vs
 /Web_API/.vs/CovidService
 /Web_API/CovidService/obj
+Web_API/CovidService/Controllers/DemoController.cs

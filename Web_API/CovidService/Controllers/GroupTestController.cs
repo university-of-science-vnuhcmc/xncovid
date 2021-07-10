@@ -18,6 +18,13 @@ namespace CovidService.Controllers
             GroupTestResponse objRes = new GroupTestResponse();
             try
             {
+                bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
+                if(!checkLogin)
+                {
+                    objRes.returnCode = 99;
+                    objRes.returnMess = "Invalid Email or Token";
+                    return objRes;
+                }
                 if(objReq == null)
                 {
                     objRes.returnCode = 1000;

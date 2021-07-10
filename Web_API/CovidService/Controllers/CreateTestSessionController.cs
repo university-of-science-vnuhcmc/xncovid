@@ -21,6 +21,13 @@ namespace CovidService.Controllers
             CreateTestSessionResponse objRes = new CreateTestSessionResponse();
             try
             {
+                bool isCheck = Util.CheckLogin(objReq.Email, objReq.Token);
+                if (isCheck == false)
+                {
+                    objRes.returnCode = 99;
+                    objRes.returnMess = "Invalid Email or Token";
+                    return objRes;
+                }
                 if (objReq == null)
                 {
                     objRes.returnCode = 1000;
