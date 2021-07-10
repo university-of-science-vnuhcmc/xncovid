@@ -12,4 +12,8 @@ public class Session {
     public Date TestingDate;
     public String Purpose;
     public String Account;
+
+    public String getFullAddress(){
+        return Address + ", " + WardName + ", " + DistrictName +  ", " + ProvinceName;
+    }
 }
