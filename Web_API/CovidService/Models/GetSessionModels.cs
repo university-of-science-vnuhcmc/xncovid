@@ -8,17 +8,19 @@ namespace CovidService.Models
     public class GetSessionRequest : Request
     {
         public long SessionID { get; set; }
+        public int IsGetAccountList { get; set; }
     }
 
     public class GetSessionResponse : Response
     {
         public Session Data { get; set; }
-        public List<AccountInfor> AccountInfor { get; set; }
+        public List<MemberInfor> MemberInfor { get; set; }
     }
 
-    public class AccountInfor
+    public class MemberInfor
     {
-
+        public string AccountName { get; set; }
+        public string Email { get; set; }
     }
     public class Session
     {
