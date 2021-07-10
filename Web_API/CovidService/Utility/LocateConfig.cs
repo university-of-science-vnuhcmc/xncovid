@@ -32,9 +32,6 @@ public class LocateConfig
     private static List<LocateInfor> lstProvince = new List<LocateInfor>();
     private static Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
     private static Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
-    private DataTable tbPrince = new DataTable();
-    private DataTable tbDistrict = new DataTable();
-    private DataTable tbWard = new DataTable();
 
     protected static void OnLoad()
     {
@@ -70,14 +67,14 @@ public class LocateConfig
             dtInfor = dts.Tables[1];
             for (int i = 0; i < dtInfor.Rows.Count; i++)
             {
-                DataRow[] temp = dtInfor.Select("DistrictCode = '" + dtInfor.Rows[i]["DistrictCode"].ToString() + "'");
+                DataRow[] temp = dtInfor.Select("ProvinceCode = '" + dtInfor.Rows[i]["ProvinceCode"].ToString() + "'");
                 List<LocateInfor> lstAddressInfor = new List<LocateInfor>();
                 foreach (var item in temp)
                 {
                     LocateInfor districtInfor = LocateInfor(item, LocateType.District);
                     lstAddressInfor.Add(districtInfor);
                 }
-                string key = dtInfor.Rows[i]["DistrictCode"].ToString();
+                string key = dtInfor.Rows[i]["ProvinceCode"].ToString();
                 if (!dicDistrict.ContainsKey(key))
                 {
                     dicDistrict.Add(key, lstAddressInfor);
@@ -88,7 +85,7 @@ public class LocateConfig
             dtInfor = dts.Tables[2]; ;
             for (int i = 0; i < dtInfor.Rows.Count; i++)
             {
-                DataRow[] temp = dtInfor.Select("WardCode = '" + dtInfor.Rows[i]["WardCode"].ToString() + "'");
+                DataRow[] temp = dtInfor.Select("DistrictCode = '" + dtInfor.Rows[i]["DistrictCode"].ToString() + "'");
                 List<LocateInfor> lstAddressInfor = new List<LocateInfor>();
                 foreach (var item in temp)
                 {
@@ -96,7 +93,7 @@ public class LocateConfig
                     lstAddressInfor.Add(wardInfor);
                 }
                 //string key = dtInfor.Rows[i]["MaTP"].ToString().PadLeft(2, '0') + "_" + dtInfor.Rows[i]["MaQH"].ToString().PadLeft(3, '0');
-                string key = dtInfor.Rows[i]["WardCode"].ToString();
+                string key = dtInfor.Rows[i]["DistrictCode"].ToString();
                 if (!dicWard.ContainsKey(key))
                 {
                     dicWard.Add(key, lstAddressInfor);
