@@ -1,4 +1,5 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,8 @@ namespace CovidService.Controllers
                         //goi db 
                         string token = Guid.NewGuid().ToString();
                         AccountInfo accInfo = new AccountInfo();
-                        int intReturn = CallDB(value.Email, token, out accInfo);
+                        string MD5Token=Util.GetMD5Hash(token);
+                        int intReturn = CallDB(value.Email, MD5Token, out accInfo);
                         if (intReturn == 1)
                         {
                             loginRes.returnCode = 1;
@@ -150,22 +152,6 @@ namespace CovidService.Controllers
 
             return googleApiTokenInfo;
 
-        }
-        public bool CheckLogin(string Email, string Token)
-        {
-            bool isOK = false;
-
-            try
-            {
-                //goi db check
-                isOK = true;
-                return isOK;
-            }
-            catch (Exception)
-            {
-                return isOK;
-                throw;
-            }
         }
         private int CallDB(string Email, string Token, out AccountInfo info)
         {

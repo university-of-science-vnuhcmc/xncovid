@@ -40,5 +40,17 @@ namespace CovidService.Utility
             SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspCheckAccountLogin", parameters.ToArray());
             int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
         }
+        public static string GetMD5Hash(string strInput)
+        {
+            System.Security.Cryptography.MD5CryptoServiceProvider objMD5Crypt = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] bytInputData = System.Text.Encoding.UTF8.GetBytes(strInput);
+            bytInputData = objMD5Crypt.ComputeHash(bytInputData);
+            System.Text.StringBuilder objStrBuilder = new System.Text.StringBuilder();
+            foreach (byte bytElement in bytInputData)
+            {
+                objStrBuilder.Append(bytElement.ToString("x2").ToLower());
+            }
+            return objStrBuilder.ToString();
+        }
     }
 }

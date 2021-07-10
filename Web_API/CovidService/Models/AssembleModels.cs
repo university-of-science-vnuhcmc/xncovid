@@ -30,15 +30,11 @@ namespace CovidService.Models
     public class LoginReponse : Response
     {
         public string Token;
-        public string Url;
-        public string Domain;
-        public string Form;
-        public string Id;
         public string Role;
+        public string AccountID;
         public string CustomerName;
-
-
     }
+
     public class ProviderUserDetails
     {
         public string Email;
@@ -191,8 +187,7 @@ namespace CovidService.Models
     {
         public long AccountID;
         public int AccountType;
-        public long RoleID;
-        public int Status;
+        public long RoleID;       
         public string AccountName;
         public string HandPhone;
         public int Status; //1: Hoạt động, 2: Đóng
