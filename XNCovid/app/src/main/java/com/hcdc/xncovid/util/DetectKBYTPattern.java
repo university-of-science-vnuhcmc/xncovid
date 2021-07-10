@@ -17,11 +17,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetectKBYTPattern {
     private static volatile DetectKBYTPattern mInstance = null;
-    private  String contentRegexs = "phone::pattern==so_dien_thoai=(?<sodienthoai>[0-9]+),==>key==sodienthoai\r\n" +
-            "fullname::pattern==so_dien_thoai=[0-9]+, ten=(?<hoten>[^,]*),==>key==hoten\r\n" +
-            "gent::pattern==gioi_tinh=(?<gioitinh>\\d{1})==>key==gioitinh\r\n" +
-            "birthdateyear::pattern==namsinh=(?<namsinh>\\d{4})==>key==namsinh\r\n" +
-            "address::pattern==dia_chi=(?<diadiem>[^,]*)==>key==diadiem##pattern==xaphuong=.*ten=(?<xaphuong>[^,]+), quanhuyen_id==>key==xaphuong##pattern==quanhuyen=.*ten=(?<quanhuyen>[^,]+), tinhthanh_id==>key==quanhuyen##pattern==tinhthanh=.*ten=(?<tinhthanh>[^,]+), quocgia_id==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+    private  String contentRegexs = "phone::pattern==\"so_dien_thoai\":\"(?<sodienthoai>[0-9]+)\",==>key==sodienthoai\n" +
+            "fullname::pattern==\"so_dien_thoai\":\"[0-9]+\",\"ten\":\"(?<hoten>[^,]*)\",==>key==hoten\n" +
+            "gent::pattern==\"gioi_tinh\":(?<gioitinh>\\d{1})==>key==gioitinh\n" +
+            "birthdateyear::pattern==\"namsinh\":(?<namsinh>\\d{4})==>key==namsinh\n" +
+            "address::pattern==\"dia_chi\":\"(?<diadiem>[^,]*)\"==>key==diadiem##pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong##pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen##pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
     private Hashtable<String, KBYTRegex> dic = null;
     private DetectKBYTPattern(Activity context) {
         //contentRegexs = ((MyApplication)  context.getApplication()).getForm();

@@ -28,6 +28,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     private  String urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
     private  String regexKBYTId = "id=([A-z0-9-]*)";
     int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te lan dau
+    ViewGroup contentFrame;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +47,24 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                 requestPermission();
             }
         }
-
-        ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+        contentFrame = (ViewGroup) findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this);
         contentFrame.addView(mScannerView);
-        mScannerView.startCamera();
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this);
 
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
     }
     @Override
     public void onPause() {
         super.onPause();
         // Stop camera on pause
+        mScannerView.stopCameraPreview();
         mScannerView.stopCamera();
     }
 
@@ -70,6 +72,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     public void onStop() {
         super.onStop();
         // Stop camera on pause
+        mScannerView.stopCameraPreview();
         mScannerView.stopCamera();
     }
 
@@ -83,6 +86,9 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     public void handleResult(Result result) {
         String txtScanedResult = result.getText();
         boolean isOnline =false;
+        mScannerView.removeAllViews(); //<- here remove all the views, it will make an Activity having no View
+        mScannerView.stopCamera(); //<- then stop the camera
+
         if((scanQRType == 2) &&txtScanedResult.startsWith(urlKBYTOnline)){
                 Pattern p = Pattern.compile(regexKBYTId);
                 Matcher m = p.matcher(txtScanedResult);

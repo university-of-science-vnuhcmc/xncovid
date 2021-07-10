@@ -21,15 +21,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hcdc.xncovid.adapter.GroupItemAdapter;
+import com.hcdc.xncovid.model.CitizenInfor;
+import com.hcdc.xncovid.model.GroupTestReq;
+import com.hcdc.xncovid.model.GroupTestRes;
 import com.hcdc.xncovid.model.GroupedUserInfo;
 import com.hcdc.xncovid.model.LoginRes;
+import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.DetectKBYTPattern;
 import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
 
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -106,11 +113,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     isStop = true;
-                                    if(UploadGroupXN()){
-                                        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                                        intent.putExtra("xn_session", session_code);//ma phien xet nghiem
-                                        startActivity(intent);
-                                        finish();
+                                    if(!UploadGroupXN()){
+                                        isStop = false;
                                     }
                                 }
                             }, new DialogInterface.OnClickListener() {
@@ -125,7 +129,56 @@ public class ListGroupXnActivity extends AppCompatActivity {
     }
 
     public  Boolean UploadGroupXN(){
-        return  true;
+        final Boolean[] isOK = {true};
+        GroupTestReq req  = new GroupTestReq();
+        req.CovidTestingSessionID = Long.parseLong(session_code);
+        req.AccountID = 1;
+        req.CovidSpecimenCode = xn_session;
+        req.SpecimenAmount = groupAdapter.getCount() + "";
+        ArrayList<CitizenInfor> tmp = new ArrayList<>();
+        for (String uid: setUID) {
+            CitizenInfor objReq = new CitizenInfor();
+            if(hashObj != null && hashObj.containsKey(uid)) //co trong hash
+            {
+                GroupedUserInfo obj = hashObj.get(uid);
+                objReq.Address = obj.getAddress();
+                objReq.FullName = obj.getFullname();
+                objReq.HandPhone = obj.getPhone();
+                objReq.QRCode = obj.getUid();
+                objReq.QRCodeType = obj.isOnline() == true ? 1 : 0;
+                objReq.YearOfBirth = obj.getBirthYear();
+                tmp.add(objReq);
+                continue;
+            }
+            //truong hop con lai la online ma chua co lay duoc thong tin
+            objReq.QRCode = uid;
+            objReq.QRCodeType =  1;
+            tmp.add(objReq);
+        }
+        req.CitizenInfor = tmp;
+        Caller caller = new Caller();
+        caller.call(this, "GroupTest", req, GroupTestRes.class, new ICallback() {
+            @Override
+            public void callback(Object response) {
+                GroupTestRes res = (GroupTestRes) response;
+                if(res.returnCode == 1){
+                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                    intent.putExtra("xn_session", session_code);//ma phien xet nghiem
+                    startActivity(intent);
+                    finish();
+                }  else{
+                    Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                    new AlertDialog.Builder(ListGroupXnActivity.this)
+                            .setMessage("Tạo nhóm xét nghiệm gộp không thành công. Vui lòng thử lại sau.")
+                            .setNegativeButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    isOK[0] = false;
+                }
+            }
+        }, null, Request.Method.POST);
+
+        return isOK[0];
     }
 
     @Override
@@ -212,10 +265,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 Caller caller = new Caller();
 
                 String api =  kbytID[0];
-                caller.call(ListGroupXnActivity.this, api, null, String.class, new ICallback() {
+                caller.call(contextCha, api, null, String.class, new ICallback() {
                     @Override
                     public void callback(Object response) {
-                        String strContent = (String) response;
+                        JSONObject objJSON = (JSONObject) response;
+                        String strContent = objJSON.toString();
                         obj[0] = DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]);
                     }
                 }, urlGetUserInfo, Request.Method.GET);
