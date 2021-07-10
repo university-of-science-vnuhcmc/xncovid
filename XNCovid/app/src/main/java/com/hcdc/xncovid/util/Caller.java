@@ -65,11 +65,11 @@ public class Caller {
                             public void onResponse(JSONObject response) {
                                 APIResponse res = new Gson().fromJson(response.toString(), type);
                                 if(res.returnCode == 99){
-                                    new AlertDialog.Builder(context)
+                                    /*new AlertDialog.Builder(context)
                                             .setMessage("Vui lòng đăng nhập lại.")
                                             .setNegativeButton("OK", null)
                                             .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .show();
+                                            .show();*/
                                     Intent intent = new Intent(context, LoginActivity.class);
                                     intent.putExtra("isLogout", true);
                                     context.startActivity(intent);

@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <LinearLayout
+                <LinearLayout android:id="@+id/sessionInfo"
                     android:background="@drawable/rectangle_main_info_disable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,7 +183,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:textSize="18dp"
-                                android:text="Block A0 chung cư Ehome3, phường An Lạc, quận Bình Tân, TpHCM"
                                 android:textColor="@color/white" />
                         </LinearLayout>
 
@@ -206,7 +205,6 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="18dp"
                                 android:layout_marginLeft="5dp"
-                                android:text="13:00 13/06/2021"
                                 android:textColor="@color/white" />
                         </LinearLayout>
 
@@ -228,7 +226,6 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="18dp"
                                 android:layout_marginLeft="5dp"
-                                android:text="Phát hiện F0 tầng 14 block A6"
                                 android:textColor="@color/white" />
                         </LinearLayout>
 
@@ -250,7 +247,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:textSize="20dp"
-                                android:text="3"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -317,11 +313,12 @@
                     android:orientation="horizontal"
                     android:layout_margin="10dp"
                     android:gravity="center_vertical">
+
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/cancel"
-                        android:layout_gravity="center"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/cancel" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
