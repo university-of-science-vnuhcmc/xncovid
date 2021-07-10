@@ -1,5 +1,6 @@
 ﻿using CovidService.Models;
 using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,9 +32,10 @@ namespace CovidService.Controllers
                     objRes.returnMess = "Object request is null";
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.SessionID);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID ", System.Data.SqlDbType.BigInt, objReq.SessionID);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidTestingSession ", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
@@ -49,12 +51,10 @@ namespace CovidService.Controllers
                     objRes.returnMess = "Error, Dataset is null";
                     return objRes;
                 }
-                List<MemberInfor> lstMember = new List<MemberInfor>();
                 Session objSession = new Session();
                 if(dts.Tables.Count > 0)
                 {
                     DataTable dt = dts.Tables[0];
-                    
                     foreach (DataRow item in dt.Rows)
                     {
                         objSession.SessionName = item["CovidTestingSessionName"] == null || item["CovidTestingSessionName"] == DBNull.Value ? "" : item["CovidTestingSessionName"].ToString();
@@ -66,27 +66,8 @@ namespace CovidService.Controllers
                         objSession.Account = item["CreateAccountName"] == null || item["CreateAccountName"] == DBNull.Value ? "" : item["CreateAccountName"].ToString();
                         objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
                     }
-                    if(dts.Tables.Count == 2)
-                    {
-                        dt = dts.Tables[1];
-                        foreach (DataRow item in dt.Rows)
-                        {
-                            MemberInfor obj = new MemberInfor();
-                            obj.AccountName = item["AccountName"] == null || item["AccountName"] == DBNull.Value ? "" : item["AccountName"].ToString();
-                            obj.Email = item["Email"] == null || item["Email"] == DBNull.Value ? "" : item["Email"].ToString();
-                        }
-                    }
                 }
-                objSession.SessionName = "Test_Covid";
-                objSession.Address = "21 Bùi Đình Túy, P26, Bình Thạnh, HCM";
-                objSession.ProvinceName = "TP. HCM";
-                objSession.DistrictName = "Bình Thạnh";
-                objSession.WardName = "P26";
-                objSession.TestingDate = DateTime.Now;
-                objSession.Account = "Test";
-                objSession.Purpose = "TestCovid";
-                objRes.Data = objSession;
-                objRes.MemberInfor = lstMember;
+                objRes.data = objSession;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
                 return objRes;

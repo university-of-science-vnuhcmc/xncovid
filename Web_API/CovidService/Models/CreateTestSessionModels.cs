@@ -17,6 +17,7 @@ namespace CovidService.Models
         public long DistrictID { get; set; }
         public long ProvinceID { get; set; }
         public string Note { get; set; }
+        public long AccountID { get; set; }
     }
 
     public class CreateTestSessionResponse : Response

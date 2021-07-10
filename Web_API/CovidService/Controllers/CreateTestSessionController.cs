@@ -50,7 +50,7 @@ namespace CovidService.Controllers
                 if (string.IsNullOrEmpty(objReq.TestingDate))
                 {
                     objRes.returnCode = 1003;
-                    objRes.returnMess = "FullLocation is null or empty";
+                    objRes.returnMess = "TestingDate is null or empty";
                     return objRes;
                 }
 
@@ -60,13 +60,12 @@ namespace CovidService.Controllers
                 SqlHelper.AddParameter(ref parameters, "@Address", System.Data.SqlDbType.NVarChar, 256, objReq.FullLocation);
                 SqlHelper.AddParameter(ref parameters, "@ApartmentNo", System.Data.SqlDbType.NVarChar, 128, objReq.ApartmentNo);
                 SqlHelper.AddParameter(ref parameters, "@FromTestingDate", System.Data.SqlDbType.DateTime, DateTime.ParseExact(objReq.TestingDate, "yyyyMMddHHmm", CultureInfo.InvariantCulture));
-               // SqlHelper.AddParameter(ref parameters, "@FromTestingDate", System.Data.SqlDbType.DateTime, DateTime.Now);
                 SqlHelper.AddParameter(ref parameters, "@StreetName", System.Data.SqlDbType.NVarChar, 128, objReq.StreetName);
                 SqlHelper.AddParameter(ref parameters, "@WardID", System.Data.SqlDbType.BigInt, objReq.WardID);
                 SqlHelper.AddParameter(ref parameters, "@DistrictID", System.Data.SqlDbType.BigInt, objReq.DistrictID);
                 SqlHelper.AddParameter(ref parameters, "@ProvinceID", System.Data.SqlDbType.BigInt, objReq.ProvinceID);
-                //SqlHelper.AddParameter(ref parameters, "@ProvinceName", System.Data.SqlDbType.NVarChar, 128, "");
                 SqlHelper.AddParameter(ref parameters, "@Note", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
+                SqlHelper.AddParameter(ref parameters, "@CreateAccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.Int, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidTestingSession", parameters.ToArray());

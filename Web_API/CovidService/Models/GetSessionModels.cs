@@ -13,15 +13,9 @@ namespace CovidService.Models
 
     public class GetSessionResponse : Response
     {
-        public Session Data { get; set; }
-        public List<MemberInfor> MemberInfor { get; set; }
+        public Session data { get; set; }
     }
 
-    public class MemberInfor
-    {
-        public string AccountName { get; set; }
-        public string Email { get; set; }
-    }
     public class Session
     {
         public string SessionName { get; set; }
