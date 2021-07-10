@@ -49,18 +49,33 @@ namespace CovidService.Controllers
                     objRes.returnMess = "Error, Dataset is null";
                     return objRes;
                 }
-                DataTable dt = dts.Tables[0];
+                List<MemberInfor> lstMember = new List<MemberInfor>();
                 Session objSession = new Session();
-                foreach (DataRow item in dt.Rows)
+                if(dts.Tables.Count > 0)
                 {
-                    objSession.SessionName = item["CovidTestingSessionName"] == null || item["CovidTestingSessionName"] == DBNull.Value ? "" : item["CovidTestingSessionName"].ToString();
-                    objSession.Address = item["Address"] == null || item["Address"] == DBNull.Value ? "" : item["Address"].ToString();
-                    objSession.ProvinceName = item["ProvinceName"] == null || item["ProvinceName"] == DBNull.Value ? "" : item["ProvinceName"].ToString();
-                    objSession.DistrictName = item["DistrictName"] == null || item["DistrictName"] == DBNull.Value ? "" : item["DistrictName"].ToString();
-                    objSession.WardName = item["WardName"] == null || item["WardName"] == DBNull.Value ? "" : item["WardName"].ToString();
-                    objSession.TestingDate = DateTime.Parse(item["FromTestingDate"].ToString());
-                    objSession.Account = item["CreateAccountName"] == null || item["CreateAccountName"] == DBNull.Value ? "" : item["CreateAccountName"].ToString();
-                    objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
+                    DataTable dt = dts.Tables[0];
+                    
+                    foreach (DataRow item in dt.Rows)
+                    {
+                        objSession.SessionName = item["CovidTestingSessionName"] == null || item["CovidTestingSessionName"] == DBNull.Value ? "" : item["CovidTestingSessionName"].ToString();
+                        objSession.Address = item["Address"] == null || item["Address"] == DBNull.Value ? "" : item["Address"].ToString();
+                        objSession.ProvinceName = item["ProvinceName"] == null || item["ProvinceName"] == DBNull.Value ? "" : item["ProvinceName"].ToString();
+                        objSession.DistrictName = item["DistrictName"] == null || item["DistrictName"] == DBNull.Value ? "" : item["DistrictName"].ToString();
+                        objSession.WardName = item["WardName"] == null || item["WardName"] == DBNull.Value ? "" : item["WardName"].ToString();
+                        objSession.TestingDate = DateTime.Parse(item["FromTestingDate"].ToString());
+                        objSession.Account = item["CreateAccountName"] == null || item["CreateAccountName"] == DBNull.Value ? "" : item["CreateAccountName"].ToString();
+                        objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
+                    }
+                    if(dts.Tables.Count == 2)
+                    {
+                        dt = dts.Tables[1];
+                        foreach (DataRow item in dt.Rows)
+                        {
+                            MemberInfor obj = new MemberInfor();
+                            obj.AccountName = item["AccountName"] == null || item["AccountName"] == DBNull.Value ? "" : item["AccountName"].ToString();
+                            obj.Email = item["Email"] == null || item["Email"] == DBNull.Value ? "" : item["Email"].ToString();
+                        }
+                    }
                 }
                 objSession.SessionName = "Test_Covid";
                 objSession.Address = "21 Bùi Đình Túy, P26, Bình Thạnh, HCM";
@@ -71,6 +86,7 @@ namespace CovidService.Controllers
                 objSession.Account = "Test";
                 objSession.Purpose = "TestCovid";
                 objRes.Data = objSession;
+                objRes.MemberInfor = lstMember;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
                 return objRes;
