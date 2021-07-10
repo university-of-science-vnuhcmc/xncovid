@@ -14,14 +14,33 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.android.volley.Request;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.hcdc.xncovid.model.CheckAccountReq;
+import com.hcdc.xncovid.model.CheckAccountRes;
+import com.hcdc.xncovid.model.GetStaffConfigReq;
+import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.SessionInfo;
+import com.hcdc.xncovid.model.UserInfo;
+import com.hcdc.xncovid.util.Caller;
+import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
 String sessionId;
+long accountID;
+    SessionInfo objSession = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +52,24 @@ String sessionId;
         Intent intent = this.getIntent();
         int flag = 0;
         if(intent.getExtras() != null){
-            sessionId = intent.getExtras().getString("xn_session");
             flag = intent.getExtras().getInt("flag");
+           // sessionId = intent.getExtras().getString("xn_session");
         }
+
+         objSession = ((MyApplication) getApplication()).getSessionInfo();
+        if(objSession != null){
+            sessionId = objSession.ID + "";
+        }
+
 
         if(flag == 1){ // tu man hinh gom nhom ve
 
         } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
             myapp.setSessionInfo(null);
-        } else { // tu MainActivity hoac tu join phien xet nghiem
+        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+
+
+
             SessionInfo sessionInfo = new SessionInfo();
             myapp.setSessionInfo(sessionInfo);
         }
@@ -121,22 +149,29 @@ String sessionId;
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }
-    private void showMessage(String tile, String subtitle, String message, DialogInterface.OnClickListener okListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainStaffActivity.this);
-        // set the custom layout
-        final View customLayout
-                = getLayoutInflater()
-                .inflate(
-                        R.layout.activity_customdialog,
-                        null);
-        final TextView txtTitle = customLayout.findViewById(R.id.dialog_title);
-        final TextView txtSubTitle = customLayout.findViewById(R.id.dialog_subtitle);
-        final TextView txtcontent = customLayout.findViewById(R.id.content_1);
 
-        txtTitle.setText(tile);
-        txtSubTitle.setText(subtitle);
-        txtcontent.setText(android.text.Html.fromHtml(message));
+    private void checkAccount(){
+        try {
+            Caller caller = new Caller();
+            CheckAccountReq req = new CheckAccountReq();
+            req.AccountID = accountID;
+            caller.call(this, "CheckAccount", req, CheckAccountRes.class, new ICallback() {
+                @Override
+                public void callback(Object response) {
+                    CheckAccountRes res = (CheckAccountRes) response;
+                    if(res.returnCode != 1){
+                        new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                .setMessage("Lỗi: " + res.returnCode)
+                                .setNegativeButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return;
+                    }
+                   
+                }
+            }, null, Request.Method.POST);
+        } catch (Exception ex){
 
-        builder.setView(customLayout);
+        }
     }
 }
