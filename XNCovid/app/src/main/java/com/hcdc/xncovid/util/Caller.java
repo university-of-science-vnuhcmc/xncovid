@@ -61,6 +61,14 @@ public class Caller {
                             @Override
                             public void onResponse(JSONObject response) {
                                 APIResponse res = new Gson().fromJson(response.toString(), type);
+                                if(res.returnCode == 99){
+                                    new AlertDialog.Builder(context)
+                                            .setMessage("Vui lòng đăng nhập lại.")
+                                            .setNegativeButton("OK", null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return;
+                                }
                                 callback.callback(res);
                             }
                         }, new Response.ErrorListener() {

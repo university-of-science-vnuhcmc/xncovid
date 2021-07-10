@@ -62,7 +62,7 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                 CreateTestSessionReq req = new CreateTestSessionReq();
                 req.SessionName = sessionName;
                 req.Purpose = cause;
-                req.FromTestingDate = String.format("%04d%02d%02d%02d%02d", year, month, day, hour, minute);
+                req.TestingDate = String.format("%04d%02d%02d%02d%02d", year, month, day, hour, minute);
                 req.FullLocation = address + ", " + ward.Name + ", " + district.Name + ", " + province.Name;
                 req.ApartmentNo = address;
                 req.WardID = ward.ID;
@@ -73,12 +73,7 @@ public class ConfirmSessionActivity extends AppCompatActivity {
         });
     }
     private void createSession(CreateTestSessionReq req){
-        Intent intent = new Intent(ConfirmSessionActivity.this, QRSessionActivity.class);
-        intent.putExtra("SessionName", req.SessionName);
-        intent.putExtra("SessionID", 1000);
-        intent.putExtra("IsNew", true);
-        startActivity(intent);
-        /*Caller caller = new Caller();
+        Caller caller = new Caller();
         caller.call(this, "createtestsession", req, CreateTestSessionRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
@@ -97,6 +92,6 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                 intent.putExtra("IsNew", true);
                 startActivity(intent);
             }
-        }, null, Request.Method.POST);*/
+        }, null, Request.Method.POST);
     }
 }

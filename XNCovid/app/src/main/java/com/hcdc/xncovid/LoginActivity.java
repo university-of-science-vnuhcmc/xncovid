@@ -169,10 +169,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.w("Login", e.toString());
                     }
                     MyApplication myapp = ((MyApplication) getApplication());
-                    myapp.setDomain(res.Domain);
-                    myapp.setForm(res.Form);
-                    myapp.setUrl(res.Url);
-                    myapp.setId(res.Id);
                     myapp.setUserInfo(userInfo);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

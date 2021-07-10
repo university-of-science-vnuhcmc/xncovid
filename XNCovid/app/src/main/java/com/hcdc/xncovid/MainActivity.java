@@ -1,13 +1,20 @@
 package com.hcdc.xncovid;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.hcdc.xncovid.model.CreateTestSessionRes;
+import com.hcdc.xncovid.model.GetStaffConfigReq;
+import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.UserInfo;
+import com.hcdc.xncovid.util.Caller;
+import com.hcdc.xncovid.util.ICallback;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -34,9 +41,33 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainLeaderActivity.class);
             startActivity(intent);
         } else {
+            getStaffConfig();
             Intent intent = new Intent(this, MainStaffActivity.class);
             startActivity(intent);
         }
+    }
+    private void getStaffConfig(){
+        Caller caller = new Caller();
+        GetStaffConfigReq req = new GetStaffConfigReq();
+        caller.call(this, "getstaffconfig", req, GetStaffConfigRes.class, new ICallback() {
+            @Override
+            public void callback(Object response) {
+                GetStaffConfigRes res = (GetStaffConfigRes) response;
+                if(res.returnCode != 1){
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setMessage("Lỗi: " + res.returnCode)
+                            .setNegativeButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
+                MyApplication myapp = ((MyApplication) getApplication());
+                myapp.setDomain(res.Domain);
+                myapp.setForm(res.Form);
+                myapp.setUrl(res.Url);
+                myapp.setId(res.Id);
+            }
+        }, null, Request.Method.POST);
     }
     private void getUserInfo(){
         try {
