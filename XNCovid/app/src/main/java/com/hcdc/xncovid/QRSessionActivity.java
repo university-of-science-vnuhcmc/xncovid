@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
+import org.w3c.dom.Text;
 
 public class QRSessionActivity extends AppCompatActivity {
 
@@ -25,9 +28,13 @@ public class QRSessionActivity extends AppCompatActivity {
         String sessionName = bundle.getString("SessionName");
         Long sessionID = bundle.getLong("SessionID");
         isNew = bundle.getBoolean("IsNew");
+
         if(!isNew){
             ((LinearLayout) findViewById(R.id.success)).setVisibility(View.GONE);
         }
+
+        ((TextView) findViewById(R.id.sessionName)).setText(sessionName);
+
         QRCodeWriter writer = new QRCodeWriter();
         try {
             BitMatrix bitMatrix = writer.encode(sessionID.toString(), BarcodeFormat.QR_CODE, 300, 300);

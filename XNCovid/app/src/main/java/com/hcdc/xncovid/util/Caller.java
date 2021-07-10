@@ -3,6 +3,7 @@ package com.hcdc.xncovid.util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 
@@ -13,6 +14,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.hcdc.xncovid.LoginActivity;
+import com.hcdc.xncovid.MainActivity;
 import com.hcdc.xncovid.MainLeaderActivity;
 import com.hcdc.xncovid.MyApplication;
 import com.hcdc.xncovid.model.UserInfo;
@@ -67,6 +70,9 @@ public class Caller {
                                             .setNegativeButton("OK", null)
                                             .setIcon(android.R.drawable.ic_dialog_alert)
                                             .show();
+                                    Intent intent = new Intent(context, LoginActivity.class);
+                                    intent.putExtra("isLogout", true);
+                                    context.startActivity(intent);
                                     return;
                                 }
                                 callback.callback(res);
