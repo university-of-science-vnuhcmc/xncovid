@@ -35,7 +35,7 @@ namespace CovidService.Controllers
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.SessionID);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidTestingSession", parameters.ToArray());
+                DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidTestingSession ", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
