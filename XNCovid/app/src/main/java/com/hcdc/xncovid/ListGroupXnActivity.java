@@ -158,7 +158,12 @@ public class ListGroupXnActivity extends AppCompatActivity {
         final Boolean[] isOK = {true};
         GroupTestReq req  = new GroupTestReq();
         req.CovidTestingSessionID = Long.parseLong(session_code);
-        req.AccountID = 1;
+        UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
+
+        if(userInfo != null){
+            req.AccountID = userInfo.AccountID;
+        }
+
         req.CovidSpecimenCode = xn_session;
         req.SpecimenAmount = groupAdapter.getCount() + "";
         ArrayList<CitizenInfor> tmp = new ArrayList<>();
