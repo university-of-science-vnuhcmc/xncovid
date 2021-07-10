@@ -1,4 +1,5 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
 using Excel;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,7 @@ public class LocateConfig
         }
         catch (Exception objEx)
         {
+            LogWriter.WriteException(objEx);
         }
     }
 
