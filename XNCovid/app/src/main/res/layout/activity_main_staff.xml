@@ -189,7 +189,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rectangle_main_info_disable">
+                    android:background="@drawable/rectangle_main_info_disable"
+                    android:id="@+id/layout_main_session_info_staff">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -285,6 +286,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:id="@+id/cause"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="18dp"

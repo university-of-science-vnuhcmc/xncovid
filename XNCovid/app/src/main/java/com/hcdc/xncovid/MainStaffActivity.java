@@ -11,6 +11,7 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
+import com.hcdc.xncovid.model.EndTestSessionReq;
+import com.hcdc.xncovid.model.EndTestSessionRes;
 import com.hcdc.xncovid.model.GetStaffConfigReq;
 import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.SessionInfo;
@@ -35,13 +38,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 
 public class MainStaffActivity extends AppCompatActivity {
-private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
+private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession, layoutsessioninfo;
 String sessionId;
 long accountID;
+private  TextView testName, location, time, cause, leader;
     MyApplication myapp = null;
     SessionInfo objSession = null;
+    private boolean errorFlag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,7 @@ long accountID;
         layoutnewGroup = findViewById(R.id.newGroup);
         layoutlistGroup = findViewById(R.id.listGroup);
         layoutensession = findViewById(R.id.endSession);
+        layoutsessioninfo = findViewById(R.id.layout_main_session_info_staff);
 
         //layoutJoinTest.setEnabled(false);
         layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
@@ -72,6 +79,14 @@ long accountID;
         layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
         //layoutJoinTest.setEnabled(false);
         layoutlistGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+        layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info_disable));
+
+        //TextView
+        testName = (TextView) findViewById(R.id.testName);
+        location= (TextView) findViewById(R.id.location);
+        time = (TextView) findViewById(R.id.time);
+        cause = (TextView) findViewById(R.id.cause);
+        leader = (TextView) findViewById(R.id.leader);
 
         if(flag == 1){ // tu man hinh gom nhom ve
             objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
@@ -96,6 +111,17 @@ long accountID;
     private  void  SetupActivit(int caseType){
         if(sessionId != null && sessionId != "")
         {
+            //TextView
+            testName.setText(objSession.SessionName);
+            location.setText((objSession.getFullAddress()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+            time.setText(timeFormat.format(objSession.TestingDate));
+            cause.setText(objSession.Purpose);
+            leader.setText(objSession.Account);
+
+            layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
+
+
             layoutnewGroup.setEnabled(true);
             layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
             layoutnewGroup.setOnClickListener(new View.OnClickListener() {
@@ -106,29 +132,27 @@ long accountID;
                     startActivity(intent);
                 }
             });
-            String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
 
             layoutensession.setEnabled(true);
             layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
-                            "XN_Covid19_HCM_123",
-                            htmlcontent,
-                            "Thoát",
-                            "Hủy",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                                    // intent.putExtra("xn_session", "");
-                                    startActivity(intent);
-                                }
-                            }, null, MainStaffActivity.this);
-
+                    endSession();
                 }
             });
+
         }else if(caseType == 0){
+
+            //TextView
+            testName.setText("Hiện tại chưa có phiên xét nghiệm");
+            location.setText("");
+
+            time.setText("");
+            cause.setText("");
+            leader.setText("");
+
+
+
             layoutJoinTest.setEnabled(true);
             layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
             layoutJoinTest.setOnClickListener(new View.OnClickListener() {
@@ -171,34 +195,84 @@ long accountID;
                     }
                     if(res.returnCode != 1){
                         new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                .setMessage("Lỗi: " + res.returnCode)
+                                .setMessage("Lỗi: " + res.returnCode + "Lỗi hệ thống, vui lòng thử lại sau.")
                                 .setNegativeButton(android.R.string.ok, null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
-
+                        errorFlag = true;
                     }else {
                         //returncode = 1 ==> co dang join vao session
-                        SessionInfo sessionInfo = new SessionInfo();
-                        sessionInfo.Address = res.session.Address;
-                        sessionInfo.Purpose = res.session.Purpose;
-                        sessionInfo.SessionName = res.session.SessionName;
-                        sessionInfo.TestingDate = res.session.TestingDate;
-                        sessionInfo.Account = res.session.Account;
-                        sessionInfo.DistrictName = res.session.DistrictName;
-                        sessionInfo.WardName = res.session.WardName;
-                        sessionInfo.ProvinceName = res.session.ProvinceName;
-                        sessionInfo.Leader = new UserInfo();
-                        sessionInfo.Leader.Name = res.session.Account;
-                        if(myapp == null){
-                            myapp = new MyApplication();
+                        if(res.session != null){
+                            objSession = new SessionInfo();
+                            objSession.Address = res.session.Address;
+                            objSession.Purpose = res.session.Purpose;
+                            objSession.SessionName = res.session.SessionName;
+                            objSession.TestingDate = res.session.TestingDate;
+                            objSession.Account = res.session.Account;
+                            objSession.DistrictName = res.session.DistrictName;
+                            objSession.WardName = res.session.WardName;
+                            objSession.ProvinceName = res.session.ProvinceName;
+                            objSession.Leader = new UserInfo();
+                            objSession.Leader.Name = res.session.Account;
+                            if(myapp == null){
+                                myapp = new MyApplication();
+                            }
+                            myapp.setSessionInfo(objSession);
+                            SetupActivit(res.returnCode);
+                        }else {
+                            Log.w("checkAccount", "SessionInfo return null");
                         }
-                        myapp.setSessionInfo(sessionInfo);
-                        SetupActivit(res.returnCode);
+
                     }
                 }
             }, null, Request.Method.POST);
         } catch (Exception ex){
+            new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                    .setMessage("Lỗi hệ thống, vui lòng thử lại sau.")
+                    .setNegativeButton(android.R.string.ok, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            errorFlag = true;
 
         }
     }
+
+    public void endSession(){
+        if(objSession == null || errorFlag){
+            return;
+        }
+        String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
+        new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                objSession.SessionName,
+                htmlcontent,
+                "Thoát",
+                "Hủy",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Caller caller = new Caller();
+                        EndTestSessionReq req = new EndTestSessionReq();
+                        req.CovidTestingSessionID = objSession.ID;
+                        caller.call(MainStaffActivity.this, "endtestsession4staff", req, EndTestSessionRes.class, new ICallback() {
+                            @Override
+                            public void callback(Object response) {
+                                EndTestSessionRes res = (EndTestSessionRes) response;
+                                if(res.returnCode != 1){
+                                    new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                            .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
+                                            .setNegativeButton(android.R.string.ok, null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    return;
+                                }
+                                objSession = null;
+                                Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                // intent.putExtra("xn_session", "");
+                                startActivity(intent);
+                            }
+                        }, null, Request.Method.POST);
+                    }
+                }, null, MainStaffActivity.this);
+    }
+
 }
