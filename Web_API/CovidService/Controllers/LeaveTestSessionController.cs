@@ -11,11 +11,11 @@ using System.Web.Http;
 
 namespace CovidService.Controllers
 {
-    public class JoinTestSessionController : ApiController
+    public class LeaveTestSessionController : ApiController
     {
-        public JoinTestSessionReponse Post([FromBody]JoinTestSessionRequest objReq)
+        public LeaveTestSessionReponse Post([FromBody] LeaveTestSessionRequest objReq)
         {
-            JoinTestSessionReponse objRes = new JoinTestSessionReponse();
+            LeaveTestSessionReponse objRes = new LeaveTestSessionReponse();
             try
             {
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
@@ -33,30 +33,25 @@ namespace CovidService.Controllers
                 }
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
-                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, 64, objReq.TestSessionID);
-                SqlHelper.AddParameter(ref parameters, "@SessionAccountTestingMappingID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-                SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddSessionAccountTestingMapping", parameters.ToArray());
-                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                //SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
+                //SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, 64, objReq.TestSessionID);
+                //SqlHelper.AddParameter(ref parameters, "@Status", System.Data.SqlDbType.SmallInt, 0);
+                //SqlHelper.AddParameter(ref parameters, "@SessionAccountTestingMappingID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
+                //SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+                //SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddSessionAccountTestingMapping", parameters.ToArray());
+                int intReturnValue = 1; //Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    if (intReturnValue == -31)
+                    if (intReturnValue == -61)
                     {
-                        objRes.returnCode = -31;
+                        objRes.returnCode = -61;
                         objRes.returnMess = "DB return: Session is not found, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
-                    else if (intReturnValue == -32)
+                    else if (intReturnValue == -62)
                     {
-                        objRes.returnCode = -32;
+                        objRes.returnCode = -62;
                         objRes.returnMess = "DB return: Session was finished, ReturnCode: " + intReturnValue;
-                        return objRes;
-                    }
-                    else if (intReturnValue == -91)
-                    {
-                        objRes.returnCode = -91;
-                        objRes.returnMess = "DB return: Staff have already joined another testing session, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                     else
@@ -66,7 +61,7 @@ namespace CovidService.Controllers
                         return objRes;
                     }
                 }
-                long loMappingID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
+                //long loMappingID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
 
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";

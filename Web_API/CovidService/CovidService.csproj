@@ -153,6 +153,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CreateQRManualDeclarationController.cs" />
+    <Compile Include="Controllers\GetHistoryCreateQRController.cs" />
+    <Compile Include="Controllers\LogoutController.cs" />
+    <Compile Include="Controllers\LeaveTestSessionController.cs" />
     <Compile Include="Controllers\UpdateCitizenInfoController.cs" />
     <Compile Include="Controllers\CheckAccountController.cs" />
     <Compile Include="Controllers\CreateTestSessionController.cs" />
@@ -171,6 +174,9 @@
     </Compile>
     <Compile Include="Models\AssembleModels.cs" />
     <Compile Include="Models\CheckAccountModels.cs" />
+    <Compile Include="Models\GetHistoryCreateQRModels.cs" />
+    <Compile Include="Models\LogoutModels.cs" />
+    <Compile Include="Models\LeaveTestSessionModels.cs" />
     <Compile Include="Models\UpdateCitizenInfoModels.cs" />
     <Compile Include="Models\CreateQRManualDeclarationModels.cs" />
     <Compile Include="Models\CreateTestSessionModels.cs" />
