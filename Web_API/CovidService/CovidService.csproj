@@ -156,7 +156,6 @@
     <Compile Include="Controllers\UpdateCitizenInfoController.cs" />
     <Compile Include="Controllers\CheckAccountController.cs" />
     <Compile Include="Controllers\CreateTestSessionController.cs" />
-    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\EndTestSession4LeadController.cs" />
     <Compile Include="Controllers\GetLocateController.cs" />
     <Compile Include="Controllers\GetSessionController.cs" />
