@@ -64,11 +64,20 @@ public class SessionInfoActivity extends AppCompatActivity {
                         JoinTestSessionRes res = (JoinTestSessionRes) response;
                         if(res.returnCode == 1){
                             StartMainStaffAcitivity();
-                        }   else if(res.returnCode == 2) //session da ket thuc
+                        }   else if(res.returnCode == -32) //session da ket thuc
                         {
                            // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
                             new AlertDialog.Builder(SessionInfoActivity.this)
                                     .setMessage("Phiên xét nghiệm đã kết thúc.")
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                        else if(res.returnCode == -31) //session da ket thuc
+                        {
+                            // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            new AlertDialog.Builder(SessionInfoActivity.this)
+                                    .setMessage("Không tìm thấy phiên xét nghiệm.")
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();

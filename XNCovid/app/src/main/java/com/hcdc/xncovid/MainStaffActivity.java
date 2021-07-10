@@ -40,13 +40,14 @@ public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession;
 String sessionId;
 long accountID;
+    MyApplication myapp = null;
     SessionInfo objSession = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionId = null;
         setContentView(R.layout.activity_main_staff);
-        MyApplication myapp = (MyApplication) getApplication();
+        myapp = (MyApplication) getApplication();
         TextView nameView = findViewById(R.id.name);
         nameView.setText(myapp.getUserInfo().Name);
         Intent intent = this.getIntent();
@@ -68,10 +69,6 @@ long accountID;
             myapp.setSessionInfo(null);
         } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
 
-
-
-            SessionInfo sessionInfo = new SessionInfo();
-            myapp.setSessionInfo(sessionInfo);
         }
 
         layoutJoinTest = findViewById(R.id.joinTest);
@@ -89,6 +86,10 @@ long accountID;
         //layoutJoinTest.setEnabled(false);
         layoutlistGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
 
+
+    }
+
+    private  void  SetupActivit(int caseType){
         if(sessionId != null && sessionId != "")
         {
             layoutnewGroup.setEnabled(true);
@@ -97,7 +98,7 @@ long accountID;
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
                     intent.putExtra("scan_qr_type", 1);
-                   // intent.putExtra("xn_session", sessionId);
+                    // intent.putExtra("xn_session", sessionId);
                     startActivity(intent);
                 }
             });
@@ -107,7 +108,7 @@ long accountID;
             layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                   new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                    new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
                             "XN_Covid19_HCM_123",
                             htmlcontent,
                             "Thoát",
@@ -123,7 +124,7 @@ long accountID;
 
                 }
             });
-        }else {
+        }else if(caseType == 0){
             layoutJoinTest.setEnabled(true);
             layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
             layoutJoinTest.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +136,7 @@ long accountID;
             });
         }
     }
+
     public void signOut(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Bạn muốn đăng xuất?")
@@ -159,15 +161,39 @@ long accountID;
                 @Override
                 public void callback(Object response) {
                     CheckAccountRes res = (CheckAccountRes) response;
+                    if(res.returnCode == 0) // khong co dang join session nao het
+                    {
+                        SetupActivit(res.returnCode);
+                    }
                     if(res.returnCode != 1){
                         new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
                                 .setMessage("Lỗi: " + res.returnCode)
                                 .setNegativeButton(android.R.string.ok, null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
-                        return;
+
+                    }else {
+                        //returncode = 1 ==> co dang join vao session
+                        SessionInfo sessionInfo = new SessionInfo();
+                        sessionInfo.Address = res.session.Address;
+                        sessionInfo.Purpose = res.session.Purpose;
+                        sessionInfo.SessionName = res.session.SessionName;
+                        sessionInfo.TestingDate = res.session.TestingDate;
+                        sessionInfo.Account = res.session.Account;
+                        sessionInfo.DistrictName = res.session.DistrictName;
+                        sessionInfo.WardName = res.session.WardName;
+                        sessionInfo.ProvinceName = res.session.ProvinceName;
+                        sessionInfo.Leader = new UserInfo();
+                        sessionInfo.Leader.Name = res.session.Account;
+                       // sessionInfo.District = res.session.DistrictName;
+                       // sessionInfo.Ward = res.session.WardName;
+                       // sessionInfo.Leader = res.session.Account
+                        if(myapp == null){
+                            myapp = new MyApplication();
+                        }
+                        myapp.setSessionInfo(sessionInfo);
+                        SetupActivit(res.returnCode);
                     }
-                   
                 }
             }, null, Request.Method.POST);
         } catch (Exception ex){
