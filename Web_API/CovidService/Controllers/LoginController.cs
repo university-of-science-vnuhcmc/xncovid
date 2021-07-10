@@ -90,15 +90,33 @@ namespace CovidService.Controllers
                 {
                     //loginRes.returnCode = 2;
                     //loginRes.returnMess = strRes;
-
-                    loginRes.returnCode = 1;
-                    loginRes.returnMess = "Thành công";
-                    loginRes.Token = Guid.NewGuid().ToString();
-                    loginRes.Role = "Staff";
-                    loginRes.AccountID = "1224";
-                    if (value.Email.ToLower().Contains("hoconghoai"))
+                    //loginRes.returnCode = 1;
+                    //loginRes.returnMess = "Thành công";
+                    //loginRes.Token = Guid.NewGuid().ToString();
+                    //loginRes.Role = "Staff";
+                    //loginRes.AccountID = "1224";
+                    //if (value.Email.ToLower().Contains("hoconghoai"))
+                    //{
+                    //    loginRes.Role = "Leader";
+                    //}
+                    //goi db 
+                    string token = Guid.NewGuid().ToString();
+                    AccountInfo accInfo = new AccountInfo();
+                    string MD5Token = Util.GetMD5Hash(token);
+                    int intReturn = CallDB(value.Email, MD5Token, out accInfo);
+                    if (intReturn == 1)
                     {
-                        loginRes.Role = "Leader";
+                        loginRes.returnCode = 1;
+                        loginRes.returnMess = "Thành công";
+                        loginRes.Token = token;
+                        loginRes.AccountID = accInfo.AccountID.ToString();
+                        loginRes.CustomerName = accInfo.AccountName;
+                        loginRes.Role = accInfo.RoleName;
+                    }
+                    else
+                    {
+                        loginRes.returnCode = intReturn;
+                        loginRes.returnMess = "Login fail";
                     }
                 }
                 return loginRes;
@@ -166,7 +184,7 @@ namespace CovidService.Controllers
                 SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.VarChar, 256, Token);
                 SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "AccountLogin", parameters.ToArray());
+                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "dbo.uspAccountLogin", parameters.ToArray());
                 intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 DataTable objDT1 = ds.Tables[0];
                 DataTable objDT2 = ds.Tables[1];
