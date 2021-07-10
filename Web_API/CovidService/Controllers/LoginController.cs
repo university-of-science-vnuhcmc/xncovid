@@ -32,7 +32,7 @@ namespace CovidService.Controllers
 
         private bool CheckValidRequest()
         {
-            if(!Request.Headers.Contains("token"))
+            if (!Request.Headers.Contains("token"))
             {
                 return false;
             }
@@ -47,8 +47,8 @@ namespace CovidService.Controllers
             LoginReponse loginRes = new LoginReponse();
             try
             {
-                bool checkTonken= CheckValidRequest();
-                string strRes="";
+                bool checkTonken = CheckValidRequest();
+                string strRes = "";
                 GoogleApiTokenInfo ggTokenInfo = null;// GetUserDetails(value.TokenID, out strRes);
                 if (ggTokenInfo != null)
                 {
@@ -76,7 +76,7 @@ namespace CovidService.Controllers
                 {
                     //loginRes.returnCode = 2;
                     //loginRes.returnMess = strRes;
-                    
+
                     loginRes.returnCode = 1;
                     loginRes.returnMess = "Thành công";
                     loginRes.Token = Guid.NewGuid().ToString();
@@ -126,7 +126,7 @@ namespace CovidService.Controllers
             {
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(TrustAllValidationCallback);
                 httpResponseMessage = httpClient.GetAsync(requestUri).Result;
-               
+
             }
             catch (Exception ex)
             {
@@ -145,9 +145,9 @@ namespace CovidService.Controllers
             var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
 
             return googleApiTokenInfo;
-           
+
         }
-        public bool CheckLogin(string Email,string Token)
+        public bool CheckLogin(string Email, string Token)
         {
             bool isOK = false;
 
