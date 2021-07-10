@@ -47,6 +47,7 @@ namespace CovidService.Controllers
         // POST api/<controller>
         public LoginReponse Post([FromBody]LoginRequest value)
         {
+            LogWriter.WriteLogMsg(value.Email);
             LoginReponse loginRes = new LoginReponse();
             try
             {
@@ -183,8 +184,9 @@ namespace CovidService.Controllers
                 }
                 return intReturnValue;
             }
-            catch (Exception ex)
+            catch (Exception objEx)
             {
+                LogWriter.WriteException(objEx);      
                 return -1;
 
             }
