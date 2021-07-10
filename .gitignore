@@ -8,4 +8,7 @@ Web_API/CovidService/obj/Debug/CovidService.csproj.FileListAbsolute.txt
 Web_API/CovidService/obj/Debug/CovidService.csprojResolveAssemblyReference.cache
 Web_API/CovidService/obj/Debug/CovidService.dll
 Web_API/CovidService/obj/Debug/CovidService.pdb
+/.vs
+/Web_API/.vs/CovidService
+/Web_API/CovidService/obj
 Web_API/CovidService/Controllers/DemoController.cs
