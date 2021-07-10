@@ -35,24 +35,6 @@ namespace CovidService.Controllers
                     objRes.returnMess = "FullLocation is null or empty";
                     return objRes;
                 }
-                if (string.IsNullOrEmpty(objReq.ProvinceID))
-                {
-                    objRes.returnCode = 1003;
-                    objRes.returnMess = "ProvinceID is null or empty";
-                    return objRes;
-                }
-                if (string.IsNullOrEmpty(objReq.DistrictID))
-                {
-                    objRes.returnCode = 1004;
-                    objRes.returnMess = "DistrictID is null or empty";
-                    return objRes;
-                }
-                if (string.IsNullOrEmpty(objReq.WardID))
-                {
-                    objRes.returnCode = 1005;
-                    objRes.returnMess = "WardID is null or empty";
-                    return objRes;
-                }
 
                 //string sqlString = SqlHelper.sqlString;
                 //List<SqlParameter> parameters = new List<SqlParameter>();

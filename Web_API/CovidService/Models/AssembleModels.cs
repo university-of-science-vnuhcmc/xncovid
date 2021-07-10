@@ -37,7 +37,7 @@ namespace CovidService.Models
         public string Role;
         public string CustomerName;
 
-       
+
     }
     public class ProviderUserDetails
     {
@@ -70,7 +70,7 @@ namespace CovidService.Models
         public string typ { get; set; }
     }
 
-    public class GroupTestRequest: Request
+    public class GroupTestRequest : Request
     {
         public string CovidSpecimenCode { get; set; }
         public long CovidTestingSessionID { get; set; }
@@ -95,20 +95,26 @@ namespace CovidService.Models
         public string ProvinceID { get; set; }
         public string QRCode { get; set; }
         public int QRCodeType { get; set; }
+        public string PartnerWardID { get; set; }
+        public string PartnerWardName { get; set; }
+        public string PartnerDistrictID { get; set; }
+        public string PartnerDistrictName { get; set; }
+        public string PartnerProvinceID { get; set; }
+        public string PartnerProvinceName { get; set; }
 
     }
 
-    public class GroupTestResponse: Response
+    public class GroupTestResponse : Response
     {
         public long CovidSpecimenID { get; set; }
     }
 
-    public class GetLocateRequest: Request
+    public class GetLocateRequest : Request
     {
         public string Value { get; set; }
     }
 
-    public class GetLocateResponse: Response
+    public class GetLocateResponse : Response
     {
         public List<LocateInfor> locateInfors;
     }
@@ -127,21 +133,20 @@ namespace CovidService.Models
         Ward = 2,
     }
 
-    public class CreateTestSessionRequest: Request
+    public class CreateTestSessionRequest : Request
     {
         public string SessionName { get; set; }
         public string Purpose { get; set; }
-        public DateTime FromTestingDate { get; set; }
-        public DateTime ToTestingDate { get; set; }
+        public string TestingDate { get; set; }
         public string FullLocation { get; set; }
         public string ApartmentNo { get; set; }
         public string StreetName { get; set; }
-        public string WardID { get; set; }
-        public string DistrictID { get; set; }
-        public string ProvinceID { get; set; }
+        public long WardID { get; set; }
+        public long DistrictID { get; set; }
+        public long ProvinceID { get; set; }
     }
 
-    public class CreateTestSessionResponse: Response
+    public class CreateTestSessionResponse : Response
     {
         public long SessionID { get; set; }
     }
@@ -150,12 +155,34 @@ namespace CovidService.Models
     public class JoinTestSessionRequest : Request
     {
         public string TestID { get; set; }
-      
+
     }
 
     public class JoinTestSessionReponse : Response
     {
-        
+
     }
 
+    public class GetStaffConfigRequest : Request
+    {
+
+    }
+
+    public class GetStaffConfigResponse : Response
+    {
+        public string Url;
+        public string Domain;
+        public string Form;
+        public string Id;
+    }
+
+    public class EndTestSession4LeadRequest : Request
+    {
+        public long CovidTestingSessionID { get; set; }
+    }
+
+    public class EndTestSession4LeadResponse : Response
+    {
+
+    }
 }

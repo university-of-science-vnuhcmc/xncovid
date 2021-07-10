@@ -50,6 +50,8 @@ namespace CovidService.Controllers
                     return objRes;
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
+                //Random rd = new Random();
+                //int i = rd.Next(7, 30);
                 objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
