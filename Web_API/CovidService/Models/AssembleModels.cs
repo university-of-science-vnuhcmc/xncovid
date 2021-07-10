@@ -207,7 +207,7 @@ namespace CovidService.Models
 
     public class GetSessionRequest : Request
     {
-        public long AccountID { get; set; }
+        public long SessionID { get; set; }
     }
 
     public class GetSessionResponse : Response

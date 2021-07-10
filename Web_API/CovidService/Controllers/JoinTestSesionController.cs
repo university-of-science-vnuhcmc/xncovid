@@ -1,4 +1,5 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,13 @@ namespace CovidService.Controllers
             JoinTestSessionReponse objRes = new JoinTestSessionReponse();
             try
             {
+                bool isCheck = Util.CheckLogin(objReq.Email, objReq.Token);
+                if (isCheck == false)
+                {
+                    objRes.returnCode = 99;
+                    objRes.returnMess = "Invalid Email or Token";
+                    return objRes;
+                }
                 if(objReq == null)
                 {
                     objRes.returnCode = 1000;
