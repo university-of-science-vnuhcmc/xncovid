@@ -16,8 +16,8 @@ namespace CovidService.Controllers
             {
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 string sqlString = SqlHelper.sqlString;
@@ -31,26 +31,26 @@ namespace CovidService.Controllers
                 {
                     if (intReturnValue == -1004)
                     {
-                        objRes.returnCode = -1004;
-                        objRes.returnMess = "DB return: User is not found, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = -1004;
+                        objRes.ReturnMess = "DB return: User is not found, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                     else
                     {
-                        objRes.returnCode = 1002;
-                        objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = 1002;
+                        objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                 }
 
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 return objRes;
             }
         }

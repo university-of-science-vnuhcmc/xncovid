@@ -18,14 +18,14 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 string sqlString = SqlHelper.sqlString;
@@ -37,15 +37,15 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    objRes.returnCode = 1002;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    objRes.ReturnCode = 1002;
+                    objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
                 DataTable objDt = ds.Tables[0];
                 if (objDt.Rows.Count == 0)
                 {
-                    objRes.returnCode = -2;
-                    objRes.returnMess = "No data found";
+                    objRes.ReturnCode = -2;
+                    objRes.ReturnMess = "No data found";
                     return objRes;
                 }
                 foreach (DataRow objRow in objDt.Rows)
@@ -58,14 +58,14 @@ namespace CovidService.Controllers
                     log.MaxNumber = int.Parse(objRow["MaxNumber"].ToString());
                     log.NumOfPrint = int.Parse(objRow["NumOfPrint"].ToString());
                 }
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 return objRes;
             }
         }

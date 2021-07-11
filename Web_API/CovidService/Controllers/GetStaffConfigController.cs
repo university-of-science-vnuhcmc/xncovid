@@ -26,8 +26,8 @@ namespace CovidService.Controllers
             try
             {
 
-                GetStaffRes.returnCode = 1;
-                GetStaffRes.returnMess = "Thành công";
+                GetStaffRes.ReturnCode = 1;
+                GetStaffRes.ReturnMess = "Thành công";
                 GetStaffRes.Url = "https://kbytcq.khambenh.gov.vn/api/v1/tokhai_yte";
                 GetStaffRes.Domain = "https://kbytcq.khambenh.gov.vn/#tokhai_yte/model";
                 GetStaffRes.Id = "Id =([A-z0-9-]*)";
@@ -42,8 +42,8 @@ namespace CovidService.Controllers
             }
             catch (Exception ex)
             {
-                GetStaffRes.returnCode = -1;
-                GetStaffRes.returnMess = ex.ToString();
+                GetStaffRes.ReturnCode = -1;
+                GetStaffRes.ReturnMess = ex.ToString();
                 return GetStaffRes;
             }
         }       

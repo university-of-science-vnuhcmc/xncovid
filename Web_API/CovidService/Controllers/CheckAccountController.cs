@@ -22,15 +22,15 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 Session sesInfo = new Session();
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 string leaderName;
@@ -39,24 +39,24 @@ namespace CovidService.Controllers
                 int intReturn = CallDB(objReq.AccountID, out sesInfo,out lstUser);
                 if (intReturn == 1)
                 {
-                    objRes.returnCode = 1;
-                    objRes.returnMess = "Success";
+                    objRes.ReturnCode = 1;
+                    objRes.ReturnMess = "Success";
                     objRes.Session = sesInfo;      
                     objRes.LstUser = lstUser;
                     
                 }
                 else
                 {
-                    objRes.returnCode = 0;
-                    objRes.returnMess = "Success";
+                    objRes.ReturnCode = 0;
+                    objRes.ReturnMess = "Success";
                 }
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
             }

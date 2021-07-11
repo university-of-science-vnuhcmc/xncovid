@@ -22,14 +22,14 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
@@ -41,14 +41,14 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    objRes.returnCode = 1001;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    objRes.ReturnCode = 1001;
+                    objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
                 if (dts == null)
                 {
-                    objRes.returnCode = 1002;
-                    objRes.returnMess = "Error, Dataset is null";
+                    objRes.ReturnCode = 1002;
+                    objRes.ReturnMess = "Error, Dataset is null";
                     return objRes;
                 }
                 Session objSession = new Session();
@@ -68,15 +68,15 @@ namespace CovidService.Controllers
                     }
                 }
                 objRes.data = objSession;
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
             }
