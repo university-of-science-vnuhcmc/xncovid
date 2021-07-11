@@ -32,9 +32,7 @@ namespace CovidService.Controllers
                     objRes.returnCode = 1000;
                     objRes.returnMess = "Object request is null";
                     return objRes;
-                }
-                string leaderName;
-                long AccountID;
+                }               
                 List<UserInfo> lstUser;
                 int intReturn = CallDB(objReq.AccountID, out sesInfo,out lstUser);
                 if (intReturn == 1)

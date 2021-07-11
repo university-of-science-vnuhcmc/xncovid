@@ -75,8 +75,9 @@ namespace CovidService.Controllers
                             loginRes.returnMess = "Thành công";
                             loginRes.Token = token;
                             loginRes.AccountID = accInfo.AccountID;
-                            loginRes.CustomerName = accInfo.AccountName;
+                            loginRes.Email = accInfo.AccountName;
                             loginRes.Role = accInfo.RoleName;
+                            loginRes.FullName=accInfo.FullName;
                         }
                         else
                         {
@@ -100,8 +101,9 @@ namespace CovidService.Controllers
                         loginRes.returnMess = "Thành công";
                         loginRes.Token = token;
                         loginRes.AccountID = accInfo.AccountID;
-                        loginRes.CustomerName = accInfo.AccountName;
+                        loginRes.Email = accInfo.AccountName;
                         loginRes.Role = accInfo.RoleName;
+                        loginRes.FullName = accInfo.FullName;
                     }
                     else
                     {
