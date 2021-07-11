@@ -175,7 +175,6 @@ private  TextView testName, location, time, cause, leader;
                         public void onClick(DialogInterface dialog, int id) {
                             Caller caller = new Caller();
                             LogoutReq req = new LogoutReq();
-                            req.AccountType = 1;
                             caller.call(MainStaffActivity.this, "logout", req, LogoutRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
