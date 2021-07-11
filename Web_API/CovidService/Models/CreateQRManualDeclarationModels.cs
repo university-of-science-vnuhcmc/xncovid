@@ -12,6 +12,7 @@ namespace CovidService.Models
 
     public class CreateQRManualDeclarationResponse : Response
     {
+        public string CreateDate;
         public int MinNumber;
         public int MaxNumber;
         public int NumOfPrint;
