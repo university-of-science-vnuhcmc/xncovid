@@ -11,10 +11,10 @@ namespace CovidService.Utility
     {
         private const long FILESIZE = 1024 * 1024 * 4; //4MB
         private static string LogFile = Path.Combine(HttpContext.Current.Server.MapPath("~/bin"), "log.txt"); 
-        public static bool WriteLogMsg( string strLogContent)
+        public static bool WriteLogMsg( string strLogContent, string apiName)
         {
             CheckAndSplitFile(LogFile, FILESIZE);
-            return DoWriteLog(LogFile, strLogContent);
+            return DoWriteLog(LogFile, strLogContent, apiName);
         }
         /// <summary>
         /// Writes an exception to log file.
@@ -31,13 +31,15 @@ namespace CovidService.Utility
         /// </summary>
         /// <param name="LogFile">Log path</param>
         /// <param name="strLogContent">Content</param>
-        private static bool DoWriteLog(string LogFile, string strLogContent)
+        private static bool DoWriteLog(string LogFile, string strLogContent, string apiName)
         {
             bool flag;
             StreamWriter wr = null;
             try
             {
                 wr = new StreamWriter(LogFile, true, Encoding.UTF8);
+                wr.WriteLine("==============================================================");
+                wr.WriteLine(apiName + " :");
                 wr.WriteLine("[" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "]");
                 wr.WriteLine(strLogContent);
                 wr.Flush();

@@ -32,7 +32,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "EndTestSession4Lead");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
@@ -62,7 +62,7 @@ namespace CovidService.Controllers
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead");
                 return objRes;
             }
             catch (Exception ex)

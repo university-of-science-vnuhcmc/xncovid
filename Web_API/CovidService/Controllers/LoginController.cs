@@ -47,7 +47,7 @@ namespace CovidService.Controllers
         // POST api/<controller>
         public LoginReponse Post([FromBody]LoginRequest value)
         {
-            LogWriter.WriteLogMsg(value.Email);
+            LogWriter.WriteLogMsg(value.Email, "Login");
             LoginReponse loginRes = new LoginReponse();
             try
             {
@@ -109,7 +109,7 @@ namespace CovidService.Controllers
                         loginRes.ReturnMess = "Login fail";
                     }
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(loginRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(loginRes), "Login");
                 return loginRes;
             }
             catch (Exception ex)

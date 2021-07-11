@@ -34,7 +34,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "UpdateCitizenInfo");
 
                 //string sqlString = SqlHelper.sqlString;
                 //List<SqlParameter> parameters = new List<SqlParameter>();

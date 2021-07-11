@@ -32,7 +32,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetSession");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID ", System.Data.SqlDbType.BigInt, objReq.SessionID);
@@ -70,7 +70,7 @@ namespace CovidService.Controllers
                 objRes.Data = objSession;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession");
                 return objRes;
             }
             catch (Exception ex)

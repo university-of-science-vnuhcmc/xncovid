@@ -34,7 +34,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateTestSession");
                 if (string.IsNullOrEmpty(objReq.SessionName))
                 {
                     objRes.ReturnCode = 1001;
@@ -80,7 +80,7 @@ namespace CovidService.Controllers
                 objRes.SessionID = loCovidSpecimenID;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession");
                 return objRes;
             }
             catch (Exception ex)

@@ -7,11 +7,15 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Threading;
 using System.Web;
 
 public class LocateConfig
 {
+    public List<LocateInfor> lstProvince = new List<LocateInfor>();
+    public Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
+    public Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
     private static LocateConfig instance;
     public static LocateConfig Instance
     {
@@ -30,11 +34,9 @@ public class LocateConfig
         OnLoad();
     }
 
-    private static List<LocateInfor> lstProvince = new List<LocateInfor>();
-    private static Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
-    private static Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
 
-    protected static void OnLoad()
+
+    public void OnLoad()
     {
         try
         {
@@ -187,5 +189,6 @@ public class LocateConfig
         }
     }
 }
+
 
 

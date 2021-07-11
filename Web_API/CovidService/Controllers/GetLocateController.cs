@@ -25,7 +25,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetLocate");
                 List<LocateInfor> lstLocate = new List<LocateInfor>();
                 lstLocate = LocateConfig.Instance.GetLocateInfor(objReq.Value);
                 if(string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
@@ -43,7 +43,7 @@ namespace CovidService.Controllers
                 objRes.LocateInfors = lstLocate;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate");
                 return objRes;
             }
             catch (Exception ex)

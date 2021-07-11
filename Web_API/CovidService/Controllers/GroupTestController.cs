@@ -39,7 +39,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "List Citizen is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GroupTest");
                 DataTable data = ConvertToDataTable(objReq.CitizenInfor);
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -75,7 +75,7 @@ namespace CovidService.Controllers
                             objRes.CovidSpecimenID = loSpecimenID;
                             objRes.ReturnCode = 1;
                             objRes.ReturnMess = "CovidSpecimenCode is duplicated";
-                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
                             return objRes;
                         case -31:
                             objRes.ReturnCode = intReturnValue;
@@ -95,7 +95,7 @@ namespace CovidService.Controllers
                 objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
                 return objRes;
             }
             catch (Exception ex)
@@ -149,7 +149,7 @@ namespace CovidService.Controllers
                 DataTable dt = dts.Tables[0];
                 if (dt.Rows.Count == 0)
                 {
-                    LogWriter.WriteLogMsg("DB return table null");
+                    LogWriter.WriteLogMsg("DB return table null", "GroupTest");
                     return false;
                 }
                 string strQRCode = string.Join("|", lstInfor.Select(x => x.QRCode.ToArray()));
