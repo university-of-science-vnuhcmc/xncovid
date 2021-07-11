@@ -33,13 +33,12 @@ namespace CovidService.Controllers
                 }
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                //SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
-                //SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, 64, objReq.TestSessionID);
-                //SqlHelper.AddParameter(ref parameters, "@Status", System.Data.SqlDbType.SmallInt, 0);
-                //SqlHelper.AddParameter(ref parameters, "@SessionAccountTestingMappingID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-                //SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                //SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddSessionAccountTestingMapping", parameters.ToArray());
-                int intReturnValue = 1; //Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                SqlHelper.AddParameter(ref parameters, "@AccountID", SqlDbType.BigInt, objReq.AccountID);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", SqlDbType.BigInt, 64, objReq.TestSessionID);
+                SqlHelper.AddParameter(ref parameters, "@Status", SqlDbType.SmallInt, 2);
+                SqlHelper.AddParameter(ref parameters, "@ReturnValue", SqlDbType.Int, ParameterDirection.ReturnValue);
+                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspSetSessionAccountTestingMapping", parameters.ToArray());
+                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
                     if (intReturnValue == -61)
