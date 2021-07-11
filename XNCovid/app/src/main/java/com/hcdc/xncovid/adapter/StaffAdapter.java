@@ -57,9 +57,9 @@ public class StaffAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = context.getLayoutInflater().inflate(R.layout.list_item, parent, false);
         }
-
-        /*((TextView) convertView.findViewById(android.R.id.text1))
-                .setText(getItem(position));*/
+        UserInfo user = (UserInfo) getItem(position);
+        ((TextView) convertView.findViewById(R.id.name)).setText((position + 1) + "/ " + user.Name);
+        ((TextView) convertView.findViewById(R.id.email)).setText(user.Email);
         return convertView;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.hcdc.xncovid.adapter.StaffAdapter;
 import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
 import com.hcdc.xncovid.model.EndTestSessionReq;
@@ -51,11 +52,10 @@ public class MainLeaderActivity extends AppCompatActivity {
                 ((TextView)findViewById(R.id.time)).setText(timeFormat.format(sessionInfo.TestingDate));
                 ((TextView)findViewById(R.id.cause)).setText(sessionInfo.Purpose);
                 ((TextView)findViewById(R.id.numberStaff)).setText(sessionInfo.LstUser == null ? 0 : sessionInfo.LstUser.length);
-                /*ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                        R.layout.activity_listview, mobileArray);
+                StaffAdapter adapter = new StaffAdapter(this, sessionInfo.LstUser);
 
                 ListView listView = (ListView) findViewById(R.id.listStaff);
-                listView.setAdapter(adapter);*/
+                listView.setAdapter(adapter);
             }
         } catch (Exception ex){
             Log.w("MainLeaderActivity", ex.toString());
