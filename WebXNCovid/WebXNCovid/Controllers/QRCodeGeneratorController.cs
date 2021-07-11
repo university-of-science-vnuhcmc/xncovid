@@ -79,6 +79,25 @@ namespace WebForCommunityScreening.Controllers
                 model.IdTo = model.IdFrom + QRCodeAmount - 1;
                 model.AmountPage = QRCodeAmount / amtQRPerPage + (QRCodeAmount % amtQRPerPage == 0 ? 0 : 1);
                 ViewData["GenerateQRInfo"] = model;
+
+                List<Bitmap> bitmaps = new List<Bitmap>();
+                List<byte[]> bytearrays = new List<byte[]>();
+                string folderPath = "~/Images/";
+                if (!Directory.Exists(Server.MapPath(folderPath)))
+                {
+                    Directory.CreateDirectory(Server.MapPath(folderPath));
+                }
+
+                for (int i = model.IdFrom; i <= model.IdTo; i++)
+                {
+                    var bmp = GenerateQR(i);
+                    bitmaps.Add(bmp);
+
+                    bytearrays.Add(BitmapToBytes(bmp));
+                }
+                model.lstQR = bytearrays;
+                //Session["QRCodeImg"] = bytearrays;
+
                 return View("GenerateQRSuccess", model);
                 //return View("GenerateQRSuccess");
             }

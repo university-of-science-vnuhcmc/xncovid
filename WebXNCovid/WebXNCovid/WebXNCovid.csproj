@@ -108,6 +108,9 @@
   <ItemGroup>
     <Resource Include="Assets\people-wearing-masks.png" />
     <Resource Include="Assets\otJN0.png" />
+    <Content Include="Assets\5K.png" />
+    <Content Include="Assets\bg1.jpg" />
+    <Content Include="Assets\bglogin.jpg" />
     <Content Include="Assets\web-fonts-with-css\css\fa-brands.css" />
     <Content Include="Assets\web-fonts-with-css\css\fa-brands.min.css" />
     <Content Include="Assets\web-fonts-with-css\css\fa-regular.css" />

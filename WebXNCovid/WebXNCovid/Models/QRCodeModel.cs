@@ -21,6 +21,8 @@ namespace WebXNCovid.Models
         public int IdTo;
 
         public int AmountPage;
+
+        public List<byte[]> lstQR;
     }
 
     public class SearchHistoryCreateQRViewModel
