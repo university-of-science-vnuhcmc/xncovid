@@ -67,7 +67,7 @@ namespace CovidService.Controllers
                         objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
                     }
                 }
-                objRes.data = objSession;
+                objRes.Data = objSession;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));

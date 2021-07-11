@@ -40,7 +40,7 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Get list locate return fail";
                     return objRes;
                 }
-                objRes.locateInfors = lstLocate;
+                objRes.LocateInfors = lstLocate;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));

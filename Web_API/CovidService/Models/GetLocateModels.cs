@@ -12,7 +12,7 @@ namespace CovidService.Models
 
     public class GetLocateResponse : Response
     {
-        public List<LocateInfor> locateInfors;
+        public List<LocateInfor> LocateInfors;
     }
 
     public class LocateInfor

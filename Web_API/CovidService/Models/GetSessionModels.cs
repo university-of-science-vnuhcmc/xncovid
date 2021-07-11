@@ -8,12 +8,11 @@ namespace CovidService.Models
     public class GetSessionRequest : Request
     {
         public long SessionID { get; set; }
-        public int IsGetAccountList { get; set; }
     }
 
     public class GetSessionResponse : Response
     {
-        public Session data { get; set; }
+        public Session Data { get; set; }
     }
 
     public class Session
