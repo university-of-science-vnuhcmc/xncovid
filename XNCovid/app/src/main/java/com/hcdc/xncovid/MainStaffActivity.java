@@ -27,6 +27,8 @@ import com.hcdc.xncovid.model.EndTestSessionReq;
 import com.hcdc.xncovid.model.EndTestSessionRes;
 import com.hcdc.xncovid.model.GetStaffConfigReq;
 import com.hcdc.xncovid.model.GetStaffConfigRes;
+import com.hcdc.xncovid.model.LogoutReq;
+import com.hcdc.xncovid.model.LogoutRes;
 import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
@@ -166,18 +168,44 @@ private  TextView testName, location, time, cause, leader;
     }
 
     public void signOut(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Bạn muốn đăng xuất?")
-                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                        intent.putExtra("isLogout", true);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton("Hủy", null)
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .show();
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Bạn muốn đăng xuất?")
+                    .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Caller caller = new Caller();
+                            LogoutReq req = new LogoutReq();
+                            req.AccountType = 1;
+                            caller.call(MainStaffActivity.this, "logout", req, LogoutRes.class, new ICallback() {
+                                @Override
+                                public void callback(Object response) {
+                                    LogoutRes res = (LogoutRes) response;
+                                    if(res.returnCode != 1){
+                                        new AlertDialog.Builder(MainStaffActivity.this)
+                                                .setMessage("Lỗi: " + res.returnCode)
+                                                .setNegativeButton(android.R.string.ok, null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                        return;
+                                    }
+                                    Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                    intent.putExtra("isLogout", true);
+                                    startActivity(intent);
+                                }
+                            }, null, Request.Method.POST);
+                        }
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
+        } catch (Exception ex){
+            Log.w("signOut", ex.toString());
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     private void checkAccount(){
