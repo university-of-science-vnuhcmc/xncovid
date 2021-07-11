@@ -183,15 +183,15 @@ namespace CovidService.Controllers
                     foreach (DataRow objRow in objDT1.Rows)
                     {
                         info.AccountID = long.Parse(objRow["AccountID"].ToString());
-                        info.AccountName = objRow["AccountName"].ToString();
-                        info.FullName = objRow["FullName "].ToString();
+                        info.AccountName = objRow["AccountName"] == null || objRow["AccountName"] == DBNull.Value ? "" : objRow["AccountName"].ToString();
+                        info.FullName = objRow["FullName"] == null || objRow["FullName"] == DBNull.Value ? "" : objRow["FullName "].ToString();
                         info.AccountType = int.Parse(objRow["AccountType"].ToString());
                         info.RoleID = long.Parse(objRow["RoleID"].ToString());
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {
-                        info.RoleName = objRow["RoleName"].ToString();
-                        info.RoleCode = objRow["RoleCode"].ToString();
+                        info.RoleName = objRow["RoleName"] == null || objRow["RoleName"] == DBNull.Value ? "" : objRow["RoleName"].ToString();
+                        info.RoleCode = objRow["RoleCode"] == null || objRow["RoleCode"] == DBNull.Value ? "" : objRow["RoleCode"].ToString();
                     }
                 }
                 return intReturnValue;
