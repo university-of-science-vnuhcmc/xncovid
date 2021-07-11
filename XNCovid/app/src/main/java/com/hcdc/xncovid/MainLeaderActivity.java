@@ -37,7 +37,7 @@ public class MainLeaderActivity extends AppCompatActivity {
             MyApplication myapp = (MyApplication) getApplication();
             TextView nameView = findViewById(R.id.name);
             nameView.setText(myapp.getUserInfo().Name);
-            getCurrentSession();
+            //getCurrentSession();
             if(errorFlag){
                 findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
             }
@@ -74,20 +74,29 @@ public class MainLeaderActivity extends AppCompatActivity {
         caller.call(MainLeaderActivity.this, "checkaccount", req, CheckAccountRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
-                CheckAccountRes res = (CheckAccountRes) response;
-                if(res.returnCode != 1 && res.returnCode != 0){
+                try {
+                    CheckAccountRes res = (CheckAccountRes) response;
+                    if(res.returnCode != 1 && res.returnCode != 0){
+                        new AlertDialog.Builder(MainLeaderActivity.this)
+                                .setMessage("Lỗi: " + res.returnCode)
+                                .setNegativeButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        errorFlag = true;
+                        return;
+                    }
+                    if(res.returnCode == 0){
+                        sessionInfo = null;
+                    } else {
+
+                    }
+                } catch (Exception ex){
+                    Log.w("MainLeaderActivity", ex.toString());
                     new AlertDialog.Builder(MainLeaderActivity.this)
-                            .setMessage("Lỗi: " + res.returnCode)
-                            .setNegativeButton(android.R.string.ok, null)
+                            .setMessage("Lỗi xử lý.")
+                            .setNegativeButton("OK", null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                    errorFlag = true;
-                    return;
-                }
-                if(res.returnCode == 0){
-                    sessionInfo = null;
-                } else {
-
                 }
             }
         }, null, Request.Method.POST);
@@ -103,18 +112,27 @@ public class MainLeaderActivity extends AppCompatActivity {
                             caller.call(MainLeaderActivity.this, "logout", req, LogoutRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
-                                    LogoutRes res = (LogoutRes) response;
-                                    if(res.returnCode != 1){
+                                    try{
+                                        LogoutRes res = (LogoutRes) response;
+                                        if(res.returnCode != 1){
+                                            new AlertDialog.Builder(MainLeaderActivity.this)
+                                                    .setMessage("Lỗi: " + res.returnCode)
+                                                    .setNegativeButton(android.R.string.ok, null)
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            return;
+                                        }
+                                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                        intent.putExtra("isLogout", true);
+                                        startActivity(intent);
+                                    } catch (Exception ex){
+                                        Log.w("signOut", ex.toString());
                                         new AlertDialog.Builder(MainLeaderActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode)
-                                                .setNegativeButton(android.R.string.ok, null)
+                                                .setMessage("Lỗi xử lý.")
+                                                .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
-                                        return;
                                     }
-                                    Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                                    intent.putExtra("isLogout", true);
-                                    startActivity(intent);
                                 }
                             }, null, Request.Method.POST);
                         }
@@ -188,18 +206,27 @@ public class MainLeaderActivity extends AppCompatActivity {
                             caller.call(MainLeaderActivity.this, "endtestsession4lead", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
-                                    EndTestSessionRes res = (EndTestSessionRes) response;
-                                    if(res.returnCode != 1){
-                                        new androidx.appcompat.app.AlertDialog.Builder(MainLeaderActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode)
-                                                .setNegativeButton(android.R.string.ok, null)
+                                    try {
+                                        EndTestSessionRes res = (EndTestSessionRes) response;
+                                        if(res.returnCode != 1){
+                                            new androidx.appcompat.app.AlertDialog.Builder(MainLeaderActivity.this)
+                                                    .setMessage("Lỗi: " + res.returnCode)
+                                                    .setNegativeButton(android.R.string.ok, null)
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            return;
+                                        }
+                                        sessionInfo = null;
+                                        Intent intent = new Intent(MainLeaderActivity.this, MainLeaderActivity.class);
+                                        startActivity(intent);
+                                    } catch (Exception ex){
+                                        Log.w("endSession", ex.toString());
+                                        new AlertDialog.Builder(MainLeaderActivity.this)
+                                                .setMessage("Lỗi xử lý.")
+                                                .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
-                                        return;
                                     }
-                                    sessionInfo = null;
-                                    Intent intent = new Intent(MainLeaderActivity.this, MainLeaderActivity.class);
-                                    startActivity(intent);
                                 }
                             }, null, Request.Method.POST);
                         }
