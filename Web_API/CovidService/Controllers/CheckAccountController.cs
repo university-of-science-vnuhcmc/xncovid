@@ -19,12 +19,12 @@ namespace CovidService.Controllers
             try
             {
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
-                //if (!checkLogin)
-                //{
-                //    objRes.returnCode = 99;
-                //    objRes.returnMess = "Invalid Email or Token";
-                //    return objRes;
-                //}
+                if (!checkLogin)
+                {
+                    objRes.returnCode = 99;
+                    objRes.returnMess = "Invalid Email or Token";
+                    return objRes;
+                }
                 Session sesInfo = new Session();
                 if (objReq == null)
                 {
@@ -72,17 +72,16 @@ namespace CovidService.Controllers
             {
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, TestID);
+                SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, TestID);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "dbo.uspGetCovidTestingSession", parameters.ToArray());
+                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "dbo.uspGetCovidTestingSessionList", parameters.ToArray());
                 intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue == 1)
                 {
                     DataTable objDT = ds.Tables[0];
-                    DataTable objDT2 = ds.Tables[2];
+                    DataTable objDT2 = ds.Tables[1];
                     foreach (DataRow objRow in objDT.Rows)
-                    {
-                        info.Account = objRow["CreateAccountName"].ToString();                        
+                    {                                       
                         info.SessionName = objRow["CovidTestingSessionName"].ToString();
                         info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString());
                         info.Address = objRow["Address"].ToString();
@@ -94,7 +93,7 @@ namespace CovidService.Controllers
                         UserInfo user=new UserInfo();
                         user.Email = objRow["AccountName"].ToString();
                         user.FullName = objRow["FullName"].ToString();
-                        if (int.Parse(objRow["IsCreateAccount "].ToString()) == 1)
+                        if (int.Parse(objRow["IsCreateAccount"].ToString()) == 1)
                         {
                             leaderName = objRow["FullName"].ToString(); ;
                         }
