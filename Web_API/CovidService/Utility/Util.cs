@@ -11,7 +11,7 @@ namespace CovidService.Utility
     {
         public static bool CheckLogin(string Email, string Token)
         {
-            bool isOK = true;
+            bool isOK = false;
 
             try
             {
@@ -19,7 +19,12 @@ namespace CovidService.Utility
                 {
                     isOK = false;
                 }
-                //goi db check              
+                string Md5Token = GetMD5Hash(Token);
+                int intRetrn = CheckSessionToken(Email, Md5Token);
+                if (intRetrn == 1)
+                {
+                    isOK = true;
+                }
                 return isOK;
             }
             catch (Exception)
@@ -28,17 +33,24 @@ namespace CovidService.Utility
                 throw;
             }
         }
-        private void CheckSessionToken(string Email, string Token)
+        private static int CheckSessionToken(string Email, string Token)
         {
-            string sqlString = SqlHelper.sqlString;
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
-            SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.BigInt, Token);
-            //       SqlHelper.AddParameter(ref parameters, "@TokenExpired", System.Data.SqlDbType.DateTime, DateTime.Now.AddHours(12));
-            //  SqlHelper.AddParameter(ref parameters, "@CovidSpecimenID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
-            SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-            SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspCheckAccountLogin", parameters.ToArray());
-            int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+            try
+            {
+                string sqlString = SqlHelper.sqlString;
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.VarChar, 64, Email);
+                SqlHelper.AddParameter(ref parameters, "@Token", System.Data.SqlDbType.VarChar, 256, Token);
+                SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspCheckAccountLogin", parameters.ToArray());
+                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                return intReturnValue;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+
         }
         public static string GetMD5Hash(string strInput)
         {
