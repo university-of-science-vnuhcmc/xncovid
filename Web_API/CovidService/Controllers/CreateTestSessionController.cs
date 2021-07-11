@@ -80,6 +80,7 @@ namespace CovidService.Controllers
                 objRes.SessionID = loCovidSpecimenID;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)

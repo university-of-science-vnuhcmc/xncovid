@@ -42,13 +42,27 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    objRes.returnCode = intReturnValue;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
-                    return objRes;
+                    switch (intReturnValue)
+                    {
+                        case -31:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "Session is not found";
+                            return objRes;
+                        case -32:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "Session was finished";
+                            return objRes;
+                        case 1002:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "DB return failure";
+                            return objRes;
+                    }
+
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
