@@ -5,6 +5,5 @@ import com.google.gson.annotations.SerializedName;
 import com.hcdc.xncovid.util.APIRequest;
 
 public class LoginReq extends APIRequest {
-    public String email;
-    public String tokenid;
+    public String TokenID;
 }

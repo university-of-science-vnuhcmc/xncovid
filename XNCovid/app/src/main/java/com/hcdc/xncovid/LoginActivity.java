@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.android.volley.Request;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -25,17 +23,13 @@ import com.google.gson.Gson;
 import com.hcdc.xncovid.model.LoginReq;
 import com.hcdc.xncovid.model.LoginRes;
 import com.hcdc.xncovid.model.UserInfo;
-import com.hcdc.xncovid.util.APIResponse;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
@@ -152,16 +146,16 @@ public class LoginActivity extends AppCompatActivity {
     private void login(GoogleSignInAccount account){
         Caller caller = new Caller();
         LoginReq req = new LoginReq();
-        req.email = account.getEmail();
-        req.tokenid = account.getIdToken();
+        req.Email = account.getEmail();
+        req.TokenID = account.getIdToken();
         caller.call(this, "login", req, LoginRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
                 LoginRes res = (LoginRes) response;
-                if(res.returnCode == 1){
+                if(res.ReturnCode == 1){
                     UserInfo userInfo = new UserInfo();
                     userInfo.Email = account.getEmail();
-                    userInfo.Name = res.CustomerName;
+                    userInfo.Name = res.FullName;
                     userInfo.Role = res.Role;
                     userInfo.Token = res.Token;
                     userInfo.AccountID = res.AccountID;
@@ -182,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                     myapp.setUserInfo(userInfo);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
-                } else if(res.returnCode == 2) {
+                } else if(res.ReturnCode == 2) {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setMessage("Email của Bạn chưa được phân quyền sử dụng.")
                             .setNegativeButton(android.R.string.ok, null)

@@ -1,6 +1,6 @@
 package com.hcdc.xncovid.util;
 
 public class APIResponse {
-    public int returnCode;
-    public String returnMess;
+    public int ReturnCode;
+    public String ReturnMess;
 }

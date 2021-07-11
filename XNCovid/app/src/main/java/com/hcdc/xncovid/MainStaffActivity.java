@@ -1,15 +1,10 @@
 package com.hcdc.xncovid;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,30 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
 import com.hcdc.xncovid.model.EndTestSessionReq;
 import com.hcdc.xncovid.model.EndTestSessionRes;
-import com.hcdc.xncovid.model.GetStaffConfigReq;
-import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.LogoutReq;
 import com.hcdc.xncovid.model.LogoutRes;
-import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.model.SessionInfo;
-import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 
 public class MainStaffActivity extends AppCompatActivity {
@@ -186,9 +168,9 @@ private  TextView testName, location, time, cause, leader;
                                 @Override
                                 public void callback(Object response) {
                                     LogoutRes res = (LogoutRes) response;
-                                    if(res.returnCode != 1){
+                                    if(res.ReturnCode != 1){
                                         new AlertDialog.Builder(MainStaffActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode)
+                                                .setMessage("Lỗi: " + res.ReturnCode)
                                                 .setNegativeButton(android.R.string.ok, null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
@@ -224,28 +206,28 @@ private  TextView testName, location, time, cause, leader;
                 public void callback(Object response) {
                     try{
                         CheckAccountRes res = (CheckAccountRes) response;
-                        if(res.returnCode == 0) // khong co dang join session nao het
+                        if(res.ReturnCode == 0) // khong co dang join session nao het
                         {
-                            SetupActivit(res.returnCode);
+                            SetupActivit(res.ReturnCode);
                         }
-                        if(res.returnCode != 1){
+                        if(res.ReturnCode != 1){
                             new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                    .setMessage("Lỗi: " + res.returnCode + "Lỗi hệ thống, vui lòng thử lại sau.")
+                                    .setMessage("Lỗi: " + res.ReturnCode + "Lỗi hệ thống, vui lòng thử lại sau.")
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             errorFlag = true;
                         }else {
                             //returncode = 1 ==> co dang join vao session
-                            if(res.session != null){
+                            if(res.Session != null){
                                 objSession = new SessionInfo();
-                                objSession = (SessionInfo) res.session;
+                                objSession = (SessionInfo) res.Session;
                                 objSession.LstUser = res.LstUser;
                                 if(myapp == null){
                                     myapp = new MyApplication();
                                 }
                                 myapp.setSessionInfo(objSession);
-                                SetupActivit(res.returnCode);
+                                SetupActivit(res.ReturnCode);
                             }else {
                                 Log.w("checkAccount", "SessionInfo return null");
                             }
@@ -297,7 +279,7 @@ private  TextView testName, location, time, cause, leader;
                                 @Override
                                 public void callback(Object response) {
                                     EndTestSessionRes res = (EndTestSessionRes) response;
-                                    if(res.returnCode == -61 || res.returnCode == -62){
+                                    if(res.ReturnCode == -61 || res.ReturnCode == -62){
                                         new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
                                                 .setMessage("Không tìm thấy phiên xét nghiệm hoặc đã kết thúc.")
                                                 .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -314,9 +296,9 @@ private  TextView testName, location, time, cause, leader;
                                                 .show();
                                         return;
                                     }
-                                    if(res.returnCode != 1){
+                                    if(res.ReturnCode != 1){
                                         new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
+                                                .setMessage("Lỗi: " + res.ReturnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
                                                 .setNegativeButton(android.R.string.ok, null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();

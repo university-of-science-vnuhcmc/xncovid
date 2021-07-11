@@ -94,9 +94,9 @@ public class ConfirmSessionActivity extends AppCompatActivity {
             public void callback(Object response) {
                 try {
                     CreateTestSessionRes res = (CreateTestSessionRes) response;
-                    if(res.returnCode != 1){
+                    if(res.ReturnCode != 1){
                         new AlertDialog.Builder(ConfirmSessionActivity.this)
-                                .setMessage("Lỗi: " + res.returnCode)
+                                .setMessage("Lỗi: " + res.ReturnCode)
                                 .setNegativeButton(android.R.string.ok, null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();

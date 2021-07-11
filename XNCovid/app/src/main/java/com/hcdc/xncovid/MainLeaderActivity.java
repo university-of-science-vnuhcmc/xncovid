@@ -17,8 +17,6 @@ import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
 import com.hcdc.xncovid.model.EndTestSessionReq;
 import com.hcdc.xncovid.model.EndTestSessionRes;
-import com.hcdc.xncovid.model.GetStaffConfigReq;
-import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.LogoutReq;
 import com.hcdc.xncovid.model.LogoutRes;
 import com.hcdc.xncovid.model.SessionInfo;
@@ -37,7 +35,7 @@ public class MainLeaderActivity extends AppCompatActivity {
             MyApplication myapp = (MyApplication) getApplication();
             TextView nameView = findViewById(R.id.name);
             nameView.setText(myapp.getUserInfo().Name);
-            //getCurrentSession();
+            getCurrentSession();
             if(errorFlag){
                 findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
             }
@@ -76,16 +74,16 @@ public class MainLeaderActivity extends AppCompatActivity {
             public void callback(Object response) {
                 try {
                     CheckAccountRes res = (CheckAccountRes) response;
-                    if(res.returnCode != 1 && res.returnCode != 0){
+                    if(res.ReturnCode != 1 && res.ReturnCode != 0){
                         new AlertDialog.Builder(MainLeaderActivity.this)
-                                .setMessage("Lỗi: " + res.returnCode)
+                                .setMessage("Lỗi: " + res.ReturnCode)
                                 .setNegativeButton(android.R.string.ok, null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                         errorFlag = true;
                         return;
                     }
-                    if(res.returnCode == 0){
+                    if(res.ReturnCode == 0){
                         sessionInfo = null;
                     } else {
 
@@ -114,9 +112,9 @@ public class MainLeaderActivity extends AppCompatActivity {
                                 public void callback(Object response) {
                                     try{
                                         LogoutRes res = (LogoutRes) response;
-                                        if(res.returnCode != 1){
+                                        if(res.ReturnCode != 1){
                                             new AlertDialog.Builder(MainLeaderActivity.this)
-                                                    .setMessage("Lỗi: " + res.returnCode)
+                                                    .setMessage("Lỗi: " + res.ReturnCode)
                                                     .setNegativeButton(android.R.string.ok, null)
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                                     .show();
@@ -208,9 +206,9 @@ public class MainLeaderActivity extends AppCompatActivity {
                                 public void callback(Object response) {
                                     try {
                                         EndTestSessionRes res = (EndTestSessionRes) response;
-                                        if(res.returnCode != 1){
+                                        if(res.ReturnCode != 1){
                                             new androidx.appcompat.app.AlertDialog.Builder(MainLeaderActivity.this)
-                                                    .setMessage("Lỗi: " + res.returnCode)
+                                                    .setMessage("Lỗi: " + res.ReturnCode)
                                                     .setNegativeButton(android.R.string.ok, null)
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                                     .show();

@@ -1,11 +1,9 @@
 package com.hcdc.xncovid;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,14 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hcdc.xncovid.adapter.GroupItemAdapter;
 import com.hcdc.xncovid.model.CitizenInfor;
 import com.hcdc.xncovid.model.GroupTestReq;
 import com.hcdc.xncovid.model.GroupTestRes;
 import com.hcdc.xncovid.model.GroupedUserInfo;
-import com.hcdc.xncovid.model.LoginRes;
 import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
@@ -39,12 +33,7 @@ import com.hcdc.xncovid.util.Util;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -209,11 +198,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 @Override
                 public void callback(Object response) {
                     GroupTestRes res = (GroupTestRes) response;
-                    if (res.returnCode == 1) {
+                    if (res.ReturnCode == 1) {
                         StartMainStaffAcitivity();
-                    } else if (res.returnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
+                    } else if (res.ReturnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
                         {
-                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
                                     .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
                                     .setNegativeButton(android.R.string.ok, null)
@@ -221,9 +210,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                          }
-                    else if (res.returnCode == -31 || res.returnCode == -32)
+                    else if (res.ReturnCode == -31 || res.ReturnCode == -32)
                     {
-                        Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                        Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                         new AlertDialog.Builder(ListGroupXnActivity.this)
                                 .setMessage("Phiên xét nghiêm đã kết thúc hoặc không tồn tại.")
                                 .setNegativeButton(android.R.string.ok, null)
@@ -232,7 +221,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         isOK[0] = false;
                     }
                     else{
-                        Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                        Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                         new AlertDialog.Builder(ListGroupXnActivity.this)
                                 .setMessage("Tạo nhóm xét nghiệm gộp không thành công. Vui lòng thử lại sau.")
                                 .setNegativeButton(android.R.string.ok, null)

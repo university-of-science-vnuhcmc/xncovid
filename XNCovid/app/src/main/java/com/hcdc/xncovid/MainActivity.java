@@ -10,7 +10,6 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.hcdc.xncovid.model.CreateTestSessionRes;
 import com.hcdc.xncovid.model.GetStaffConfigReq;
 import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.UserInfo;
@@ -63,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void callback(Object response) {
                 GetStaffConfigRes res = (GetStaffConfigRes) response;
-                if(res.returnCode != 1){
+                if(res.ReturnCode != 1){
                     new AlertDialog.Builder(MainActivity.this)
-                            .setMessage("Lỗi: " + res.returnCode)
+                            .setMessage("Lỗi: " + res.ReturnCode)
                             .setNegativeButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
