@@ -1,15 +1,10 @@
 package com.hcdc.xncovid;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,30 +12,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
 import com.hcdc.xncovid.model.EndTestSessionReq;
 import com.hcdc.xncovid.model.EndTestSessionRes;
-import com.hcdc.xncovid.model.GetStaffConfigReq;
-import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.LogoutReq;
 import com.hcdc.xncovid.model.LogoutRes;
 import com.hcdc.xncovid.model.Session;
-import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 
 public class MainStaffActivity extends AppCompatActivity {
@@ -50,7 +33,8 @@ long accountID;
     int flag = 0;
 private  TextView testName, location, time, cause, leader;
     MyApplication myapp = null;
-    SessionInfo objSession = null;
+    Session objSession = null;
+    UserInfo[] LstUser = null;
     private boolean errorFlag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +82,7 @@ private  TextView testName, location, time, cause, leader;
             leader = (TextView) findViewById(R.id.leader);
 
             if(flag == 1){ // tu man hinh gom nhom ve
-                objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
+                objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
                 if(objSession != null){
                     sessionId = objSession.SessionID + "";
                     SetupActivit(1);//Da co join vao session
@@ -106,7 +90,7 @@ private  TextView testName, location, time, cause, leader;
                     checkAccount();// chua co thi check account lai
                 }
             } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-                myapp.setSessionInfo(null); //set la null
+                myapp.setSession(null); //set la null
                 SetupActivit(0);//chua join
             } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
                 checkAccount();
@@ -127,7 +111,7 @@ private  TextView testName, location, time, cause, leader;
         super.onResume();
         try{
         if(flag == 1){ // tu man hinh gom nhom ve
-            objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
+            objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
             if(objSession != null){
                 sessionId = objSession.SessionID + "";
                 SetupActivit(1);//Da co join vao session
@@ -135,7 +119,7 @@ private  TextView testName, location, time, cause, leader;
                 checkAccount();// chua co thi check account lai
             }
         } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-            myapp.setSessionInfo(null); //set la null
+            myapp.setSession(null); //set la null
             SetupActivit(0);//chua join
         } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
             checkAccount();
@@ -282,16 +266,15 @@ private  TextView testName, location, time, cause, leader;
                         }else {
                             //ReturnCode = 1 ==> co dang join vao session
                             if(res.Session != null){
-                                objSession = new SessionInfo();
-                                objSession = (SessionInfo) res.Session;
-                                objSession.LstUser = res.LstUser;
+                                objSession = res.Session;
+                                LstUser = res.LstUser;
                                 if(myapp == null){
                                     myapp = new MyApplication();
                                 }
-                                myapp.setSessionInfo(objSession);
+                                myapp.setSession(objSession);
                                 SetupActivit(res.ReturnCode);
                             }else {
-                                Log.w("checkAccount", "SessionInfo return null");
+                                Log.w("checkAccount", "Session return null");
                             }
 
                         }
