@@ -23,7 +23,7 @@ namespace CovidService.Controllers
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@AccountName", SqlDbType.VarChar, 64, objReq.Email);
-                SqlHelper.AddParameter(ref parameters, "@AccountType", SqlDbType.SmallInt, objReq.AccountType);
+                //SqlHelper.AddParameter(ref parameters, "@AccountType", SqlDbType.SmallInt, objReq.AccountType);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", SqlDbType.Int, ParameterDirection.ReturnValue);
                 SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAccountLogout", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
