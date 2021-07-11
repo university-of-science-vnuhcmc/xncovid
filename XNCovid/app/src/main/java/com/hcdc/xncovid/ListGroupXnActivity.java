@@ -208,10 +208,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
             caller.call(this, "GroupTest", req, GroupTestRes.class, new ICallback() {
                 @Override
                 public void callback(Object response) {
-                    GroupTestRes res = (GroupTestRes) response;
-                    if (res.returnCode == 1) {
-                        StartMainStaffAcitivity();
-                    } else if (res.returnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
+                    try{
+                        GroupTestRes res = (GroupTestRes) response;
+                        if (res.returnCode == 1) {
+                            StartMainStaffAcitivity();
+                        } else if (res.returnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
                         {
                             Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
@@ -220,26 +221,46 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             isOK[0] = false;
-                         }
-                    else if (res.returnCode == -31 || res.returnCode == -32)
-                    {
-                        Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
-                        new AlertDialog.Builder(ListGroupXnActivity.this)
-                                .setMessage("Phiên xét nghiêm đã kết thúc hoặc không tồn tại.")
-                                .setNegativeButton(android.R.string.ok, null)
+                        }
+                        else if (res.returnCode == -16) //trung QR
+                        {
+                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            new AlertDialog.Builder(ListGroupXnActivity.this)
+                                    .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            isOK[0] = false;
+                        }
+                        else if (res.returnCode == -31 || res.returnCode == -32)
+                        {
+                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            new AlertDialog.Builder(ListGroupXnActivity.this)
+                                    .setMessage("Phiên xét nghiêm đã kết thúc hoặc không tồn tại.")
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            isOK[0] = false;
+                        }
+                        else{
+                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            new AlertDialog.Builder(ListGroupXnActivity.this)
+                                    .setMessage("Tạo nhóm xét nghiệm gộp không thành công. Vui lòng thử lại sau.")
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            isOK[0] = false;
+                        }
+                    }catch (Exception e){
+                        Log.e("ListGroupXnActivity", e.toString(), e);
+                        new android.app.AlertDialog.Builder(ListGroupXnActivity.this)
+                                .setMessage("Lỗi xử lý.")
+                                .setNegativeButton("OK", null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                         isOK[0] = false;
                     }
-                    else{
-                        Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
-                        new AlertDialog.Builder(ListGroupXnActivity.this)
-                                .setMessage("Tạo nhóm xét nghiệm gộp không thành công. Vui lòng thử lại sau.")
-                                .setNegativeButton(android.R.string.ok, null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                        isOK[0] = false;
-                    }
+
                 }
             }, null, Request.Method.POST);
 
@@ -248,15 +269,10 @@ public class ListGroupXnActivity extends AppCompatActivity {
             Log.e("ListGroupXnActivity", e.toString(), e);
             new android.app.AlertDialog.Builder(this)
                     .setMessage("Lỗi xử lý.")
-                    .setNegativeButton("OK",  new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            isOK[0] = false;
-
-                        }
-                    })
+                    .setNegativeButton("OK",  null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            isOK[0] = false;
             return   isOK[0] ;
         }
 
@@ -373,9 +389,15 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     caller.call(contextCha, api, null, String.class, new ICallback() {
                         @Override
                         public void callback(Object response) {
-                            JSONObject objJSON = (JSONObject) response;
-                            String strContent = objJSON.toString();
-                            AddNewGroupItem( DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]));
+                            try{
+                                JSONObject objJSON = (JSONObject) response;
+                                String strContent = objJSON.toString();
+                                AddNewGroupItem( DetectKBYTPattern.instance(contextCha).DetectInfo(strContent, kbytID[0]));
+
+                            }catch (Exception e){
+                                Log.e("doInBackground", e.toString(), e);
+                            }
+
                         }
                     }, urlGetUserInfo, Request.Method.GET);
 

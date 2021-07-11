@@ -62,35 +62,45 @@ public class SessionInfoActivity extends AppCompatActivity {
                     caller.call(SessionInfoActivity.this, "JoinTestSesion", req, JoinTestSessionRes.class, new ICallback() {
                         @Override
                         public void callback(Object response) {
-                            JoinTestSessionRes res = (JoinTestSessionRes) response;
-                            if(res.returnCode == 1){
-                                StartMainStaffAcitivity();
-                            }   else if(res.returnCode == -32) //session da ket thuc
-                            {
-                                // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
-                                new AlertDialog.Builder(SessionInfoActivity.this)
-                                        .setMessage("Phiên xét nghiệm đã kết thúc.")
-                                        .setNegativeButton(android.R.string.ok, null)
+                            try{
+                                JoinTestSessionRes res = (JoinTestSessionRes) response;
+                                if(res.returnCode == 1){
+                                    StartMainStaffAcitivity();
+                                }   else if(res.returnCode == -32) //session da ket thuc
+                                {
+                                    // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    new AlertDialog.Builder(SessionInfoActivity.this)
+                                            .setMessage("Phiên xét nghiệm đã kết thúc.")
+                                            .setNegativeButton(android.R.string.ok, null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                }
+                                else if(res.returnCode == -31) //session da ket thuc
+                                {
+                                    // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    new AlertDialog.Builder(SessionInfoActivity.this)
+                                            .setMessage("Không tìm thấy phiên xét nghiệm.")
+                                            .setNegativeButton(android.R.string.ok, null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                }
+                                else{
+                                    Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    new AlertDialog.Builder(SessionInfoActivity.this)
+                                            .setMessage("Tham gia phiên xét nghiệm không thành công. Vui lòng thử lại sau.")
+                                            .setNegativeButton(android.R.string.ok, null)
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                }
+                            }catch (Exception e){
+                                Log.e("SessionInfoActivity", e.toString(), e);
+                                new android.app.AlertDialog.Builder(SessionInfoActivity.this)
+                                        .setMessage("Lỗi xử lý.")
+                                        .setNegativeButton("OK", null)
                                         .setIcon(android.R.drawable.ic_dialog_alert)
                                         .show();
                             }
-                            else if(res.returnCode == -31) //session da ket thuc
-                            {
-                                // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
-                                new AlertDialog.Builder(SessionInfoActivity.this)
-                                        .setMessage("Không tìm thấy phiên xét nghiệm.")
-                                        .setNegativeButton(android.R.string.ok, null)
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
-                            }
-                            else{
-                                Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
-                                new AlertDialog.Builder(SessionInfoActivity.this)
-                                        .setMessage("Tham gia phiên xét nghiệm không thành công. Vui lòng thử lại sau.")
-                                        .setNegativeButton(android.R.string.ok, null)
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
-                            }
+
                         }
                     }, null, Request.Method.POST);
                 }
@@ -131,10 +141,36 @@ public class SessionInfoActivity extends AppCompatActivity {
           caller.call(SessionInfoActivity.this, "GetSession", req, GetSessionRes.class, new ICallback() {
               @Override
               public void callback(Object response) {
-                  GetSessionRes res = (GetSessionRes) response;
-                  if(res.returnCode == 1){
-                      try{
-                          if(res.data == null){
+                  try{
+                      GetSessionRes res = (GetSessionRes) response;
+                      if(res.returnCode == 1){
+                          try{
+                              if(res.data == null){
+                                  new AlertDialog.Builder(SessionInfoActivity.this)
+                                          .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
+                                          .setNegativeButton(android.R.string.ok,
+                                                  new DialogInterface.OnClickListener() {
+                                                      @Override
+                                                      public void onClick(DialogInterface dialog, int which) {
+                                                          StartMainStaffAcitivity();
+                                                      }
+                                                  })
+                                          .setIcon(android.R.drawable.ic_dialog_alert)
+                                          .show();
+                              }
+                              SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                              SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                              tenphien.setText(res.data.SessionName);
+                              province.setText(res.data.ProvinceName);
+                              district.setText(res.data.DistrictName);
+                              ward.setText(res.data.WardName);
+                              address.setText(res.data.Address);
+                              chooseTime.setText(timeFormat.format(res.data.TestingDate));
+                              chooseDate.setText(dateFormat.format(res.data.TestingDate));
+                              cause.setText(res.data.Purpose);
+                              leader.setText(res.data.Account);
+                          }catch (Exception e){
+                              Log.e("GetSession", "", e);
                               new AlertDialog.Builder(SessionInfoActivity.this)
                                       .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                       .setNegativeButton(android.R.string.ok,
@@ -147,19 +183,9 @@ public class SessionInfoActivity extends AppCompatActivity {
                                       .setIcon(android.R.drawable.ic_dialog_alert)
                                       .show();
                           }
-                          SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                          SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                          tenphien.setText(res.data.SessionName);
-                          province.setText(res.data.ProvinceName);
-                          district.setText(res.data.DistrictName);
-                          ward.setText(res.data.WardName);
-                          address.setText(res.data.Address);
-                          chooseTime.setText(timeFormat.format(res.data.TestingDate));
-                          chooseDate.setText(dateFormat.format(res.data.TestingDate));
-                          cause.setText(res.data.Purpose);
-                          leader.setText(res.data.Account);
-                      }catch (Exception e){
-                          Log.e("GetSession", "", e);
+                      }
+                      else{
+                          Log.e("GetSession", res.returnCode + " - " + res.returnMess);
                           new AlertDialog.Builder(SessionInfoActivity.this)
                                   .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                   .setNegativeButton(android.R.string.ok,
@@ -172,21 +198,15 @@ public class SessionInfoActivity extends AppCompatActivity {
                                   .setIcon(android.R.drawable.ic_dialog_alert)
                                   .show();
                       }
-                  }
-                  else{
-                      Log.e("GetSession", res.returnCode + " - " + res.returnMess);
-                      new AlertDialog.Builder(SessionInfoActivity.this)
-                              .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
-                              .setNegativeButton(android.R.string.ok,
-                                      new DialogInterface.OnClickListener() {
-                                          @Override
-                                          public void onClick(DialogInterface dialog, int which) {
-                                              StartMainStaffAcitivity();
-                                          }
-                                      })
+                  }catch (Exception e){
+                      Log.e("getSessionIf", e.toString(), e);
+                      new android.app.AlertDialog.Builder(SessionInfoActivity.this)
+                              .setMessage("Lỗi xử lý.")
+                              .setNegativeButton("OK", null)
                               .setIcon(android.R.drawable.ic_dialog_alert)
                               .show();
                   }
+
               }
           }, null, Request.Method.POST);
       }catch (Exception e){

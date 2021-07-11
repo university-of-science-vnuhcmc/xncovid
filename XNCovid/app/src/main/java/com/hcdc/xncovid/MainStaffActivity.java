@@ -185,18 +185,28 @@ private  TextView testName, location, time, cause, leader;
                             caller.call(MainStaffActivity.this, "logout", req, LogoutRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
-                                    LogoutRes res = (LogoutRes) response;
-                                    if(res.returnCode != 1){
+                                    try{
+                                        LogoutRes res = (LogoutRes) response;
+                                        if(res.returnCode != 1){
+                                            new AlertDialog.Builder(MainStaffActivity.this)
+                                                    .setMessage("Lỗi: " + res.returnCode)
+                                                    .setNegativeButton(android.R.string.ok, null)
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            return;
+                                        }
+                                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                        intent.putExtra("isLogout", true);
+                                        startActivity(intent);
+                                    }catch (Exception e){
+                                        Log.w("signOut", e.toString());
                                         new AlertDialog.Builder(MainStaffActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode)
-                                                .setNegativeButton(android.R.string.ok, null)
+                                                .setMessage("Lỗi xử lý.")
+                                                .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
-                                        return;
                                     }
-                                    Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                                    intent.putExtra("isLogout", true);
-                                    startActivity(intent);
+
                                 }
                             }, null, Request.Method.POST);
                         }
@@ -296,36 +306,46 @@ private  TextView testName, location, time, cause, leader;
                             caller.call(MainStaffActivity.this, "LeaveTestSession", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
-                                    EndTestSessionRes res = (EndTestSessionRes) response;
-                                    if(res.returnCode == -61 || res.returnCode == -62){
-                                        new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                                .setMessage("Không tìm thấy phiên xét nghiệm hoặc đã kết thúc.")
-                                                .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        objSession = null;
-                                                        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                                                        intent.putExtra("flag", 2);
-                                                        startActivity(intent);
+                                    try{
+                                        EndTestSessionRes res = (EndTestSessionRes) response;
+                                        if(res.returnCode == -61 || res.returnCode == -62){
+                                            new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                                    .setMessage("Không tìm thấy phiên xét nghiệm hoặc đã kết thúc.")
+                                                    .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            objSession = null;
+                                                            Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                                            intent.putExtra("flag", 2);
+                                                            startActivity(intent);
 
-                                                    }
-                                                })
+                                                        }
+                                                    })
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            return;
+                                        }
+                                        if(res.returnCode != 1){
+                                            new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                                    .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
+                                                    .setNegativeButton(android.R.string.ok, null)
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            return;
+                                        }
+                                        objSession = null;
+                                        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                        intent.putExtra("flag", 2);
+                                        startActivity(intent);
+                                    }catch (Exception e){
+                                        Log.e("endSession", e.toString(), e);
+                                        new AlertDialog.Builder(MainStaffActivity.this)
+                                                .setMessage("Lỗi xử lý.")
+                                                .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
-                                        return;
                                     }
-                                    if(res.returnCode != 1){
-                                        new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                                .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
-                                                .setNegativeButton(android.R.string.ok, null)
-                                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                                .show();
-                                        return;
-                                    }
-                                    objSession = null;
-                                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                                    intent.putExtra("flag", 2);
-                                    startActivity(intent);
+
                                 }
                             }, null, Request.Method.POST);
                         }
