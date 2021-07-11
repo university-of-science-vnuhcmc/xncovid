@@ -10,7 +10,7 @@ namespace CovidService.Utility
     public class LogWriter
     {
         private const long FILESIZE = 1024 * 1024 * 4; //4MB
-        private static string LogFile = Path.Combine(@"", "log.txt"); 
+        private static string LogFile = Path.Combine(HttpContext.Current.Server.MapPath("~/bin"), "log.txt"); 
         public static bool WriteLogMsg( string strLogContent)
         {
             CheckAndSplitFile(LogFile, FILESIZE);

@@ -1,0 +1,1 @@
+<SqlString>Data Source=45.122.249.76,1433;Initial Catalog=XNCovid;User ID=sa;Password=mhWZ9PvOwDQSViFO0d1S</SqlString>
