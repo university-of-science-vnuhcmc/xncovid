@@ -78,7 +78,7 @@ namespace CovidService.Controllers
                     foreach (DataRow objRow in objDT.Rows)
                     {
                         info.SessionName = objRow["CovidTestingSessionName"].ToString();
-                        info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString());
+                        info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString()).ToString("yyyyMMddHHmm");
                         info.Address = objRow["Address"].ToString();
                         info.Purpose = objRow["Note"].ToString();
                         info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
