@@ -21,14 +21,14 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 string sqlString = SqlHelper.sqlString;
@@ -43,39 +43,39 @@ namespace CovidService.Controllers
                 {
                     if (intReturnValue == -31)
                     {
-                        objRes.returnCode = -31;
-                        objRes.returnMess = "DB return: Session is not found, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = -31;
+                        objRes.ReturnMess = "DB return: Session is not found, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                     else if (intReturnValue == -32)
                     {
-                        objRes.returnCode = -32;
-                        objRes.returnMess = "DB return: Session was finished, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = -32;
+                        objRes.ReturnMess = "DB return: Session was finished, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                     else if (intReturnValue == -91)
                     {
-                        objRes.returnCode = -91;
-                        objRes.returnMess = "DB return: Staff have already joined another testing session, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = -91;
+                        objRes.ReturnMess = "DB return: Staff have already joined another testing session, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                     else
                     {
-                        objRes.returnCode = 1002;
-                        objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                        objRes.ReturnCode = 1002;
+                        objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                         return objRes;
                     }
                 }
                 long loMappingID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
 
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 return objRes;
             }
         }

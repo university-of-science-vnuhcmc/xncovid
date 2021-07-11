@@ -24,33 +24,33 @@ namespace CovidService.Controllers
                 bool isCheck = Util.CheckLogin(objReq.Email, objReq.Token);
                 if (isCheck == false)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
                 if (string.IsNullOrEmpty(objReq.SessionName))
                 {
-                    objRes.returnCode = 1001;
-                    objRes.returnMess = "SessionName is null or empty";
+                    objRes.ReturnCode = 1001;
+                    objRes.ReturnMess = "SessionName is null or empty";
                     return objRes;
                 }
                 if (string.IsNullOrEmpty(objReq.FullLocation))
                 {
-                    objRes.returnCode = 1002;
-                    objRes.returnMess = "FullLocation is null or empty";
+                    objRes.ReturnCode = 1002;
+                    objRes.ReturnMess = "FullLocation is null or empty";
                     return objRes;
                 }
                 if (string.IsNullOrEmpty(objReq.TestingDate))
                 {
-                    objRes.returnCode = 1003;
-                    objRes.returnMess = "TestingDate is null or empty";
+                    objRes.ReturnCode = 1003;
+                    objRes.ReturnMess = "TestingDate is null or empty";
                     return objRes;
                 }
 
@@ -72,20 +72,20 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    objRes.returnCode = 1004;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    objRes.ReturnCode = 1004;
+                    objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.SessionID = loCovidSpecimenID;
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
+                objRes.ReturnCode = -1;
                 LogWriter.WriteException(ex);   
                 return objRes;
             }

@@ -23,20 +23,20 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
                 if (objReq.CitizenInfor == null)
                 {
-                    objRes.returnCode = 1001;
-                    objRes.returnMess = "List Citizen is null";
+                    objRes.ReturnCode = 1001;
+                    objRes.ReturnMess = "List Citizen is null";
                     return objRes;
                 }
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
@@ -60,48 +60,48 @@ namespace CovidService.Controllers
                         case -16:
                             DataTable dt = dts.Tables[0];
                             string strQRCode = GetQRCode(dt);
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = strQRCode;
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = strQRCode;
                             return objRes;
                         case -17:
                             long loSpecimenID = 0;
                             bool isDuplicate = CheckDuplicate(objReq.CovidSpecimenCode, sqlString, objReq.CitizenInfor, ref loSpecimenID);
                             if (!isDuplicate)
                             {
-                                objRes.returnCode = intReturnValue;
-                                objRes.returnMess = "CovidSpecimenCode already exists in Session";
+                                objRes.ReturnCode = intReturnValue;
+                                objRes.ReturnMess = "CovidSpecimenCode already exists in Session";
                                 return objRes;
                             }
                             objRes.CovidSpecimenID = loSpecimenID;
-                            objRes.returnCode = 1;
-                            objRes.returnMess = "CovidSpecimenCode is duplicated";
+                            objRes.ReturnCode = 1;
+                            objRes.ReturnMess = "CovidSpecimenCode is duplicated";
                             LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                             return objRes;
                         case -31:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session is not found";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session is not found";
                             return objRes;
                         case -32:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session was finished";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session was finished";
                             return objRes;
                         case 1002:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "DB return failure";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "DB return failure";
                             return objRes;
                     }
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.CovidSpecimenID = loCovidSpecimenID;
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
             }
