@@ -95,7 +95,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
                         ((TextView)findViewById(R.id.time)).setText(timeFormat.format(session.getTestingDate()));
                         ((TextView)findViewById(R.id.cause)).setText(session.Purpose);
-                        ((TextView)findViewById(R.id.numberStaff)).setText(LstUser == null ? 0 : LstUser.length);
+                        ((TextView)findViewById(R.id.numberStaff)).setText(String.valueOf(LstUser == null ? 0 : LstUser.length));
                         StaffAdapter adapter = new StaffAdapter(MainLeaderActivity.this, LstUser);
 
                         ListView listView = (ListView) findViewById(R.id.listStaff);
@@ -195,12 +195,18 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .show();
         }
     }
+    private boolean flag = false;
     private Session session;
     private UserInfo[] LstUser;
     public void endSession(View v){
         try {
             if(session == null || errorFlag){
                 return;
+            }
+            if(flag){
+                return;
+            } else {
+                flag = true;
             }
             String htmlcontent = String.format("Toàn bộ quá trình sẽ được lưu lại và toàn bộ (%d) nhân viên sẽ bị buộc thoát khỏi phiên xét nghiệm",
                     LstUser == null ? 0 : LstUser.length);
@@ -219,6 +225,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                                 @Override
                                 public void callback(Object response) {
                                     try {
+                                        flag = false;
                                         EndTestSessionRes res = (EndTestSessionRes) response;
                                         if(res.ReturnCode != 1){
                                             new androidx.appcompat.app.AlertDialog.Builder(MainLeaderActivity.this)

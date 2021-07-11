@@ -87,12 +87,19 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                     .show();
         }
     }
+    private boolean flag = false;
     private void createSession(CreateTestSessionReq req){
+        if(flag){
+            return;
+        } else {
+            flag = true;
+        }
         Caller caller = new Caller();
         caller.call(this, "createtestsession", req, CreateTestSessionRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
                 try {
+                    flag = false;
                     CreateTestSessionRes res = (CreateTestSessionRes) response;
                     if(res.ReturnCode != 1){
                         new AlertDialog.Builder(ConfirmSessionActivity.this)

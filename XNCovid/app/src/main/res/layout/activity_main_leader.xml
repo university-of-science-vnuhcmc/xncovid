@@ -313,6 +313,7 @@
                 android:clickable="true"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
+                android:onClick="endSession"
                 android:id="@+id/endSession">
                 <LinearLayout
                     android:layout_width="match_parent"
