@@ -22,7 +22,7 @@ namespace CovidService.Models
         public string DistrictName { get; set; }
         public string WardName { get; set; }
         public string Address { get; set; }
-        public DateTime TestingDate { get; set; }
+        public string TestingDate { get; set; }
         public string Purpose { get; set; }
         public string Account { get; set; }
         public long SessionID;
