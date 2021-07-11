@@ -251,7 +251,11 @@
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
                         </LinearLayout>
-
+                        <ListView
+                            android:layout_weight="1"
+                            android:id="@+id/listStaff"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
                         <LinearLayout
                             android:background="@drawable/button_scan_qr_session_disable"
                             android:id="@+id/scanQR"

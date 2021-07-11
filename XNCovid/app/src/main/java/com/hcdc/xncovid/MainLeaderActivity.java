@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,11 +46,16 @@ public class MainLeaderActivity extends AppCompatActivity {
                 findViewById(R.id.scanQR).setBackground(getResources().getDrawable( R.drawable.button_scan_qr_session_enable));
                 findViewById(R.id.endSession).setBackground(getResources().getDrawable( R.drawable.end_session_enable));
                 ((TextView)findViewById(R.id.sessionName)).setText(sessionInfo.SessionName);
-                ((TextView)findViewById(R.id.location)).setText(sessionInfo.getFullAddress());
+                ((TextView)findViewById(R.id.location)).setText(sessionInfo.Address);
                 SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
                 ((TextView)findViewById(R.id.time)).setText(timeFormat.format(sessionInfo.TestingDate));
                 ((TextView)findViewById(R.id.cause)).setText(sessionInfo.Purpose);
-                ((TextView)findViewById(R.id.numberStaff)).setText(sessionInfo.Participants == null ? 0 : sessionInfo.Participants.length);
+                ((TextView)findViewById(R.id.numberStaff)).setText(sessionInfo.LstUser == null ? 0 : sessionInfo.LstUser.length);
+                /*ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                        R.layout.activity_listview, mobileArray);
+
+                ListView listView = (ListView) findViewById(R.id.listStaff);
+                listView.setAdapter(adapter);*/
             }
         } catch (Exception ex){
             Log.w("MainLeaderActivity", ex.toString());
@@ -148,7 +154,7 @@ public class MainLeaderActivity extends AppCompatActivity {
             }
             Intent intent = new Intent(this, QRSessionActivity.class);
             intent.putExtra("SessionName", sessionInfo.SessionName);
-            intent.putExtra("SessionID", sessionInfo.ID);
+            intent.putExtra("SessionID", sessionInfo.SessionID);
             intent.putExtra("IsNew", false);
             startActivity(intent);
         } catch (Exception ex){
@@ -167,7 +173,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                 return;
             }
             String htmlcontent = String.format("Toàn bộ quá trình sẽ được lưu lại và toàn bộ (%d) nhân viên sẽ bị buộc thoát khỏi phiên xét nghiệm",
-                    sessionInfo.Participants == null ? 0 : sessionInfo.Participants.length);
+                    sessionInfo.LstUser == null ? 0 : sessionInfo.LstUser.length);
             new Util().showMessage("Xác nhận kết thúc phiên xét nghiệm",
                     sessionInfo.SessionName,
                     htmlcontent,
@@ -178,7 +184,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Caller caller = new Caller();
                             EndTestSessionReq req = new EndTestSessionReq();
-                            req.CovidTestingSessionID = sessionInfo.ID;
+                            req.CovidTestingSessionID = sessionInfo.SessionID;
                             caller.call(MainLeaderActivity.this, "endtestsession4lead", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
