@@ -53,60 +53,66 @@ private  TextView testName, location, time, cause, leader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionId = null;
-        setContentView(R.layout.activity_main_staff);
-        myapp = (MyApplication) getApplication();
-        TextView nameView = findViewById(R.id.name);
-        nameView.setText(myapp.getUserInfo().Name);
-        Intent intent = this.getIntent();
-        int flag = 0;
-        if(intent.getExtras() != null){
-            flag = intent.getExtras().getInt("flag");
-           // sessionId = intent.getExtras().getString("xn_session");
-        }
-
-
-        layoutJoinTest = findViewById(R.id.joinTest);
-        layoutListTest = findViewById(R.id.listTest);
-        layoutnewGroup = findViewById(R.id.newGroup);
-        layoutlistGroup = findViewById(R.id.listGroup);
-        layoutensession = findViewById(R.id.endSession);
-        layoutsessioninfo = findViewById(R.id.layout_main_session_info_staff);
-
-        //layoutJoinTest.setEnabled(false);
-        layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-        // layoutListTest.setEnabled(false);
-        layoutListTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-        //layoutnewGroup.setEnabled(false);
-        layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-        //layoutJoinTest.setEnabled(false);
-        layoutlistGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-        layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info_disable));
-
-        //TextView
-        testName = (TextView) findViewById(R.id.testName);
-        location= (TextView) findViewById(R.id.location);
-        time = (TextView) findViewById(R.id.time);
-        cause = (TextView) findViewById(R.id.cause);
-        leader = (TextView) findViewById(R.id.leader);
-
-        if(flag == 1){ // tu man hinh gom nhom ve
-            objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
-            if(objSession != null){
-                sessionId = objSession.ID + "";
-                SetupActivit(1);//Da co join vao session
-            }else {
-                checkAccount();// chua co thi check account lai
+        try{
+            sessionId = null;
+            setContentView(R.layout.activity_main_staff);
+            myapp = (MyApplication) getApplication();
+            TextView nameView = findViewById(R.id.name);
+            nameView.setText(myapp.getUserInfo().Name);
+            Intent intent = this.getIntent();
+            int flag = 0;
+            if(intent.getExtras() != null){
+                flag = intent.getExtras().getInt("flag");
+                // sessionId = intent.getExtras().getString("xn_session");
             }
-        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-            myapp.setSessionInfo(null); //set la null
-            SetupActivit(0);//chua join
-        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
-            checkAccount();
+
+
+            layoutJoinTest = findViewById(R.id.joinTest);
+            layoutListTest = findViewById(R.id.listTest);
+            layoutnewGroup = findViewById(R.id.newGroup);
+            layoutlistGroup = findViewById(R.id.listGroup);
+            layoutensession = findViewById(R.id.endSession);
+            layoutsessioninfo = findViewById(R.id.layout_main_session_info_staff);
+
+            //layoutJoinTest.setEnabled(false);
+            layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+            // layoutListTest.setEnabled(false);
+            layoutListTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+            //layoutnewGroup.setEnabled(false);
+            layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+            //layoutJoinTest.setEnabled(false);
+            layoutlistGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+            layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info_disable));
+
+            //TextView
+            testName = (TextView) findViewById(R.id.testName);
+            location= (TextView) findViewById(R.id.location);
+            time = (TextView) findViewById(R.id.time);
+            cause = (TextView) findViewById(R.id.cause);
+            leader = (TextView) findViewById(R.id.leader);
+
+            if(flag == 1){ // tu man hinh gom nhom ve
+                objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
+                if(objSession != null){
+                    sessionId = objSession.ID + "";
+                    SetupActivit(1);//Da co join vao session
+                }else {
+                    checkAccount();// chua co thi check account lai
+                }
+            } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+                myapp.setSessionInfo(null); //set la null
+                SetupActivit(0);//chua join
+            } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+                checkAccount();
+            }
+        } catch (Exception e){
+            Log.e("MainStaffActivity", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-
-
-
 
     }
 
@@ -253,7 +259,8 @@ private  TextView testName, location, time, cause, leader;
                     }
                 }
             }, null, Request.Method.POST);
-        } catch (Exception ex){
+        } catch (Exception e){
+            Log.e("checkAccount", e.toString(), e);
             new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
                     .setMessage("Lỗi hệ thống, vui lòng thử lại sau.")
                     .setNegativeButton(android.R.string.ok, null)
@@ -265,41 +272,69 @@ private  TextView testName, location, time, cause, leader;
     }
 
     public void endSession(){
-        if(objSession == null || errorFlag){
-            return;
-        }
-        String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
-        new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
-                objSession.SessionName,
-                htmlcontent,
-                "Thoát",
-                "Hủy",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Caller caller = new Caller();
-                        EndTestSessionReq req = new EndTestSessionReq();
-                        req.CovidTestingSessionID = objSession.ID;
-                        caller.call(MainStaffActivity.this, "endtestsession4staff", req, EndTestSessionRes.class, new ICallback() {
-                            @Override
-                            public void callback(Object response) {
-                                EndTestSessionRes res = (EndTestSessionRes) response;
-                                if(res.returnCode != 1){
-                                    new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                            .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
-                                            .setNegativeButton(android.R.string.ok, null)
-                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .show();
-                                    return;
+        try{
+
+            if(objSession == null || errorFlag){
+                return;
+            }
+            String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
+            new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
+                    objSession.SessionName,
+                    htmlcontent,
+                    "Thoát",
+                    "Hủy",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Caller caller = new Caller();
+                            EndTestSessionReq req = new EndTestSessionReq();
+                            req.CovidTestingSessionID = objSession.ID;
+                            caller.call(MainStaffActivity.this, "LeaveTestSession", req, EndTestSessionRes.class, new ICallback() {
+                                @Override
+                                public void callback(Object response) {
+                                    EndTestSessionRes res = (EndTestSessionRes) response;
+                                    if(res.returnCode == -61 || res.returnCode == -62){
+                                        new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                                .setMessage("Không tìm thấy phiên xét nghiệm hoặc đã kết thúc.")
+                                                .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        objSession = null;
+                                                        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                                        intent.putExtra("flag", 2);
+                                                        startActivity(intent);
+
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                        return;
+                                    }
+                                    if(res.returnCode != 1){
+                                        new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                                .setMessage("Lỗi: " + res.returnCode + "- Lỗi hệ thống, vui lòng thử lại sau.")
+                                                .setNegativeButton(android.R.string.ok, null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                        return;
+                                    }
+                                    objSession = null;
+                                    Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+                                    intent.putExtra("flag", 2);
+                                    startActivity(intent);
                                 }
-                                objSession = null;
-                                Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
-                                // intent.putExtra("xn_session", "");
-                                startActivity(intent);
-                            }
-                        }, null, Request.Method.POST);
-                    }
-                }, null, MainStaffActivity.this);
-    }
+                            }, null, Request.Method.POST);
+                        }
+                    }, null, MainStaffActivity.this);
+
+        }catch (Exception e){
+            Log.e("endSession", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        }
 
 }

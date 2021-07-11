@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -36,36 +37,45 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scansession);
-
         try{
-            urlKBYTOnline = ((MyApplication)  getApplication()).getDomain();
+            try{
+                urlKBYTOnline = ((MyApplication)  getApplication()).getDomain();
 
-            regexKBYTId = ((MyApplication) getApplication()).getId();
-        }catch (Exception e){
-            urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
-            regexKBYTId = "id=([A-z0-9-]*)";
-        }
-
-        if( getIntent().getExtras() != null){
-            scanQRType = getIntent().getExtras().getInt("scan_qr_type");
-        }
-        SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
-
-        if(sessionInfo != null){
-            xn_session = sessionInfo.ID + "";
-        }
-
-        xn_session = getIntent().getExtras().getString("xn_session");
-
-        int apiVersion = android.os.Build.VERSION.SDK_INT;
-        if (apiVersion >= android.os.Build.VERSION_CODES.M) {
-            if (!checkPermission()) {
-                requestPermission();
+                regexKBYTId = ((MyApplication) getApplication()).getId();
+            }catch (Exception e){
+                urlKBYTOnline = "https://kbytcq.khambenh.gov.vn/";
+                regexKBYTId = "id=([A-z0-9-]*)";
             }
+
+            if( getIntent().getExtras() != null){
+                scanQRType = getIntent().getExtras().getInt("scan_qr_type");
+            }
+            SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+
+            if(sessionInfo != null){
+                xn_session = sessionInfo.ID + "";
+            }
+
+            xn_session = getIntent().getExtras().getString("xn_session");
+
+            int apiVersion = android.os.Build.VERSION.SDK_INT;
+            if (apiVersion >= android.os.Build.VERSION_CODES.M) {
+                if (!checkPermission()) {
+                    requestPermission();
+                }
+            }
+            contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+            mScannerView = new ZXingScannerView(this);
+            contentFrame.addView(mScannerView);
+        }catch (Exception e){
+            Log.e("ScanSessionActivity", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-        contentFrame = (ViewGroup) findViewById(R.id.content_frame);
-        mScannerView = new ZXingScannerView(this);
-        contentFrame.addView(mScannerView);
+
     }
 
 
@@ -102,21 +112,31 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     public void handleResult(Result result) {
         String txtScanedResult = result.getText();
         boolean isOnline =false;
-        mScannerView.removeAllViews(); //<- here remove all the views, it will make an Activity having no View
-        mScannerView.stopCamera(); //<- then stop the camera
+        try{
+            mScannerView.removeAllViews(); //<- here remove all the views, it will make an Activity having no View
+            mScannerView.stopCamera(); //<- then stop the camera
 
-        if((scanQRType == 2) &&txtScanedResult.startsWith(urlKBYTOnline)){
+            if((scanQRType == 2) &&txtScanedResult.startsWith(urlKBYTOnline)){
                 Pattern p = Pattern.compile(regexKBYTId);
                 Matcher m = p.matcher(txtScanedResult);
                 m.find();
                 String id = m.group(1);
                 scanContent = id;
                 isOnline = true;
-        }else {
-            scanContent = txtScanedResult.trim();
+            }else {
+                scanContent = txtScanedResult.trim();
+            }
+
+            showResult(isOnline);
+        }catch (Exception e){
+            Log.e("ScanSessionActivity", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
 
-        showResult(isOnline);
     }
 
     private  void showResult(boolean isOnline){
