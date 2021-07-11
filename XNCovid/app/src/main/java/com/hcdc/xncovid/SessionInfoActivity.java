@@ -165,8 +165,8 @@ public class SessionInfoActivity extends AppCompatActivity {
                               district.setText(res.Data.DistrictName);
                               ward.setText(res.Data.WardName);
                               address.setText(res.Data.Address);
-                              chooseTime.setText(timeFormat.format(res.Data.TestingDate));
-                              chooseDate.setText(dateFormat.format(res.Data.TestingDate));
+                              chooseTime.setText(timeFormat.format(res.Data.getTestingDate()));
+                              chooseDate.setText(dateFormat.format(res.Data.getTestingDate()));
                               cause.setText(res.Data.Purpose);
                               leader.setText(res.Data.Account);
                           }catch (Exception e){

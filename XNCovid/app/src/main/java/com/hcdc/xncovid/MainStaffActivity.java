@@ -67,7 +67,11 @@ private  TextView testName, location, time, cause, leader;
                 // sessionId = intent.getExtras().getString("xn_session");
             }
 
+            UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
 
+            if(userInfo != null){
+                accountID = userInfo.AccountID;
+            }
             layoutJoinTest = findViewById(R.id.joinTest);
             layoutListTest = findViewById(R.id.listTest);
             layoutnewGroup = findViewById(R.id.newGroup);
@@ -124,7 +128,7 @@ private  TextView testName, location, time, cause, leader;
             testName.setText(objSession.SessionName);
             location.setText((objSession.Address));
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-            time.setText(timeFormat.format(objSession.TestingDate));
+            time.setText(timeFormat.format(objSession.getTestingDate()));
             cause.setText(objSession.Purpose);
             leader.setText(objSession.Account);
 
@@ -237,6 +241,7 @@ private  TextView testName, location, time, cause, leader;
                         if(res.ReturnCode == 0) // khong co dang join session nao het
                         {
                             SetupActivit(res.ReturnCode);
+                            return;
                         }
                         if(res.ReturnCode != 1){
                             new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
