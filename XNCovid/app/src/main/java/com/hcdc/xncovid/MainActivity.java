@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 getStaffConfig();
                 Intent intent = new Intent(this, MainStaffActivity.class);
                 startActivity(intent);
+                finish();
             }
         } catch (Exception ex){
             Log.w("MainActivity", ex.toString());

@@ -2,6 +2,7 @@ package com.hcdc.xncovid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
 import com.hcdc.xncovid.model.EndTestSessionReq;
 import com.hcdc.xncovid.model.EndTestSessionRes;
+import com.hcdc.xncovid.model.LeaveTestSessionReq;
 import com.hcdc.xncovid.model.LogoutReq;
 import com.hcdc.xncovid.model.LogoutRes;
 import com.hcdc.xncovid.model.Session;
@@ -25,12 +27,14 @@ import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession, layoutsessioninfo;
 String sessionId;
 long accountID;
     int flag = 0;
+    public  static  boolean isFirst = false;
 private  TextView testName, location, time, cause, leader;
     MyApplication myapp = null;
     Session objSession = null;
@@ -81,20 +85,6 @@ private  TextView testName, location, time, cause, leader;
             cause = (TextView) findViewById(R.id.cause);
             leader = (TextView) findViewById(R.id.leader);
 
-            if(flag == 1){ // tu man hinh gom nhom ve
-                objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
-                if(objSession != null){
-                    sessionId = objSession.SessionID + "";
-                    SetupActivit(1);//Da co join vao session
-                }else {
-                    checkAccount();// chua co thi check account lai
-                }
-            } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-                myapp.setSession(null); //set la null
-                SetupActivit(0);//chua join
-            } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
-                checkAccount();
-            }
         } catch (Exception e){
             Log.e("MainStaffActivity", e.toString(), e);
             new AlertDialog.Builder(this)
@@ -267,11 +257,12 @@ private  TextView testName, location, time, cause, leader;
                             //ReturnCode = 1 ==> co dang join vao session
                             if(res.Session != null){
                                 objSession = res.Session;
-                                LstUser = res.LstUser;
+                               // LstUser = res.LstUser;
                                 if(myapp == null){
                                     myapp = new MyApplication();
                                 }
                                 myapp.setSession(objSession);
+                                sessionId = res.Session.SessionID + "";
                                 SetupActivit(res.ReturnCode);
                             }else {
                                 Log.w("checkAccount", "Session return null");
@@ -318,8 +309,9 @@ private  TextView testName, location, time, cause, leader;
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Caller caller = new Caller();
-                            EndTestSessionReq req = new EndTestSessionReq();
-                            req.CovidTestingSessionID = objSession.SessionID;
+                            LeaveTestSessionReq req = new LeaveTestSessionReq();
+                            req.AccountID = accountID;
+                            req.TestSessionID = objSession.SessionID ;
                             caller.call(MainStaffActivity.this, "LeaveTestSession", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
@@ -335,6 +327,7 @@ private  TextView testName, location, time, cause, leader;
                                                             Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
                                                             intent.putExtra("flag", 2);
                                                             startActivity(intent);
+                                                            finish();
 
                                                         }
                                                     })
@@ -354,6 +347,7 @@ private  TextView testName, location, time, cause, leader;
                                         Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
                                         intent.putExtra("flag", 2);
                                         startActivity(intent);
+                                        finish();
                                     }catch (Exception e){
                                         Log.e("endSession", e.toString(), e);
                                         new AlertDialog.Builder(MainStaffActivity.this)
@@ -380,27 +374,43 @@ private  TextView testName, location, time, cause, leader;
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
         try{
-        new Util().showMessage("Bạn muốn thoát ứng dụng.",
-                "",
-                "",
-                "Thoát",
-                "Hủy",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Khoi tao lai Activity main
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
+            ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
 
-                        // Tao su kien ket thuc app
-                        Intent startMain = new Intent(Intent.ACTION_MAIN);
-                        startMain.addCategory(Intent.CATEGORY_HOME);
-                        startActivity(startMain);
-                        finish();
-                    }
-                }, null, MainStaffActivity.this);
+            List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+            String subTitle = "Phiên xét nghiệm đang tham gia: ";
+            if(objSession != null){
+                subTitle += objSession.SessionName;
+            }
+            if(taskList.get(0).numActivities == 1 &&
+                    taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+                new Util().showMessage("Bạn muốn thoát ứng dụng.",
+                        subTitle,
+                        "",
+                        "Thoát",
+                        "Hủy",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Khoi tao lai Activity main
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+
+                                // Tao su kien ket thuc app
+                                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                                startMain.addCategory(Intent.CATEGORY_HOME);
+                                startActivity(startMain);
+                                finish();
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                            }, MainStaffActivity.this);
+            }
+
 
     }catch (Exception e){
         Log.e("endSession", e.toString(), e);

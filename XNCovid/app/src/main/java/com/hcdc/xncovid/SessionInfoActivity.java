@@ -150,7 +150,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                               btnConfirm.setOnClickListener(new View.OnClickListener() {
                                   public void onClick(View v) {
                                       JoinTestSessionReq req = new JoinTestSessionReq();
-                                      req.TestSessionID = xn_session;
+                                      req.TestSessionID =  Long.parseLong(xn_session);
                                       UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
 
                                       if(userInfo != null){
