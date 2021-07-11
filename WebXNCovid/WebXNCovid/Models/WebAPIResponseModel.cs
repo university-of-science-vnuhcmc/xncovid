@@ -5,16 +5,29 @@ using System.Web;
 
 namespace WebXNCovid.Models
 {
-    public class LoginResponse
+    public class ResponseModel
     {
-        public int returnCode;
+        public int ReturnCode;
+        public string ReturnMessage;
+    }
+
+    public class LoginResponse : ResponseModel
+    {
         public string Token;
-        public string Url;
-        public string Domain;
-        public string Form;
-        public string Id;
         public string Role;
+        public string AccountID;
         public string CustomerName;
-        public string returnMess;
+    }
+
+    public class CreateQRResponse : ResponseModel
+    {
+        public string CreateDate;
+        public int MinNumber;
+        public int MaxNumber;
+        public int NumOfPrint;
+    }
+    public class LogoutResponse : ResponseModel
+    {
+
     }
 }

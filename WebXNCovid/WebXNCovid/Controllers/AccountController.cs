@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebXNCovid.Models;
-using WebXNCovid.ServerSide;
 
 namespace WebXNCovid.Controllers
 {
@@ -26,7 +25,11 @@ namespace WebXNCovid.Controllers
         {
             try
             {
-                string postData = JsonConvert.SerializeObject(model);
+                LoginRequestModel request = new LoginRequestModel();
+                request.Email = model.Email;
+                request.Token = model.TokenID;
+
+                string postData = JsonConvert.SerializeObject(request);
 
                 var response = await CallWebAPI.Instance().Call("Login", postData);
 
@@ -44,13 +47,13 @@ namespace WebXNCovid.Controllers
 
                 LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
 
-                if (objRes.returnCode != 1)
+                if (objRes.ReturnCode != 1)
                 {
-                    if (objRes.returnCode == 0)
+                    if (objRes.ReturnCode == 0)
                     {
                         return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                     }
-                    else if (objRes.returnCode == 2)
+                    else if (objRes.ReturnCode == 2)
                     {
                         return Json(new { success = false, responseText = "Email không tồn tại." }, JsonRequestBehavior.AllowGet);
                     }
@@ -66,14 +69,47 @@ namespace WebXNCovid.Controllers
 
                 return Json(new { success = true, responseText = "Succeed." }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception objEx)
+            catch //(Exception objEx)
             {
                 return Json(new { success = false, responseText = "System error." }, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public ActionResult LogOut()
+        public async Task<ActionResult> LogOut()
         {
+            LogoutRequestModel request = new LogoutRequestModel();
+            request.Email = Session["Email"].ToString();
+            request.Token = Session["Token"].ToString();
+
+            string postData = JsonConvert.SerializeObject(request);
+
+            var response = await CallWebAPI.Instance().Call("Logout", postData);
+
+            if (response.IsSuccessStatusCode != true)
+            {
+                return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+            }
+
+            LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
+
+            if (objRes.ReturnCode != 1)
+            {
+                if (objRes.ReturnCode == 0)
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "Lỗi hệ thống." }, JsonRequestBehavior.AllowGet);
+                }
+            }
             Session.Clear();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");

@@ -1,0 +1,49 @@
+﻿@using WebXNCovid.Models
+@using System.Collections.Generic;
+@model SearchHistoryCreateQRViewModel
+
+<div class="container-fluid">
+    <div class="row">
+
+        @using (Html.BeginForm("SearchHistoryCreateQR", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal form-search", role = "form" }))
+        {
+            <div class="inline">
+                <label class="">Chọn ngày</label>
+            </div>
+            <div class="col-sm-4 col-md-3 col-xl-3 input-date">
+                <input type="date" name="FromCreateDate" class="form-control" required />
+            </div>
+            <div class="col-sm-4 col-md-3 col-xl-3 input-date">
+                <input type="date" name="ToCreateDate" class="form-control" required />
+            </div>
+            <div class="col-sm-2 col-md-1 inline">
+                <input type="submit" class="btn btn-search" value="Tra cứu" />
+            </div>
+        }
+        <div>
+            <table class="table table-bordered table-responsive table-hover">
+                <tr>
+                    <th>Ngày</th>
+                    <th>Số lượng</th>
+                    <th>Người tạo</th>
+                    <th>Từ số</th>
+                    <th>Đến số</th>
+                    <th>Số trang</th>
+                    <th>In lại</th>
+                </tr>
+                @foreach (var item in Model.ListHistory)
+                {
+                    <tr>
+                        <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.AmountQR</td>
+                        <td>@item.CreatedUser</td>
+                        <td>@item.IdFrom</td>
+                        <td>@item.IdTo</td>
+                        <td>@item.AmountPage</td>
+                        <td><input type="submit" class="btn btn-search" value="In lại" /></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

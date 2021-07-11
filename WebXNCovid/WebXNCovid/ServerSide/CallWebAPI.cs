@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebXNCovid.ServerSide
+namespace WebXNCovid
 {
     public class CallWebAPI
     {
         private static CallWebAPI _instance;
+        private static string baseAddress;
 
         protected CallWebAPI()
         {
-
+            baseAddress = "http://localhost:59767/";
         }
 
         public static CallWebAPI Instance()
@@ -31,7 +32,6 @@ namespace WebXNCovid.ServerSide
         {
             try
             {
-                const string baseAddress = "http://45.122.249.68:7070/api";
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(baseAddress);
                 var buffer = System.Text.Encoding.UTF8.GetBytes(postData);

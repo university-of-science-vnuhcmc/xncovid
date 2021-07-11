@@ -1,4 +1,5 @@
-﻿using PagedList;
+﻿using Newtonsoft.Json;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +9,9 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using WebXNCovid;
 using WebXNCovid.Models;
 using ZXing;
 
@@ -21,19 +24,60 @@ namespace WebForCommunityScreening.Controllers
         {
             return View();
         }
+        
+        public ActionResult SearchHistoryCreateQR()
+        {
+            return View();
+        }
 
-        public ActionResult GenerateCode(int QRCodeAmount)
+        public async Task<ActionResult> GenerateCode(int QRCodeAmount)
         {
             try
             {
-                const int amtQRInPerPage = 6;
+                const int amtQRPerPage = 6;
+
+                CreateQRRequestModel request = new CreateQRRequestModel();
+                request.Email = Session["Email"].ToString();
+                request.Token = Session["Token"].ToString();
+                request.QRAmount = QRCodeAmount;
+
+                string postData = JsonConvert.SerializeObject(request);
+
+                var response = await CallWebAPI.Instance().Call("CreateQRManualDeclaration", postData);
+
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+
+                LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
+
+                if (objRes.ReturnCode != 1)
+                {
+                    if (objRes.ReturnCode == 0)
+                    {
+                        return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, responseText = "Lỗi hệ thống." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
                 GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
                 model.CreateDate = DateTime.Now;
                 model.CreatedUser = Session["Email"].ToString();
                 model.AmountQR = QRCodeAmount;
                 model.IdFrom = 10000;
                 model.IdTo = model.IdFrom + QRCodeAmount - 1;
-                model.AmountPage = QRCodeAmount / amtQRInPerPage + (QRCodeAmount % amtQRInPerPage == 0 ? 0 : 1);
+                model.AmountPage = QRCodeAmount / amtQRPerPage + (QRCodeAmount % amtQRPerPage == 0 ? 0 : 1);
                 ViewData["GenerateQRInfo"] = model;
                 return View("GenerateQRSuccess", model);
                 //return View("GenerateQRSuccess");
@@ -109,13 +153,14 @@ namespace WebForCommunityScreening.Controllers
                 //ViewBag.Message = "QR Code Created successfully"; 
                 #endregion
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 //catch exception if there is any
             }
             return RedirectToAction("PreviewQRCode", new { page = 1 });
         }
 
+        [HttpGet]
         public ActionResult PreviewQRCode(int page)
         {
             List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
@@ -197,36 +242,35 @@ namespace WebForCommunityScreening.Controllers
             return bmp;
         }
 
+        //private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
+        //{
+        //    const int padding = 20;
+        //    var enumerable = images as IList<Bitmap> ?? images.ToList();
 
-        private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
-        {
-            const int padding = 20;
-            var enumerable = images as IList<Bitmap> ?? images.ToList();
+        //    var width = enumerable[0].Width * column + padding * (column - 1);
+        //    var height = enumerable[0].Height * row + padding * (row - 1);
 
-            var width = enumerable[0].Width * column + padding * (column - 1);
-            var height = enumerable[0].Height * row + padding * (row - 1);
+        //    var bitmap = new Bitmap(width, height);
 
-            var bitmap = new Bitmap(width, height);
-
-            using (var g = Graphics.FromImage(bitmap))
-            {
-                g.Clear(Color.White);
-                var localWidth = 0;
-                var localHeight = 0;
-                int length = enumerable.Count;
-                for (int i = 0; i < length; i++)
-                {
-                    Bitmap image = enumerable[i];
-                    g.DrawImage(enumerable[i], localWidth, localHeight);
-                    localWidth += image.Width + padding;
-                    if (i % column == column - 1)
-                    {
-                        localWidth = 0;
-                        localHeight += image.Height + padding;
-                    }
-                }
-            }
-            return bitmap;
-        }
+        //    using (var g = Graphics.FromImage(bitmap))
+        //    {
+        //        g.Clear(Color.White);
+        //        var localWidth = 0;
+        //        var localHeight = 0;
+        //        int length = enumerable.Count;
+        //        for (int i = 0; i < length; i++)
+        //        {
+        //            Bitmap image = enumerable[i];
+        //            g.DrawImage(enumerable[i], localWidth, localHeight);
+        //            localWidth += image.Width + padding;
+        //            if (i % column == column - 1)
+        //            {
+        //                localWidth = 0;
+        //                localHeight += image.Height + padding;
+        //            }
+        //        }
+        //    }
+        //    return bitmap;
+        //}
     }
 }
