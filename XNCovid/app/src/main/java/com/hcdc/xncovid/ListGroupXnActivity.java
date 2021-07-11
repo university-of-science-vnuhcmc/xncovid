@@ -225,11 +225,17 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         else if (res.ReturnCode == -16) //trung QR
                         {
                             Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
-                            new AlertDialog.Builder(ListGroupXnActivity.this)
-                                    .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
-                                    .setNegativeButton(android.R.string.ok, null)
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .show();
+                            String strcontent = "Danh sách mã tồn tại:";
+                            String[] arrIds = res.ReturnMess.split("|");
+                            for (String uid: arrIds) {
+                                strcontent += "<br/><font color='#FF0000'><i>" + uid + "</i></font>";
+                            }
+                            new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp củ phiên.",
+                                    strcontent,
+                                    null,
+                                    null,
+                                    "OK",
+                                    null, null, ListGroupXnActivity.this);
                             isOK[0] = false;
                         }
                         else if (res.ReturnCode == -31 || res.ReturnCode == -32)
