@@ -13,8 +13,6 @@ namespace CovidService.Utility
         static long bnlFlagNotify = 0;
         static FileSystemWatcher watcher = null;
         static AutoResetEvent w = new AutoResetEvent(false);
-        static string strPath = null;
-        static string strDirectory = null;
         static string strFilePath = Path.Combine(HttpContext.Current.Server.MapPath("~/bin"), "Config.txt");
         public Dictionary<string, string> dicConfig = new Dictionary<string, string>();
         private static Config instance;
@@ -49,18 +47,23 @@ namespace CovidService.Utility
 
         public void Load()
         {
-
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            foreach (var item in Values)
+            try
             {
-                XmlDocument xmltest = new XmlDocument();
-                xmltest.LoadXml(item);
-                string key = xmltest.DocumentElement.Name;
-                string value = xmltest.GetElementsByTagName(key)[0].InnerXml;
-                if (!dicConfig.ContainsKey(key))
+                foreach (var item in Values)
                 {
-                    dicConfig.Add(key, value);
+                    XmlDocument xmltest = new XmlDocument();
+                    xmltest.LoadXml(item);
+                    string key = xmltest.DocumentElement.Name;
+                    string value = xmltest.GetElementsByTagName(key)[0].InnerXml;
+                    if (!dicConfig.ContainsKey(key))
+                    {
+                        dicConfig.Add(key, value);
+                    }
                 }
+            }
+            catch (Exception objEx)
+            {
+                LogWriter.WriteException(objEx);
             }
         }
 

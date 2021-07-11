@@ -1,4 +1,6 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +39,7 @@ namespace CovidService.Controllers
                     objRes.returnMess = "List Citizen is null";
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
                 DataTable data = ConvertToDataTable(objReq.CitizenInfor);
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -62,12 +65,14 @@ namespace CovidService.Controllers
                 objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
                 objRes.returnCode = -1;
                 objRes.returnMess = ex.ToString();
+                LogWriter.WriteException(ex);
                 return objRes;
             }
         }

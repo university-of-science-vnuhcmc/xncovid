@@ -41,7 +41,6 @@ public class LocateConfig
             string connect = SqlHelper.sqlString;
             List<SqlParameter> parameters = new List<SqlParameter>();
             SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-            //SqlHelper.ExecuteNonQuery(connect, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
             DataSet dts = SqlHelper.GetDataTable(connect, "uspGetMetaDataList", parameters.ToArray());
             int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
             if (intReturnValue != 1)
@@ -112,62 +111,80 @@ public class LocateConfig
     private static LocateInfor LocateInfor(DataRow row, LocateType LocateType)
     {
         LocateInfor locateInfor = null;
-        if (row != null)
+        try
         {
-            locateInfor = new LocateInfor();
-            switch (LocateType)
+            if (row != null)
             {
-                case LocateType.Province:
-                    locateInfor.ID = long.Parse(row["ProvinceID"].ToString());
-                    locateInfor.Code = row["ProvinceCode"].ToString();
-                    break;
-                case LocateType.District:
-                    locateInfor.ID = long.Parse(row["DistrictID"].ToString());
-                    locateInfor.Code = row["DistrictCode"].ToString();
-                    break;
-                case LocateType.Ward:
-                    locateInfor.ID = long.Parse(row["WardID"].ToString());
-                    locateInfor.Code = row["WardCode"].ToString();
-                    break;
+                locateInfor = new LocateInfor();
+                switch (LocateType)
+                {
+                    case LocateType.Province:
+                        locateInfor.ID = long.Parse(row["ProvinceID"].ToString());
+                        locateInfor.Code = row["ProvinceCode"].ToString();
+                        break;
+                    case LocateType.District:
+                        locateInfor.ID = long.Parse(row["DistrictID"].ToString());
+                        locateInfor.Code = row["DistrictCode"].ToString();
+                        break;
+                    case LocateType.Ward:
+                        locateInfor.ID = long.Parse(row["WardID"].ToString());
+                        locateInfor.Code = row["WardCode"].ToString();
+                        break;
 
+                }
+                locateInfor.Name = row["Name"] == null || row["Name"] == DBNull.Value ? "" : row["Name"].ToString();
             }
-            locateInfor.Name = row["Name"] == null || row["Name"] == DBNull.Value ? "" : row["Name"].ToString();
+            return locateInfor;
         }
-        return locateInfor;
+        catch (Exception objEx)
+        {
+
+            LogWriter.WriteException(objEx);
+            return locateInfor;
+        }
     }
 
 
     public List<LocateInfor> GetLocateInfor(string searchKey)
     {
         List<LocateInfor> locateInfors = new List<LocateInfor>();
-        if (string.IsNullOrEmpty(searchKey))
+        try
         {
-            return lstProvince;
-        }
-        else
-        {
-            if (searchKey.Length == 2)
+            if (string.IsNullOrEmpty(searchKey))
             {
-                if (dicDistrict != null)
-                {
-                    if (dicDistrict.TryGetValue(searchKey, out locateInfors))
-                    {
-                        return locateInfors;
-                    }
-                }
+                return lstProvince;
             }
             else
             {
-                if (dicWard != null)
+                if (searchKey.Length == 2)
                 {
-                    if (dicWard.TryGetValue(searchKey, out locateInfors))
+                    if (dicDistrict != null)
                     {
-                        return locateInfors;
+                        if (dicDistrict.TryGetValue(searchKey, out locateInfors))
+                        {
+                            return locateInfors;
+                        }
+                    }
+                }
+                else
+                {
+                    if (dicWard != null)
+                    {
+                        if (dicWard.TryGetValue(searchKey, out locateInfors))
+                        {
+                            return locateInfors;
+                        }
                     }
                 }
             }
+            return locateInfors;
         }
-        return locateInfors;
+        catch (Exception objEx)
+        {
+
+            LogWriter.WriteException(objEx);
+            return locateInfors;
+        }
     }
 }
 

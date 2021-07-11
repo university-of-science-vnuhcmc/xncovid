@@ -1,5 +1,6 @@
 ﻿using CovidService.Models;
 using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace CovidService.Controllers
                     objRes.returnMess = "Invalid Email or Token";
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
                 List<LocateInfor> lstLocate = new List<LocateInfor>();
                 lstLocate = LocateConfig.Instance.GetLocateInfor(objReq.Value);
                 if(string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
@@ -41,12 +43,14 @@ namespace CovidService.Controllers
                 objRes.locateInfors = lstLocate;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
             {
                 objRes.returnCode = -1;
                 objRes.returnMess = ex.ToString();
+                LogWriter.WriteException(ex);
                 return objRes;
             }
         }
