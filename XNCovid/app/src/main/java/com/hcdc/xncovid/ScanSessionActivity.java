@@ -165,6 +165,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             intent.putExtra("xn_session", scanContent);
             //intent.putExtra("session_code", xn_session);
             startActivity(intent);
+            finish();
         }
 
     }

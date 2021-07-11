@@ -62,6 +62,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
    LinearLayout btnStartGroup;
     Hashtable<String, GroupedUserInfo> hashObj;
     Boolean isStop  = false;
+    SessionInfo sessionInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             xn_code=(TextView) findViewById(R.id.txt_xncode);
             xn_code.setText(xn_session);
 
-            SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+             sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
 
             if(sessionInfo != null){
                 session_code = sessionInfo.SessionID + "";
@@ -155,6 +156,35 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .show();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try{
+            if(sessionInfo != null){
+                session_code = sessionInfo.SessionID + "";
+            }else {
+                new AlertDialog.Builder(ListGroupXnActivity.this)
+                        .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
+                        .setNegativeButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        StartMainStaffAcitivity();
+                                    }
+                                })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        }catch (Exception e){
+            Log.e("ListGroupXnActivity", e.toString(), e);
+            new android.app.AlertDialog.Builder(this)
+                .setMessage("Lỗi xử lý.")
+                .setNegativeButton("OK", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+         }
     }
 
     private  void StartMainStaffAcitivity(){

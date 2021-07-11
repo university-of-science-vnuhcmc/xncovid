@@ -47,6 +47,7 @@ public class MainStaffActivity extends AppCompatActivity {
 private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession, layoutsessioninfo;
 String sessionId;
 long accountID;
+    int flag = 0;
 private  TextView testName, location, time, cause, leader;
     MyApplication myapp = null;
     SessionInfo objSession = null;
@@ -61,7 +62,7 @@ private  TextView testName, location, time, cause, leader;
             TextView nameView = findViewById(R.id.name);
             nameView.setText(myapp.getUserInfo().Name);
             Intent intent = this.getIntent();
-            int flag = 0;
+
             if(intent.getExtras() != null){
                 flag = intent.getExtras().getInt("flag");
                 // sessionId = intent.getExtras().getString("xn_session");
@@ -119,6 +120,34 @@ private  TextView testName, location, time, cause, leader;
                     .show();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try{
+        if(flag == 1){ // tu man hinh gom nhom ve
+            objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
+            if(objSession != null){
+                sessionId = objSession.SessionID + "";
+                SetupActivit(1);//Da co join vao session
+            }else {
+                checkAccount();// chua co thi check account lai
+            }
+        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+            myapp.setSessionInfo(null); //set la null
+            SetupActivit(0);//chua join
+        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+            checkAccount();
+        }
+    } catch (Exception e){
+        Log.e("MainStaffActivity", e.toString(), e);
+        new AlertDialog.Builder(this)
+                .setMessage("Lỗi xử lý.")
+                .setNegativeButton("OK", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
     }
 
     private  void  SetupActivit(int caseType){
