@@ -11,6 +11,7 @@ import com.hcdc.xncovid.model.GetSessionRes;
 import com.hcdc.xncovid.model.GroupTestRes;
 import com.hcdc.xncovid.model.JoinTestSessionReq;
 import com.hcdc.xncovid.model.JoinTestSessionRes;
+import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 
@@ -149,7 +150,12 @@ public class SessionInfoActivity extends AppCompatActivity {
                               btnConfirm.setOnClickListener(new View.OnClickListener() {
                                   public void onClick(View v) {
                                       JoinTestSessionReq req = new JoinTestSessionReq();
-                                      req.TestID = xn_session;
+                                      req.TestSessionID = xn_session;
+                                      UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
+
+                                      if(userInfo != null){
+                                          req.AccountID = userInfo.AccountID;
+                                      }
                                       Caller caller = new Caller();
                                       caller.call(SessionInfoActivity.this, "JoinTestSession", req, JoinTestSessionRes.class, new ICallback() {
                                           @Override
