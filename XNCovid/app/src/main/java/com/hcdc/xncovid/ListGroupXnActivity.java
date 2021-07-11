@@ -74,7 +74,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
 
             if(sessionInfo != null){
-                session_code = sessionInfo.ID + "";
+                session_code = sessionInfo.SessionID + "";
             }else {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")

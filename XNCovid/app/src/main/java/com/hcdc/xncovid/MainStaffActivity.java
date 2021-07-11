@@ -94,7 +94,7 @@ private  TextView testName, location, time, cause, leader;
             if(flag == 1){ // tu man hinh gom nhom ve
                 objSession = ((MyApplication) getApplication()).getSessionInfo(); //Kt session trong cache
                 if(objSession != null){
-                    sessionId = objSession.ID + "";
+                    sessionId = objSession.SessionID + "";
                     SetupActivit(1);//Da co join vao session
                 }else {
                     checkAccount();// chua co thi check account lai
@@ -245,8 +245,7 @@ private  TextView testName, location, time, cause, leader;
                             objSession.DistrictName = res.session.DistrictName;
                             objSession.WardName = res.session.WardName;
                             objSession.ProvinceName = res.session.ProvinceName;
-                            objSession.Leader = new UserInfo();
-                            objSession.Leader.Name = res.session.Account;
+
                             if(myapp == null){
                                 myapp = new MyApplication();
                             }
@@ -288,7 +287,7 @@ private  TextView testName, location, time, cause, leader;
                         public void onClick(DialogInterface dialog, int which) {
                             Caller caller = new Caller();
                             EndTestSessionReq req = new EndTestSessionReq();
-                            req.CovidTestingSessionID = objSession.ID;
+                            req.CovidTestingSessionID = objSession.SessionID;
                             caller.call(MainStaffActivity.this, "LeaveTestSession", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
