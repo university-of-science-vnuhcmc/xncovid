@@ -17,7 +17,7 @@ public class Session {
     public String Account;
 
     public  Date getTestingDate(){
-        SimpleDateFormat inputFormat = new SimpleDateFormat("HHmmssddMMyyyy");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmm");
         Date parsedDate = null;
         try {
             parsedDate = inputFormat.parse(TestingDate);
