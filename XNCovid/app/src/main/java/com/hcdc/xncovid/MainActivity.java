@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.google.gson.Gson;
@@ -25,25 +26,34 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        UserInfo userInfo = ((MyApplication)getApplication()).getUserInfo();
-        if(userInfo == null){
-            getUserInfo();
-            userInfo = ((MyApplication)getApplication()).getUserInfo();
+        try {
+            super.onCreate(savedInstanceState);
+            UserInfo userInfo = ((MyApplication)getApplication()).getUserInfo();
             if(userInfo == null){
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                return;
+                getUserInfo();
+                userInfo = ((MyApplication)getApplication()).getUserInfo();
+                if(userInfo == null){
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
             }
-        }
 
-        if(userInfo.Role.equals("Leader")){
-            Intent intent = new Intent(this, MainLeaderActivity.class);
-            startActivity(intent);
-        } else {
-            getStaffConfig();
-            Intent intent = new Intent(this, MainStaffActivity.class);
-            startActivity(intent);
+            if(userInfo.Role.equals("Leader")){
+                Intent intent = new Intent(this, MainLeaderActivity.class);
+                startActivity(intent);
+            } else {
+                getStaffConfig();
+                Intent intent = new Intent(this, MainStaffActivity.class);
+                startActivity(intent);
+            }
+        } catch (Exception ex){
+            Log.w("MainActivity", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     }
     private void getStaffConfig(){

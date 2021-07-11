@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,48 +31,57 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
     private LocateInfor ward;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_session);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_create_session);
 
-        Spinner spinnerProvince = findViewById(R.id.province);
-        Spinner spinnerDistrict = findViewById(R.id.district);
-        Spinner spinnerWard = findViewById(R.id.ward);
-        getLocateInfor("", spinnerProvince);
-        spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                province = (LocateInfor)parent.getItemAtPosition(position);
-                getLocateInfor(province.Code, spinnerDistrict);
-            }
+            Spinner spinnerProvince = findViewById(R.id.province);
+            Spinner spinnerDistrict = findViewById(R.id.district);
+            Spinner spinnerWard = findViewById(R.id.ward);
+            getLocateInfor("", spinnerProvince);
+            spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    province = (LocateInfor)parent.getItemAtPosition(position);
+                    getLocateInfor(province.Code, spinnerDistrict);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                district = (LocateInfor)parent.getItemAtPosition(position);
-                getLocateInfor(district.Code, spinnerWard);
-            }
+                }
+            });
+            spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    district = (LocateInfor)parent.getItemAtPosition(position);
+                    getLocateInfor(district.Code, spinnerWard);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        spinnerWard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ward = (LocateInfor)parent.getItemAtPosition(position);
-            }
+                }
+            });
+            spinnerWard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ward = (LocateInfor)parent.getItemAtPosition(position);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception ex){
+            Log.w("CreateSessionActivity", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     private void getLocateInfor(String code, Spinner spinner){
@@ -99,79 +109,97 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
     }
 
     public void createSession(View v) {
-        EditText sessionName = findViewById(R.id.sessionName);
-        EditText address = findViewById(R.id.address);
-        EditText cause = findViewById(R.id.cause);
-        TextView time = findViewById(R.id.chooseTime);
-        TextView date = findViewById(R.id.chooseDate);
+        try {
+            EditText sessionName = findViewById(R.id.sessionName);
+            EditText address = findViewById(R.id.address);
+            EditText cause = findViewById(R.id.cause);
+            TextView time = findViewById(R.id.chooseTime);
+            TextView date = findViewById(R.id.chooseDate);
 
-        boolean valid = true;
-        if(sessionName.getText().toString().trim().length() == 0){
-            sessionName.setError("Thiếu tên phiên.");
-            valid = false;
-        }
-        if(address.getText().toString().trim().length() == 0){
-            address.setError("Thiếu địa chỉ cụ thể.");
-            valid = false;
-        }
-        if(cause.getText().toString().trim().length() == 0){
-            cause.setError("Thiếu lý do.");
-            valid = false;
-        }
-        if(time.getText().length() == 0){
-            time.setError("Thiếu thời gian.");
-            valid = false;
-        }
-        if(date.getText().length() == 0){
-            date.setError("Thiếu ngày tháng.");
-            valid = false;
-        }
-        if(province == null){
-            new AlertDialog.Builder(this)
-                    .setMessage("Vui lòng chọn Tỉnh/Thành phố.")
-                    .setNegativeButton(android.R.string.ok, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-            valid = false;
-        }
-        if(district == null){
-            new AlertDialog.Builder(this)
-                    .setMessage("Vui lòng chọn Quận/Huyện.")
-                    .setNegativeButton(android.R.string.ok, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-            valid = false;
-        }
-        if(ward == null){
-            new AlertDialog.Builder(CreateSessionActivity.this)
-                    .setMessage("Vui lòng chọn Xã/Phường.")
-                    .setNegativeButton(android.R.string.ok, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-            valid = false;
-        }
-        if(!valid){
-            return;
-        }
+            boolean valid = true;
+            if(sessionName.getText().toString().trim().length() == 0){
+                sessionName.setError("Thiếu tên phiên.");
+                valid = false;
+            }
+            if(address.getText().toString().trim().length() == 0){
+                address.setError("Thiếu địa chỉ cụ thể.");
+                valid = false;
+            }
+            if(cause.getText().toString().trim().length() == 0){
+                cause.setError("Thiếu lý do.");
+                valid = false;
+            }
+            if(time.getText().length() == 0){
+                time.setError("Thiếu thời gian.");
+                valid = false;
+            }
+            if(date.getText().length() == 0){
+                date.setError("Thiếu ngày tháng.");
+                valid = false;
+            }
+            if(province == null){
+                new AlertDialog.Builder(this)
+                        .setMessage("Vui lòng chọn Tỉnh/Thành phố.")
+                        .setNegativeButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                valid = false;
+            }
+            if(district == null){
+                new AlertDialog.Builder(this)
+                        .setMessage("Vui lòng chọn Quận/Huyện.")
+                        .setNegativeButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                valid = false;
+            }
+            if(ward == null){
+                new AlertDialog.Builder(CreateSessionActivity.this)
+                        .setMessage("Vui lòng chọn Xã/Phường.")
+                        .setNegativeButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                valid = false;
+            }
+            if(!valid){
+                return;
+            }
 
-        Intent intent = new Intent(this, ConfirmSessionActivity.class);
-        intent.putExtra("SessionName", sessionName.getText().toString());
-        intent.putExtra("Address", address.getText().toString());
-        intent.putExtra("Cause", cause.getText().toString());
-        intent.putExtra("Year", getYear());
-        intent.putExtra("Month", getMonth());
-        intent.putExtra("Day", getDay());
-        intent.putExtra("Hour", getHour());
-        intent.putExtra("Minute", getMinute());
-        intent.putExtra("Province", new Gson().toJson(province));
-        intent.putExtra("District", new Gson().toJson(district));
-        intent.putExtra("Ward", new Gson().toJson(ward));
-        startActivity(intent);
+            Intent intent = new Intent(this, ConfirmSessionActivity.class);
+            intent.putExtra("SessionName", sessionName.getText().toString());
+            intent.putExtra("Address", address.getText().toString());
+            intent.putExtra("Cause", cause.getText().toString());
+            intent.putExtra("Year", getYear());
+            intent.putExtra("Month", getMonth());
+            intent.putExtra("Day", getDay());
+            intent.putExtra("Hour", getHour());
+            intent.putExtra("Minute", getMinute());
+            intent.putExtra("Province", new Gson().toJson(province));
+            intent.putExtra("District", new Gson().toJson(district));
+            intent.putExtra("Ward", new Gson().toJson(ward));
+            startActivity(intent);
+        } catch (Exception ex){
+            Log.w("createSession", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
+        try {
+            DialogFragment newFragment = new TimePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "timePicker");
+        } catch (Exception ex){
+            Log.w("showTimePickerDialog", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
     private int year;
     @Override
@@ -194,16 +222,34 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
 
     @Override
     public void setDate(int year, int month, int day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        TextView chooseDate = findViewById(R.id.chooseDate);
-        chooseDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+        try {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            TextView chooseDate = findViewById(R.id.chooseDate);
+            chooseDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+        } catch (Exception ex){
+            Log.w("setDate", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        try {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "datePicker");
+        } catch (Exception ex){
+            Log.w("showDatePickerDialog", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     private int hour;
@@ -220,9 +266,18 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
 
     @Override
     public void setTime(int hour, int minute) {
-        this.hour = hour;
-        this.minute = minute;
-        TextView chooseTime = findViewById(R.id.chooseTime);
-        chooseTime.setText(String.format("%02d:%02d", hour, minute));
+        try {
+            this.hour = hour;
+            this.minute = minute;
+            TextView chooseTime = findViewById(R.id.chooseTime);
+            chooseTime.setText(String.format("%02d:%02d", hour, minute));
+        } catch (Exception ex){
+            Log.w("setTime", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 }

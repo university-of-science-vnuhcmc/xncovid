@@ -42,43 +42,52 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken("202164736204-6ftlinikq9rp3men5sap6tp5eerpe57h.apps.googleusercontent.com")
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.sign_in_button:
-                        signIn();
-                        break;
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken("202164736204-6ftlinikq9rp3men5sap6tp5eerpe57h.apps.googleusercontent.com")
+                    .build();
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            SignInButton signInButton = findViewById(R.id.sign_in_button);
+            signInButton.setSize(SignInButton.SIZE_WIDE);
+            findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.sign_in_button:
+                            signIn();
+                            break;
+                    }
+                }
+            });
+
+            Intent intent = this.getIntent();
+            Bundle bundle = getIntent().getExtras();
+            if(bundle != null && !bundle.isEmpty()){
+                Boolean isLogout = bundle.getBoolean("isLogout");
+                if(isLogout){
+                    signOut();
+                    return;
                 }
             }
-        });
 
-        Intent intent = this.getIntent();
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null && !bundle.isEmpty()){
-            Boolean isLogout = bundle.getBoolean("isLogout");
-            if(isLogout){
-                signOut();
-                return;
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+            if(account != null){
+                if(account.isExpired()){
+                    signOut();
+                } else{
+                    login(account);
+                }
             }
-        }
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null){
-            if(account.isExpired()){
-                signOut();
-            } else{
-                login(account);
-            }
+        } catch (Exception ex){
+            Log.w("LoginActivity", ex.toString());
+            new android.app.AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     }
     private void signIn() {
