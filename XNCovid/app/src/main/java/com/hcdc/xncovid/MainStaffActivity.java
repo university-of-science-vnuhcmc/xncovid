@@ -395,4 +395,17 @@ private  TextView testName, location, time, cause, leader;
         }
         }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //Khoi tao lai Activity main
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+
+        // Tao su kien ket thuc app
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startActivity(startMain);
+        finish();
+    }
 }
