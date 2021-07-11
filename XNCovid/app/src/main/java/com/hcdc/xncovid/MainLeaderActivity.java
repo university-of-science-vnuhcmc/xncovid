@@ -1,5 +1,6 @@
 package com.hcdc.xncovid;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.hcdc.xncovid.util.ICallback;
 import com.hcdc.xncovid.util.Util;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class MainLeaderActivity extends AppCompatActivity {
     @Override
@@ -50,11 +52,6 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-
     }
 
     private boolean errorFlag = false;
@@ -136,6 +133,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                                         Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                         intent.putExtra("isLogout", true);
                                         startActivity(intent);
+                                        finish();
                                     } catch (Exception ex){
                                         Log.w("signOut", ex.toString());
                                         new AlertDialog.Builder(MainLeaderActivity.this)
@@ -238,6 +236,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                                         session = null;
                                         Intent intent = new Intent(MainLeaderActivity.this, MainLeaderActivity.class);
                                         startActivity(intent);
+                                        finish();
                                     } catch (Exception ex){
                                         Log.w("endSession", ex.toString());
                                         new AlertDialog.Builder(MainLeaderActivity.this)
@@ -252,6 +251,47 @@ public class MainLeaderActivity extends AppCompatActivity {
                     }, null, MainLeaderActivity.this);
         } catch (Exception ex){
             Log.w("endSession", ex.toString());
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        try {
+            ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+            List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+            String subTitle = "Phiên xét nghiệm đang tham gia: ";
+            if (session != null) {
+                subTitle += session.SessionName;
+            }
+            if (taskList.get(0).numActivities == 1 &&
+                    taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Bạn muốn thoát ứng dụng?")
+                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Khoi tao lai Activity main
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+
+                                // Tao su kien ket thuc app
+                                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                                startMain.addCategory(Intent.CATEGORY_HOME);
+                                startActivity(startMain);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        } catch (Exception e) {
+            Log.e("onBackPressed", e.toString(), e);
             new AlertDialog.Builder(this)
                     .setMessage("Lỗi xử lý.")
                     .setNegativeButton("OK", null)

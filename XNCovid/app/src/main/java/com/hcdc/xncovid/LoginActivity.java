@@ -176,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                     myapp.setUserInfo(userInfo);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 } else if(res.ReturnCode == 2) {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setMessage("Email của Bạn chưa được phân quyền sử dụng.")

@@ -385,7 +385,7 @@ private  TextView testName, location, time, cause, leader;
             }
             if(taskList.get(0).numActivities == 1 &&
                     taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
-                new Util().showMessage("Bạn muốn thoát ứng dụng.",
+                new Util().showMessage("Bạn muốn thoát ứng dụng?",
                         subTitle,
                         "",
                         "Thoát",
