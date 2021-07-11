@@ -53,7 +53,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
 
             if(sessionInfo != null){
-                xn_session = sessionInfo.ID + "";
+                xn_session = sessionInfo.SessionID + "";
             }
 
             xn_session = getIntent().getExtras().getString("xn_session");
