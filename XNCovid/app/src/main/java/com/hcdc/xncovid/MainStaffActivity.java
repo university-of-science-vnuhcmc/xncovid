@@ -121,7 +121,7 @@ private  TextView testName, location, time, cause, leader;
         {
             //TextView
             testName.setText(objSession.SessionName);
-            location.setText((objSession.getFullAddress()));
+            location.setText((objSession.Address));
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
             time.setText(timeFormat.format(objSession.TestingDate));
             cause.setText(objSession.Purpose);
