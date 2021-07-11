@@ -30,88 +30,105 @@ import java.util.Optional;
 
 public class Caller {
     public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback, String url, int method){
-        HttpsTrustManager.allowAllSSL();
-        RequestQueue queue = Volley.newRequestQueue(context);
-        if(url == null || url.isEmpty()){
-            url = "https://xncovid.uit.edu.vn:7070/api/";
-            UserInfo userInfo = ((MyApplication)((Activity)(context)).getApplication()).getUserInfo();
-            if(userInfo != null){
-                req.Email = userInfo.Email;
-                req.Token = userInfo.Token;
-            }
-        }
-        url = url + apiName;
-
-        JSONObject jsonReq = null;
         try{
-            if(req != null){
-                jsonReq = new JSONObject(new Gson().toJson(req));
+            HttpsTrustManager.allowAllSSL();
+            RequestQueue queue = Volley.newRequestQueue(context);
+            if(url == null || url.isEmpty()){
+                url = "https://xncovid.uit.edu.vn:7070/api/";
+                UserInfo userInfo = ((MyApplication)((Activity)(context)).getApplication()).getUserInfo();
+                if(userInfo != null){
+                    req.Email = userInfo.Email;
+                    req.Token = userInfo.Token;
+                }
             }
-        } catch (JSONException e)
-        {
-            Log.w("Call " + apiName, "Parse request object fail.");
-            new AlertDialog.Builder(context)
-                    .setMessage("Lỗi xử lý.")
-                    .setNegativeButton("OK", null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-            return;
-        }
-        switch (method){
-            case Request.Method.POST:
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonReq,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                APIResponse res = new Gson().fromJson(response.toString(), type);
-                                if(res.returnCode == 99){
-                                    /*new AlertDialog.Builder(context)
+            url = url + apiName;
+
+            JSONObject jsonReq = null;
+            try{
+                if(req != null){
+                    jsonReq = new JSONObject(new Gson().toJson(req));
+                }
+            } catch (JSONException e)
+            {
+                Log.w("Call " + apiName, "Parse request object fail.");
+                new AlertDialog.Builder(context)
+                        .setMessage("Lỗi xử lý.")
+                        .setNegativeButton("OK", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return;
+            }
+            switch (method){
+                case Request.Method.POST:
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonReq,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try{
+                                        APIResponse res = new Gson().fromJson(response.toString(), type);
+                                        if(res.returnCode == 99){
+                                        /*new AlertDialog.Builder(context)
                                             .setMessage("Vui lòng đăng nhập lại.")
                                             .setNegativeButton("OK", null)
                                             .setIcon(android.R.drawable.ic_dialog_alert)
                                             .show();*/
-                                    Intent intent = new Intent(context, LoginActivity.class);
-                                    intent.putExtra("isLogout", true);
-                                    context.startActivity(intent);
-                                    return;
+                                            Intent intent = new Intent(context, LoginActivity.class);
+                                            intent.putExtra("isLogout", true);
+                                            context.startActivity(intent);
+                                            return;
+                                        }
+                                        callback.callback(res);
+                                    } catch (Exception ex){
+                                        Log.w("Call " + apiName, ex.toString());
+                                        new AlertDialog.Builder(context)
+                                                .setMessage("Lỗi kết nối. Vui lòng thử lại.")
+                                                .setNegativeButton("OK", null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                    }
                                 }
-                                callback.callback(res);
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
-                        new AlertDialog.Builder(context)
-                                .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
-                                .setNegativeButton("OK", null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                });
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
+                            new AlertDialog.Builder(context)
+                                    .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
+                                    .setNegativeButton("OK", null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                    });
 
-                queue.add(jsonRequest);
-                break;
-            case Request.Method.GET:
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                        new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        callback.callback(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
-                        new AlertDialog.Builder(context)
-                                .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
-                                .setNegativeButton("OK", null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                });
-                queue.add(jsonObjectRequest);
-                break;
+                    queue.add(jsonRequest);
+                    break;
+                case Request.Method.GET:
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    callback.callback(response);
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.w("Call " + apiName, String.valueOf(error.networkResponse.statusCode));
+                            new AlertDialog.Builder(context)
+                                    .setMessage("Lỗi kết nối. Vui lòng thử lại. ErrorCode: " + String.valueOf(error.networkResponse.statusCode))
+                                    .setNegativeButton("OK", null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                    });
+                    queue.add(jsonObjectRequest);
+                    break;
+            }
+        } catch (Exception ex){
+            Log.w("Call " + apiName, ex.toString());
+            new AlertDialog.Builder(context)
+                    .setMessage("Lỗi kết nối. Vui lòng thử lại.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-
     }
 }

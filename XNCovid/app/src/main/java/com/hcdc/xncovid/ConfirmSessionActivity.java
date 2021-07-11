@@ -57,16 +57,25 @@ public class ConfirmSessionActivity extends AppCompatActivity {
             LinearLayout next = findViewById(R.id.next);
             next.setOnClickListener(new View.OnClickListener() {
                 public void onClick (View v) {
-                    CreateTestSessionReq req = new CreateTestSessionReq();
-                    req.SessionName = sessionName;
-                    req.Note = cause;
-                    req.TestingDate = String.format("%04d%02d%02d%02d%02d", year, month, day, hour, minute);
-                    req.FullLocation = address + ", " + ward.Name + ", " + district.Name + ", " + province.Name;
-                    req.ApartmentNo = address;
-                    req.WardID = ward.ID;
-                    req.DistrictID = district.ID;
-                    req.ProvinceID = province.ID;
-                    createSession(req);
+                    try {
+                        CreateTestSessionReq req = new CreateTestSessionReq();
+                        req.SessionName = sessionName;
+                        req.Note = cause;
+                        req.TestingDate = String.format("%04d%02d%02d%02d%02d", year, month, day, hour, minute);
+                        req.FullLocation = address + ", " + ward.Name + ", " + district.Name + ", " + province.Name;
+                        req.ApartmentNo = address;
+                        req.WardID = ward.ID;
+                        req.DistrictID = district.ID;
+                        req.ProvinceID = province.ID;
+                        createSession(req);
+                    } catch (Exception ex){
+                        Log.w("next.setOnClickListener", ex.toString());
+                        new android.app.AlertDialog.Builder(ConfirmSessionActivity.this)
+                                .setMessage("Lỗi xử lý.")
+                                .setNegativeButton("OK", null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
             });
         } catch (Exception ex){
@@ -83,20 +92,29 @@ public class ConfirmSessionActivity extends AppCompatActivity {
         caller.call(this, "createtestsession", req, CreateTestSessionRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
-                CreateTestSessionRes res = (CreateTestSessionRes) response;
-                if(res.returnCode != 1){
-                    new AlertDialog.Builder(ConfirmSessionActivity.this)
-                            .setMessage("Lỗi: " + res.returnCode)
-                            .setNegativeButton(android.R.string.ok, null)
+                try {
+                    CreateTestSessionRes res = (CreateTestSessionRes) response;
+                    if(res.returnCode != 1){
+                        new AlertDialog.Builder(ConfirmSessionActivity.this)
+                                .setMessage("Lỗi: " + res.returnCode)
+                                .setNegativeButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return;
+                    }
+                    Intent intent = new Intent(ConfirmSessionActivity.this, QRSessionActivity.class);
+                    intent.putExtra("SessionName", req.SessionName);
+                    intent.putExtra("SessionID", res.SessionID);
+                    intent.putExtra("IsNew", true);
+                    startActivity(intent);
+                } catch (Exception ex){
+                    Log.w("createSession", ex.toString());
+                    new android.app.AlertDialog.Builder(ConfirmSessionActivity.this)
+                            .setMessage("Lỗi xử lý.")
+                            .setNegativeButton("OK", null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
-                    return;
                 }
-                Intent intent = new Intent(ConfirmSessionActivity.this, QRSessionActivity.class);
-                intent.putExtra("SessionName", req.SessionName);
-                intent.putExtra("SessionID", res.SessionID);
-                intent.putExtra("IsNew", true);
-                startActivity(intent);
             }
         }, null, Request.Method.POST);
     }
