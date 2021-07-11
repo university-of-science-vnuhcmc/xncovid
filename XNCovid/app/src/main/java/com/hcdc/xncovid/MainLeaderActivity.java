@@ -47,7 +47,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                 ((TextView)findViewById(R.id.sessionName)).setText(sessionInfo.SessionName);
                 ((TextView)findViewById(R.id.location)).setText(sessionInfo.Address);
                 SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-                ((TextView)findViewById(R.id.time)).setText(timeFormat.format(sessionInfo.TestingDate));
+                ((TextView)findViewById(R.id.time)).setText(timeFormat.format(sessionInfo.getTestingDate()));
                 ((TextView)findViewById(R.id.cause)).setText(sessionInfo.Purpose);
                 ((TextView)findViewById(R.id.numberStaff)).setText(sessionInfo.LstUser == null ? 0 : sessionInfo.LstUser.length);
                 StaffAdapter adapter = new StaffAdapter(this, sessionInfo.LstUser);
