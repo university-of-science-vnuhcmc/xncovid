@@ -398,14 +398,35 @@ private  TextView testName, location, time, cause, leader;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //Khoi tao lai Activity main
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+        try{
+        new Util().showMessage("Bạn muốn thoát ứng dụng.",
+                "",
+                "",
+                "Thoát",
+                "Hủy",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Khoi tao lai Activity main
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
 
-        // Tao su kien ket thuc app
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
-        startMain.addCategory(Intent.CATEGORY_HOME);
-        startActivity(startMain);
-        finish();
+                        // Tao su kien ket thuc app
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startActivity(startMain);
+                        finish();
+                    }
+                }, null, MainStaffActivity.this);
+
+    }catch (Exception e){
+        Log.e("endSession", e.toString(), e);
+        new AlertDialog.Builder(this)
+                .setMessage("Lỗi xử lý.")
+                .setNegativeButton("OK", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
     }
 }
