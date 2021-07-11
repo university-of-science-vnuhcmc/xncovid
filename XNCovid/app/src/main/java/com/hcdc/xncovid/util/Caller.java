@@ -15,18 +15,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.hcdc.xncovid.LoginActivity;
-import com.hcdc.xncovid.MainActivity;
-import com.hcdc.xncovid.MainLeaderActivity;
 import com.hcdc.xncovid.MyApplication;
 import com.hcdc.xncovid.model.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.Optional;
 
 public class Caller {
     public void call(Context context, String apiName, APIRequest req, Type type, ICallback callback, String url, int method){
@@ -66,7 +61,7 @@ public class Caller {
                                 public void onResponse(JSONObject response) {
                                     try{
                                         APIResponse res = new Gson().fromJson(response.toString(), type);
-                                        if(res.returnCode == 99){
+                                        if(res.ReturnCode == 99){
                                         /*new AlertDialog.Builder(context)
                                             .setMessage("Vui lòng đăng nhập lại.")
                                             .setNegativeButton("OK", null)

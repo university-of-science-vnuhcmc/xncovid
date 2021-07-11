@@ -26,6 +26,7 @@
                 <TextView android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:text="Nguyễn Văn A"
                     android:layout_weight="1"
                     android:textSize="30dp"
@@ -210,6 +211,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
+                                    android:singleLine="true"
                                     android:id="@+id/testName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

@@ -6,8 +6,6 @@ import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +19,6 @@ import com.google.gson.Gson;
 import com.hcdc.xncovid.model.GetLocateReq;
 import com.hcdc.xncovid.model.GetLocateRes;
 import com.hcdc.xncovid.model.LocateInfor;
-import com.hcdc.xncovid.util.APIResponse;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 
@@ -92,16 +89,16 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
             @Override
             public void callback(Object response) {
                 GetLocateRes res = (GetLocateRes) response;
-                if(res.returnCode != 1){
+                if(res.ReturnCode != 1){
                     new AlertDialog.Builder(CreateSessionActivity.this)
-                            .setMessage("Lỗi: " + res.returnCode)
+                            .setMessage("Lỗi: " + res.ReturnCode)
                             .setNegativeButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                     return;
                 }
                 ArrayAdapter<LocateInfor> adapter = new ArrayAdapter(CreateSessionActivity.this,
-                        R.layout.spinner_item, res.locateInfors);
+                        R.layout.spinner_item, res.LocateInfors);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
             }
