@@ -64,20 +64,20 @@ public class SessionInfoActivity extends AppCompatActivity {
                         public void callback(Object response) {
                             try{
                                 JoinTestSessionRes res = (JoinTestSessionRes) response;
-                                if(res.returnCode == 1){
+                                if(res.ReturnCode == 1){
                                     StartMainStaffAcitivity();
-                                }   else if(res.returnCode == -32) //session da ket thuc
+                                }   else if(res.ReturnCode == -32) //session da ket thuc
                                 {
-                                    // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    // Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                                     new AlertDialog.Builder(SessionInfoActivity.this)
                                             .setMessage("Phiên xét nghiệm đã kết thúc.")
                                             .setNegativeButton(android.R.string.ok, null)
                                             .setIcon(android.R.drawable.ic_dialog_alert)
                                             .show();
                                 }
-                                else if(res.returnCode == -31) //session da ket thuc
+                                else if(res.ReturnCode == -31) //session da ket thuc
                                 {
-                                    // Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    // Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                                     new AlertDialog.Builder(SessionInfoActivity.this)
                                             .setMessage("Không tìm thấy phiên xét nghiệm.")
                                             .setNegativeButton(android.R.string.ok, null)
@@ -85,7 +85,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                             .show();
                                 }
                                 else{
-                                    Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                                    Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                                     new AlertDialog.Builder(SessionInfoActivity.this)
                                             .setMessage("Tham gia phiên xét nghiệm không thành công. Vui lòng thử lại sau.")
                                             .setNegativeButton(android.R.string.ok, null)
@@ -143,9 +143,9 @@ public class SessionInfoActivity extends AppCompatActivity {
               public void callback(Object response) {
                   try{
                       GetSessionRes res = (GetSessionRes) response;
-                      if(res.returnCode == 1){
+                      if(res.ReturnCode == 1){
                           try{
-                              if(res.data == null){
+                              if(res.Data == null){
                                   new AlertDialog.Builder(SessionInfoActivity.this)
                                           .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                           .setNegativeButton(android.R.string.ok,
@@ -160,15 +160,15 @@ public class SessionInfoActivity extends AppCompatActivity {
                               }
                               SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
                               SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                              tenphien.setText(res.data.SessionName);
-                              province.setText(res.data.ProvinceName);
-                              district.setText(res.data.DistrictName);
-                              ward.setText(res.data.WardName);
-                              address.setText(res.data.Address);
-                              chooseTime.setText(timeFormat.format(res.data.TestingDate));
-                              chooseDate.setText(dateFormat.format(res.data.TestingDate));
-                              cause.setText(res.data.Purpose);
-                              leader.setText(res.data.Account);
+                              tenphien.setText(res.Data.SessionName);
+                              province.setText(res.Data.ProvinceName);
+                              district.setText(res.Data.DistrictName);
+                              ward.setText(res.Data.WardName);
+                              address.setText(res.Data.Address);
+                              chooseTime.setText(timeFormat.format(res.Data.TestingDate));
+                              chooseDate.setText(dateFormat.format(res.Data.TestingDate));
+                              cause.setText(res.Data.Purpose);
+                              leader.setText(res.Data.Account);
                           }catch (Exception e){
                               Log.e("GetSession", "", e);
                               new AlertDialog.Builder(SessionInfoActivity.this)
@@ -185,7 +185,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                           }
                       }
                       else{
-                          Log.e("GetSession", res.returnCode + " - " + res.returnMess);
+                          Log.e("GetSession", res.ReturnCode + " - " + res.ReturnMess);
                           new AlertDialog.Builder(SessionInfoActivity.this)
                                   .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                   .setNegativeButton(android.R.string.ok,

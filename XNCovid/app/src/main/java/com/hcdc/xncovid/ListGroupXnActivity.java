@@ -210,11 +210,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 public void callback(Object response) {
                     try{
                         GroupTestRes res = (GroupTestRes) response;
-                        if (res.returnCode == 1) {
+                        if (res.ReturnCode == 1) {
                             StartMainStaffAcitivity();
-                        } else if (res.returnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
+                        } else if (res.ReturnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
                         {
-                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
                                     .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
                                     .setNegativeButton(android.R.string.ok, null)
@@ -222,9 +222,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                         }
-                        else if (res.returnCode == -16) //trung QR
+                        else if (res.ReturnCode == -16) //trung QR
                         {
-                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
                                     .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
                                     .setNegativeButton(android.R.string.ok, null)
@@ -232,9 +232,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                         }
-                        else if (res.returnCode == -31 || res.returnCode == -32)
+                        else if (res.ReturnCode == -31 || res.ReturnCode == -32)
                         {
-                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
                                     .setMessage("Phiên xét nghiêm đã kết thúc hoặc không tồn tại.")
                                     .setNegativeButton(android.R.string.ok, null)
@@ -243,7 +243,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             isOK[0] = false;
                         }
                         else{
-                            Log.e("GroupTest", res.returnCode + " - " + res.returnMess);
+                            Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
                                     .setMessage("Tạo nhóm xét nghiệm gộp không thành công. Vui lòng thử lại sau.")
                                     .setNegativeButton(android.R.string.ok, null)
