@@ -15,7 +15,7 @@ namespace CovidService.Models
     {
         public string Token;
         public string Role;
-        public string AccountID;
+        public long AccountID;
         public string CustomerName;
     }
     public class GoogleApiTokenInfo
