@@ -29,6 +29,7 @@ import com.hcdc.xncovid.model.GetStaffConfigReq;
 import com.hcdc.xncovid.model.GetStaffConfigRes;
 import com.hcdc.xncovid.model.LogoutReq;
 import com.hcdc.xncovid.model.LogoutRes;
+import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.model.SessionInfo;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
@@ -221,39 +222,43 @@ private  TextView testName, location, time, cause, leader;
             caller.call(this, "CheckAccount", req, CheckAccountRes.class, new ICallback() {
                 @Override
                 public void callback(Object response) {
-                    CheckAccountRes res = (CheckAccountRes) response;
-                    if(res.returnCode == 0) // khong co dang join session nao het
-                    {
-                        SetupActivit(res.returnCode);
-                    }
-                    if(res.returnCode != 1){
+                    try{
+                        CheckAccountRes res = (CheckAccountRes) response;
+                        if(res.returnCode == 0) // khong co dang join session nao het
+                        {
+                            SetupActivit(res.returnCode);
+                        }
+                        if(res.returnCode != 1){
+                            new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
+                                    .setMessage("Lỗi: " + res.returnCode + "Lỗi hệ thống, vui lòng thử lại sau.")
+                                    .setNegativeButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            errorFlag = true;
+                        }else {
+                            //returncode = 1 ==> co dang join vao session
+                            if(res.session != null){
+                                objSession = new SessionInfo();
+                                objSession = (SessionInfo) res.session;
+                                objSession.LstUser = res.LstUser;
+                                if(myapp == null){
+                                    myapp = new MyApplication();
+                                }
+                                myapp.setSessionInfo(objSession);
+                                SetupActivit(res.returnCode);
+                            }else {
+                                Log.w("checkAccount", "SessionInfo return null");
+                            }
+
+                        }
+                    } catch (Exception e){
+                        Log.e("checkAccount", e.toString(), e);
                         new androidx.appcompat.app.AlertDialog.Builder(MainStaffActivity.this)
-                                .setMessage("Lỗi: " + res.returnCode + "Lỗi hệ thống, vui lòng thử lại sau.")
+                                .setMessage("Lỗi hệ thống, vui lòng thử lại sau.")
                                 .setNegativeButton(android.R.string.ok, null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                         errorFlag = true;
-                    }else {
-                        //returncode = 1 ==> co dang join vao session
-                        if(res.session != null){
-                            objSession = new SessionInfo();
-                            objSession.Address = res.session.Address;
-                            objSession.Purpose = res.session.Purpose;
-                            objSession.SessionName = res.session.SessionName;
-                            objSession.TestingDate = res.session.TestingDate;
-                            objSession.Account = res.session.Account;
-                            objSession.DistrictName = res.session.DistrictName;
-                            objSession.WardName = res.session.WardName;
-                            objSession.ProvinceName = res.session.ProvinceName;
-
-                            if(myapp == null){
-                                myapp = new MyApplication();
-                            }
-                            myapp.setSessionInfo(objSession);
-                            SetupActivit(res.returnCode);
-                        }else {
-                            Log.w("checkAccount", "SessionInfo return null");
-                        }
 
                     }
                 }
