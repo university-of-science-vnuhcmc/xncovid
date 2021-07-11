@@ -20,12 +20,12 @@ namespace CovidService.Controllers
             try
             {
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
-                if (!checkLogin)
-                {
-                    objRes.ReturnCode = 99;
-                    objRes.ReturnMess = "Invalid Email or Token";
-                    return objRes;
-                }
+                //if (!checkLogin)
+                //{
+                //    objRes.ReturnCode = 99;
+                //    objRes.ReturnMess = "Invalid Email or Token";
+                //    return objRes;
+                //}
                 Session sesInfo = new Session();
                 if (objReq == null)
                 {
@@ -33,17 +33,14 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                string leaderName;
-                long AccountID;
                 List<UserInfo> lstUser;
-                int intReturn = CallDB(objReq.AccountID, out sesInfo,out lstUser);
+                int intReturn = CallDB(objReq.AccountID, out sesInfo, out lstUser);
                 if (intReturn == 1)
                 {
                     objRes.ReturnCode = 1;
                     objRes.ReturnMess = "Success";
-                    objRes.Session = sesInfo;      
+                    objRes.Session = sesInfo;
                     objRes.LstUser = lstUser;
-                    
                 }
                 else
                 {
@@ -61,9 +58,9 @@ namespace CovidService.Controllers
                 return objRes;
             }
         }
-        private int CallDB(long TestID, out Session info,out List<UserInfo> lstUser)
+        private int CallDB(long TestID, out Session info, out List<UserInfo> lstUser)
         {
-            info = new Session();                   
+            info = new Session();
             int intReturnValue = 0;
             lstUser = new List<UserInfo>();
             try
@@ -79,24 +76,24 @@ namespace CovidService.Controllers
                     DataTable objDT = ds.Tables[0];
                     DataTable objDT2 = ds.Tables[1];
                     foreach (DataRow objRow in objDT.Rows)
-                    {                                       
+                    {
                         info.SessionName = objRow["CovidTestingSessionName"].ToString();
                         info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString());
                         info.Address = objRow["Address"].ToString();
-                        info.Purpose = objRow["ApartmentNo"].ToString();
+                        info.Purpose = objRow["Note"].ToString();
                         info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
-                       
+                        info.Account = objRow["ApartmentNo"].ToString();
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {
-                        UserInfo user=new UserInfo();
+                        UserInfo user = new UserInfo();
                         user.Email = objRow["AccountName"].ToString();
                         user.Name = objRow["FullName"].ToString();
-                        if (int.Parse(objRow["IsCreateAccount"].ToString()) == 1)
-                        {
-                            info.Account = objRow["FullName"].ToString(); ;
-                        }
                         lstUser.Add(user);
+                    }
+                    if (objDT.Rows.Count == 0)
+                    {
+                        intReturnValue = 0;
                     }
                 }
                 return intReturnValue;
