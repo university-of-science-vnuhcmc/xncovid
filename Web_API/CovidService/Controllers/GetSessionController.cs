@@ -63,7 +63,7 @@ namespace CovidService.Controllers
                         objSession.DistrictName = item["DistrictName"] == null || item["DistrictName"] == DBNull.Value ? "" : item["DistrictName"].ToString();
                         objSession.WardName = item["WardName"] == null || item["WardName"] == DBNull.Value ? "" : item["WardName"].ToString();
                         objSession.TestingDate = DateTime.Parse(item["FromTestingDate"].ToString());
-                        objSession.Account = item["CreateAccountName"] == null || item["CreateAccountName"] == DBNull.Value ? "" : item["CreateAccountName"].ToString();
+                        objSession.Account = item["FullName"] == null || item["FullName"] == DBNull.Value ? "" : item["FullName"].ToString();
                         objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
                     }
                 }
