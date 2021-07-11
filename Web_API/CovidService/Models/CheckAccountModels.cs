@@ -12,6 +12,16 @@ namespace CovidService.Models
 
     public class CheckAccountResponse : Response
     {
+        public Session session;
+        public long AccountID;
+        public string leaderName;
+        public List<UserInfo> LstUser;
+    }
 
+    public class UserInfo
+    {
+        public string Email;
+        public string FullName;
+        public string AcountID;
     }
 }

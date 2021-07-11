@@ -184,6 +184,7 @@ namespace CovidService.Controllers
                     {
                         info.AccountID = long.Parse(objRow["AccountID"].ToString());
                         info.AccountName = objRow["AccountName"].ToString();
+                        info.FullName = objRow["FullName "].ToString();
                         info.AccountType = int.Parse(objRow["AccountType"].ToString());
                         info.RoleID = long.Parse(objRow["RoleID"].ToString());
                     }
