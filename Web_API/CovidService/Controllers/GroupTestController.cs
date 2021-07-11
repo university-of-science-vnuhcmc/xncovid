@@ -55,13 +55,32 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if(intReturnValue != 1)
                 {
-                    objRes.returnCode = 1002;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
-                    return objRes;
+
+                    switch (intReturnValue)
+                    {
+                        case -16:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "QR already exists";
+                            return objRes;
+                        case -17:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "CovidSpecimenCode already exists in Session";
+                            return objRes;
+                        case -31:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "Session is not found";
+                            return objRes;
+                        case -32:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "Session was finished";
+                            return objRes;
+                        case 1002:
+                            objRes.returnCode = intReturnValue;
+                            objRes.returnMess = "DB return failure";
+                            return objRes;
+                    }
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
-                //Random rd = new Random();
-                //int i = rd.Next(7, 30);
                 objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";
