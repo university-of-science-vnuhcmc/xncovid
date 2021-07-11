@@ -1,11 +1,9 @@
 package com.hcdc.xncovid;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,15 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hcdc.xncovid.adapter.GroupItemAdapter;
 import com.hcdc.xncovid.model.CitizenInfor;
 import com.hcdc.xncovid.model.GroupTestReq;
 import com.hcdc.xncovid.model.GroupTestRes;
 import com.hcdc.xncovid.model.GroupedUserInfo;
-import com.hcdc.xncovid.model.LoginRes;
-import com.hcdc.xncovid.model.SessionInfo;
+import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.model.UserInfo;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.DetectKBYTPattern;
@@ -39,12 +33,7 @@ import com.hcdc.xncovid.util.Util;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -62,7 +51,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
    LinearLayout btnStartGroup;
     Hashtable<String, GroupedUserInfo> hashObj;
     Boolean isStop  = false;
-    SessionInfo sessionInfo = null;
+    Session session = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +61,10 @@ public class ListGroupXnActivity extends AppCompatActivity {
             xn_code=(TextView) findViewById(R.id.txt_xncode);
             xn_code.setText(xn_session);
 
-             sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+             session = ((MyApplication) getApplication()).getSession();
 
-            if(sessionInfo != null){
-                session_code = sessionInfo.SessionID + "";
+            if(session != null){
+                session_code = session.SessionID + "";
             }else {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
@@ -162,8 +151,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try{
-            if(sessionInfo != null){
-                session_code = sessionInfo.SessionID + "";
+            if(session != null){
+                session_code = session.SessionID + "";
             }else {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")

@@ -2,7 +2,7 @@ package com.hcdc.xncovid;
 
 import android.app.Application;
 
-import com.hcdc.xncovid.model.SessionInfo;
+import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.model.UserInfo;
 
 public class MyApplication extends Application {
@@ -56,13 +56,13 @@ public class MyApplication extends Application {
         Form = form;
     }
 
-    private SessionInfo sessionInfo;
+    private Session session;
 
-    public SessionInfo getSessionInfo() {
-        return sessionInfo;
+    public Session getSession() {
+        return session;
     }
 
-    public void setSessionInfo(SessionInfo sessionInfo) {
-        this.sessionInfo = sessionInfo;
+    public void setSession(Session session) {
+        this.session = session;
     }
 }

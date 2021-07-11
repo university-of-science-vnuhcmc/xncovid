@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,8 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.hcdc.xncovid.model.SessionInfo;
-import com.hcdc.xncovid.model.UserInfo;
+import com.hcdc.xncovid.model.Session;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,10 +48,10 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             if( getIntent().getExtras() != null){
                 scanQRType = getIntent().getExtras().getInt("scan_qr_type");
             }
-            SessionInfo sessionInfo = ((MyApplication) getApplication()).getSessionInfo();
+            Session session = ((MyApplication) getApplication()).getSession();
 
-            if(sessionInfo != null){
-                xn_session = sessionInfo.SessionID + "";
+            if(session != null){
+                xn_session = session.SessionID + "";
             }
 
             xn_session = getIntent().getExtras().getString("xn_session");
