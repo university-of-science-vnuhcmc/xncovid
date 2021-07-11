@@ -26,5 +26,6 @@ namespace CovidService.Models
         public DateTime TestingDate { get; set; }
         public string Purpose { get; set; }
         public string Account { get; set; }
+        public long SessionID;
     }
 }

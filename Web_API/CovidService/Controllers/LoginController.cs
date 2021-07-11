@@ -109,6 +109,7 @@ namespace CovidService.Controllers
                         loginRes.returnMess = "Login fail";
                     }
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(loginRes));
                 return loginRes;
             }
             catch (Exception ex)

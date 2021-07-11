@@ -1,5 +1,6 @@
 ﻿using CovidService.Models;
 using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,14 +36,12 @@ namespace CovidService.Controllers
                 string leaderName;
                 long AccountID;
                 List<UserInfo> lstUser;
-                int intReturn = CallDB(objReq.AccountID, out sesInfo, out leaderName,out AccountID,out lstUser);
+                int intReturn = CallDB(objReq.AccountID, out sesInfo,out lstUser);
                 if (intReturn == 1)
                 {
                     objRes.returnCode = 1;
                     objRes.returnMess = "Success";
-                    objRes.session = sesInfo;
-                    objRes.AccountID = AccountID;
-                    objRes.leaderName = leaderName;
+                    objRes.Session = sesInfo;      
                     objRes.LstUser = lstUser;
                     
                 }
@@ -51,6 +50,7 @@ namespace CovidService.Controllers
                     objRes.returnCode = 0;
                     objRes.returnMess = "Success";
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
                 return objRes;
             }
             catch (Exception ex)
@@ -61,11 +61,9 @@ namespace CovidService.Controllers
                 return objRes;
             }
         }
-        private int CallDB(long TestID, out Session info,out string leaderName,out long accountID,out List<UserInfo> lstUser)
+        private int CallDB(long TestID, out Session info,out List<UserInfo> lstUser)
         {
-            info = new Session();
-            leaderName = "";
-            accountID = 0;
+            info = new Session();                   
             int intReturnValue = 0;
             lstUser = new List<UserInfo>();
             try
@@ -86,16 +84,17 @@ namespace CovidService.Controllers
                         info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString());
                         info.Address = objRow["Address"].ToString();
                         info.Purpose = objRow["ApartmentNo"].ToString();
-                        accountID = long.Parse(objRow["CovidTestingSessionID"].ToString());
+                        info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
+                       
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {
                         UserInfo user=new UserInfo();
                         user.Email = objRow["AccountName"].ToString();
-                        user.FullName = objRow["FullName"].ToString();
+                        user.Name = objRow["FullName"].ToString();
                         if (int.Parse(objRow["IsCreateAccount"].ToString()) == 1)
                         {
-                            leaderName = objRow["FullName"].ToString(); ;
+                            info.Account = objRow["FullName"].ToString(); ;
                         }
                         lstUser.Add(user);
                     }
