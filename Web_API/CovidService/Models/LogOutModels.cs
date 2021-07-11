@@ -7,7 +7,7 @@ namespace CovidService.Models
 {
     public class LogoutRequest : Request
     {
-        public string AccountID;
+        public int AccountType;
 
     }
 

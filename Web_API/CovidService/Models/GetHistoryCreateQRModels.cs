@@ -21,8 +21,9 @@ namespace CovidService.Models
     {
         public string CreateDate;
         public string CreateUser;
-        public int AmountQR;
-        public int IdFrom;
-        public int IdTo;
+        public int QRAmount;
+        public int MinNumber;
+        public int MaxNumber;
+        public int NumOfPrint;
     }
 }
