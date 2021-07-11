@@ -7,16 +7,16 @@
                 @Html.ActionLink(Session["Email"].ToString(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
             </div>
         </div>
-        <div class="col-6 text-right mt-3 pr-5">
+        @*<div class="col-6 text-right mt-3 pr-5">
             <a href="/Account/LogOut" onclick="signOut()">Log out</a>
-        </div>
+        </div>*@
     }
     else
     {
         
-        <div class="col-12 text-left">
-            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-        </div>
+        @*<script>
+                window.location.href = '@Url.Action("Logout", "Account")';
+        </script>*@
     }
 </div>
 

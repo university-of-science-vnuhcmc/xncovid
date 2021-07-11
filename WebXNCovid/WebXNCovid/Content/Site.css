@@ -263,8 +263,8 @@ a.article, a.article:hover {
 
 .form-inner {
     padding: 40px 30px;
-    background: #fff;
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    /*background: #fff;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);*/
     margin-bottom: 20px;
     width: 100%;
 }
@@ -276,7 +276,7 @@ a.article, a.article:hover {
 }
 
 .text-primary {
-    color: #2b90d9 !important;
+    color: #fff !important;
 }
 
 .Header{
@@ -291,7 +291,7 @@ a.article, a.article:hover {
     }
 }
 body {
-    background-image: url('../Assets/people-wearing-masks.png');
+    /*background-image: url('../Assets/people-wearing-masks.png');*/
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -305,7 +305,7 @@ body {
 }
 
 #my-signin2 > div {
-    margin: auto;
+    /*margin: auto;*/
 }
 
 .login-header {
@@ -361,12 +361,7 @@ body {
     }
 
 .print-area {
-    width: 21cm;
-    min-height: 29.7cm;
-    margin: auto;
-    background-color: white;
-    border: 1px #D3D3D3 solid;
-    padding: 10px 0px;
+    width: 21cm;    min-height: 29.7cm;    margin: auto;    background-color: white;    border: 1px #D3D3D3 solid;    padding: 10px 0px;
 }
 
 .info-section {
@@ -381,8 +376,7 @@ body {
 }
 
 .qr-section {
-    margin: 10px 0px;
-    padding: 10px 5px 10px 10px;
+    margin: 10px 0px; padding: 10px 5px 10px 10px;
 }
 
 .data-section {
@@ -394,15 +388,28 @@ body {
 }
 
 .field {
-    background-color: #FFFFFF;
-    display: inline-block;
+    background-color: #FFFFFF; display: inline-block;
 }
 
 .header-section {
-    text-align: center;
-    font-weight: bold;
+    text-align: center;    font-weight: bold;
 }
 
 .paging-custom {
     margin-left: 400px;
+}
+
+.div5k {
+    position: absolute;
+    width: 884.54px;
+    height: 128px;
+    left: 328px;
+    bottom: 90px;
+}
+
+.divlout {
+    position: absolute;
+    width: 80px;
+    left: 0px;
+    bottom: 20px;
 }
