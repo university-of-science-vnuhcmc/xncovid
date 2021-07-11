@@ -82,7 +82,7 @@ namespace CovidService.Controllers
                         info.Address = objRow["Address"].ToString();
                         info.Purpose = objRow["Note"].ToString();
                         info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
-                        info.Account = objRow["ApartmentNo"].ToString();
+                        info.Account = objRow["CreateAccountName"].ToString();
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {
