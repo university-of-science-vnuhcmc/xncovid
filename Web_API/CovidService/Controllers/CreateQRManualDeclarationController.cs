@@ -38,13 +38,12 @@ namespace CovidService.Controllers
 
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                SqlHelper.AddParameter(ref parameters, "@QRAmount", System.Data.SqlDbType.Int, objReq.QRAmount);
-                SqlHelper.AddParameter(ref parameters, "@CreateUser", System.Data.SqlDbType.NVarChar, 128, objReq.Email);
-                SqlHelper.AddParameter(ref parameters, "@IdFrom", System.Data.SqlDbType.Int, ParameterDirection.Output);
-                SqlHelper.AddParameter(ref parameters, "@IdTo", System.Data.SqlDbType.Int, ParameterDirection.Output);
+                SqlHelper.AddParameter(ref parameters, "@Numbers", System.Data.SqlDbType.BigInt, objReq.QRAmount);
+                SqlHelper.AddParameter(ref parameters, "@AccountName", System.Data.SqlDbType.NVarChar, 128, objReq.Email);
+                SqlHelper.AddParameter(ref parameters, "@IdentityNumberID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidTestingSession", parameters.ToArray());
-                int intReturnValue = 1;// Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "dbo.uspAddIdentityNumber", parameters.ToArray());
+                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
 
                 if (intReturnValue != 1)
                 {
@@ -52,9 +51,17 @@ namespace CovidService.Controllers
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
-                long lngIdFrom = 10000;// Convert.ToInt32(parameters[parameters.Count - 3].Value);
-                long lngIdTo = lngIdFrom + objReq.QRAmount;// Convert.ToInt32(parameters[parameters.Count - 2].Value);
-
+                DataTable objDt = ds.Tables[0];
+                if (objDt.Rows.Count == 0)
+                {
+                    objRes.ReturnCode = -2;
+                    objRes.ReturnMess = "No data found";
+                    return objRes;
+                }
+                objRes.CreateDate = DateTime.Parse(objDt.Rows[0]["CreateDate"].ToString()).ToString("yyyy/MM/dd HH:mm:ss");
+                objRes.MinNumber = int.Parse(objDt.Rows[0]["MinNumber"].ToString());
+                objRes.MaxNumber = int.Parse(objDt.Rows[0]["MaxNumber"].ToString());
+                objRes.NumOfPrint = int.Parse(objDt.Rows[0]["NumOfPrint"].ToString());
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
                 return objRes;
