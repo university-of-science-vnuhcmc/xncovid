@@ -67,6 +67,7 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                         req.WardID = ward.ID;
                         req.DistrictID = district.ID;
                         req.ProvinceID = province.ID;
+                        req.AccountID = ((MyApplication)getApplication()).getUserInfo().AccountID;
                         createSession(req);
                     } catch (Exception ex){
                         Log.w("next.setOnClickListener", ex.toString());
@@ -114,6 +115,7 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                     intent.putExtra("SessionID", res.SessionID);
                     intent.putExtra("IsNew", true);
                     startActivity(intent);
+                    finish();
                 } catch (Exception ex){
                     Log.w("createSession", ex.toString());
                     new android.app.AlertDialog.Builder(ConfirmSessionActivity.this)

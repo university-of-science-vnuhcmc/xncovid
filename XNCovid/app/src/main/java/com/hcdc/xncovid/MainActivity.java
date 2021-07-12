@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             if(userInfo.Role.equals("Leader")){
                 Intent intent = new Intent(this, MainLeaderActivity.class);
                 startActivity(intent);
+                finish();
             } else {
                 getStaffConfig();
                 Intent intent = new Intent(this, MainStaffActivity.class);

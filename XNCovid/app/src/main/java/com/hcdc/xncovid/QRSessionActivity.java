@@ -74,6 +74,7 @@ public class QRSessionActivity extends AppCompatActivity {
         try {
             Intent intent = new Intent(this, MainLeaderActivity.class);
             startActivity(intent);
+            finish();
         } catch (Exception ex){
             Log.w("gotoHome", ex.toString());
             new AlertDialog.Builder(this)

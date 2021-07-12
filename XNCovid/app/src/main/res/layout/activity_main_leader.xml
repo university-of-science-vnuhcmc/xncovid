@@ -254,6 +254,8 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
                         <ListView
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
                             android:layout_weight="1"
                             android:id="@+id/listStaff"
                             android:layout_width="match_parent"
