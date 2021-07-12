@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using WebXNCovid;
 using WebXNCovid.Models;
 using ZXing;
@@ -318,6 +319,71 @@ namespace WebForCommunityScreening.Controllers
             return bmp;
         }
 
+
+        public ActionResult PrintQR(int min, int max)
+        {
+            var obj = new
+            {
+                valid = false,
+                data = ""
+            };
+            try
+            {
+                GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
+                model.CreateDate = DateTime.Now;
+                model.IdFrom = min;
+                model.IdTo = max;
+                List<Bitmap> bitmaps = new List<Bitmap>();
+                List<byte[]> bytearrays = new List<byte[]>();
+
+                for (int i = model.IdFrom; i <= model.IdTo; i++)
+                {
+                    var bmp = GenerateQR(i);
+                    bitmaps.Add(bmp);
+                    bytearrays.Add(BitmapToBytes(bmp));
+                }
+                model.lstQR = bytearrays;
+                string strData = RenderPartialViewToString("PrintQR", model);
+                obj = new
+                {
+                    valid = true,
+                    data = strData,
+                };
+
+                var serializer = new JavaScriptSerializer();
+
+                // For simplicity just use Int32's max value.
+                // You could always read the value from the config section mentioned above.
+                serializer.MaxJsonLength = Int32.MaxValue;
+
+                //var resultData = new { Value = "foo", Text = "var" };
+                var result = new ContentResult
+                {
+                    Content = serializer.Serialize(obj),
+                    ContentType = "application/json"
+                };
+                return result;
+                //return Json(obj);
+            }
+            catch
+            {
+                return Json(obj);
+            }
+        }
+
+        protected string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+            ViewData.Model = model;
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
         //private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
         //{
         //    const int padding = 20;

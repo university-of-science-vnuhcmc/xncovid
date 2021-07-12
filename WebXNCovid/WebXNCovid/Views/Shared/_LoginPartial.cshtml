@@ -1,23 +1,11 @@
-﻿
-<div class="row Header">
-    @if (Session["Email"] != null)
-    {
-        <div class="col-6 text-light mt-3">
-            <div class="mb-show">
-                @*@Html.ActionLink(Session["Email"].ToString(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-            </div>
-        </div>
-        @*<div class="col-6 text-right mt-3 pr-5">
-            <a href="/Account/LogOut" onclick="signOut()">Log out</a>
-        </div>*@
-    }
-    else
-    {
-        
-        @*<script>
+﻿@if (Session["Email"] != null)
+{
+
+}
+else
+{
+
+    <script>
                 window.location.href = '@Url.Action("Logout", "Account")';
-        </script>*@
-    }
-</div>
-
-
+    </script>
+}
