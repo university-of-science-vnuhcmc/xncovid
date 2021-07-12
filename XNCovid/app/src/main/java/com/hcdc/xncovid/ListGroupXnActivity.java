@@ -138,6 +138,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 }
             });
             setUIRef();
+            hideLoading();
         }catch (Exception e){
             Log.e("ListGroupXnActivity", e.toString(), e);
             new android.app.AlertDialog.Builder(this)

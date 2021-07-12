@@ -102,6 +102,15 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
     public void clickCancel(View view)
     {
+
+        if(scanQRType == 2){
+            Intent intent=new Intent();
+            intent.putExtra("kbyt_uid", "");
+            intent.putExtra("is_online", true);
+            //intent.putExtra("xn_session", xn_session);
+            setResult(2,intent);
+            finish();//finishing activity
+        }
         onBackPressed();
     }
 
