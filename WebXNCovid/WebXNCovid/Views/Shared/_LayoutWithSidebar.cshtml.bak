@@ -58,9 +58,9 @@
             <div class="row Header">
                 <h2 class="title-section">@ViewBag.Title</h2>
             </div>
-            @*@Html.Partial("_LoginPartial")*@
+            @Html.Partial("_LoginPartial")
             <div id="content" style="position: relative">
-                <div class="footer-image">
+                <div>
                     <div class="div5k">
                         <img style="max-width: 800px" src="~/Assets/5K.png" />
                     </div>

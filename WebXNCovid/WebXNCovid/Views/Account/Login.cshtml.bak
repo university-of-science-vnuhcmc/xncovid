@@ -30,6 +30,7 @@
         var tokenSigninViewModel = {};
         tokenSigninViewModel.Email = profile.getEmail();
         tokenSigninViewModel.TokenID = googleUser.getAuthResponse().id_token;
+        console.log('onSignIn');
         googleUser.disconnect()
         $.ajax({
             url: '@Url.Action("TokenSignin","Account")',

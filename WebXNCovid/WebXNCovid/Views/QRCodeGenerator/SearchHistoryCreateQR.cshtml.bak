@@ -6,6 +6,22 @@
     Layout = "~/Views/Shared/_LayoutWithoutBackground.cshtml";
     ViewBag.Title = "Tra cứu QR";
 }
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $('#confirmModal').on('show.bs.modal', function (e) {
+                var _button = $(e.relatedTarget); // Button that triggered the modal
+
+                var _row = _button.parents("tr");
+                var _idFrom = _row.find(".id-from").text();
+                var _ifTo = _row.find(".id-to").text();
+                var _numOfPages = _row.find(".num-of-pages").text();
+
+                $(this).find("#num-of-pages").val(_idFrom);
+                $(this).find("#id-from").val(_ifTo);
+                $(this).find("#num-of-pages").val(_numOfPages);
+            });
+        });
+    </script>*@
 <div style="background-color: white; width: 100%">
     <div class="container-fluid">
         <div class="row">
@@ -66,7 +82,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p class="confirm-content text-center">Bạn chắc chắn muốn in lại <span id="num-of-pages" style="color: #86CF3C;"></span> trang<br /> từ số <span id="id-from" style="color: #64A0F3;"></span> đến số <span id="id-to" style="color: #64A0F3;"></span>?</p>
+                            <p class="confirm-content center-text-align">Bạn chắc chắn muốn in lại <span id="num-of-pages" style="color: #86CF3C;"></span> trang<br /> từ số <span id="id-from" style="color: #64A0F3;"></span> đến số <span id="id-to" style="color: #64A0F3;"></span>?</p>
                         </div>
                         <div class="h-align-center pt-2 pb-4">
                             <button type="button" id="btncfp" onclick="printqr()" class="btn btn-submit">In lại</button>
@@ -90,10 +106,9 @@
                 if (obj.valid) {
                     newWin = window.open("");
                     newWin.document.write(obj.data);
-                    setTimeout(function () {
-                        newWin.print();
-                        newWin.close();
-                    }, 100);}
+                    setTimeout(newWin.print(), 3000);
+                    newWin.close();
+                }
                 else {
                 }
             },
@@ -101,7 +116,6 @@
                 return false;
             }
         });
-        $('#confirmModal').modal('hide');
     }
 
     function print(min, max) {

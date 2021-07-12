@@ -35,7 +35,7 @@ namespace WebForCommunityScreening.Controllers
         {
             try
             {
-                const double amtQRPerPage = 6;
+                const int amtQRPerPage = 6;
 
                 CreateQRRequestModel request = new CreateQRRequestModel();
                 request.Email = Session["Email"].ToString();
@@ -58,7 +58,7 @@ namespace WebForCommunityScreening.Controllers
                     return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                 }
 
-                CreateQRResponse objRes = JsonConvert.DeserializeObject<CreateQRResponse>(result);
+                LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
 
                 if (objRes.ReturnCode != 1)
                 {
@@ -73,12 +73,12 @@ namespace WebForCommunityScreening.Controllers
                 }
 
                 GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
-                model.CreateDate = DateTime.ParseExact(objRes.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
+                model.CreateDate = DateTime.Now;
                 model.CreatedUser = Session["Email"].ToString();
-                model.AmountQR = objRes.Numbers;
-                model.IdFrom = objRes.MinNumber;
-                model.IdTo = objRes.MaxNumber;
-                model.AmountPage = Convert.ToInt16(Math.Ceiling(((double)objRes.Numbers) / amtQRPerPage));
+                model.AmountQR = QRCodeAmount;
+                model.IdFrom = 10000;
+                model.IdTo = model.IdFrom + QRCodeAmount - 1;
+                model.AmountPage = QRCodeAmount / amtQRPerPage + (QRCodeAmount % amtQRPerPage == 0 ? 0 : 1);
                 //ViewData["GenerateQRInfo"] = model;
 
                 List<Bitmap> bitmaps = new List<Bitmap>();
@@ -198,7 +198,6 @@ namespace WebForCommunityScreening.Controllers
             SearchHistoryCreateQRViewModel model = new SearchHistoryCreateQRViewModel();
             try
             {
-                const double amtQRPerPage = 6;
                 string FromDate = form["FromCreateDate"];
                 DateTime FromCreateDate = DateTime.ParseExact(FromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
                 DateTime ToCreateDate = FromCreateDate.AddDays(1).AddMilliseconds(-1);
@@ -239,16 +238,7 @@ namespace WebForCommunityScreening.Controllers
                     }
                 }
 
-                model.ListHistory = objRes.HistoryLogs.Select(log =>
-                      new HistoryLog
-                      {
-                          CreateDate = log.CreateDate,
-                          CreateUser = log.CreateUser,
-                          QRAmount = log.QRAmount,
-                          MinNumber = log.MinNumber,
-                          MaxNumber = log.MaxNumber,
-                          NumOfPrint = Convert.ToInt16(Math.Ceiling(((double)log.QRAmount) / amtQRPerPage))
-                      }).ToList();
+                model.ListHistory = objRes.HistoryLogs;
             }
             catch (Exception objEx)
             {
