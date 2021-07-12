@@ -6,7 +6,7 @@
     android:background="@color/background_color">
     <!--Full Screen Progress Layout-->
     <include
-        android:id="@+id/my_loading_layout"
+        android:id="@+id/my_loading_layout_info"
         layout="@layout/my_loading_layout" />
     <ScrollView
         android:fillViewport="true"

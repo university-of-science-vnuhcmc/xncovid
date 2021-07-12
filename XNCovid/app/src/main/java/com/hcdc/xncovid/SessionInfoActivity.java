@@ -209,7 +209,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                           }catch (Exception e){
                               Log.e("GetSession", "", e);
                               new AlertDialog.Builder(SessionInfoActivity.this)
-                                      .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
+                                      .setMessage("Không lấy được thông tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                       .setNegativeButton(android.R.string.ok,
                                               new DialogInterface.OnClickListener() {
                                                   @Override
@@ -220,6 +220,19 @@ public class SessionInfoActivity extends AppCompatActivity {
                                       .setIcon(android.R.drawable.ic_dialog_alert)
                                       .show();
                           }
+                      }else if(res.ReturnCode == -196){
+                          Log.e("GetSession", res.ReturnCode + " - " + res.ReturnMess);
+                          new AlertDialog.Builder(SessionInfoActivity.this)
+                                  .setMessage("Phiên xét nghiệm đã kết thúc. Vi lòng tham gia phiên xét nghiệm khác.")
+                                  .setNegativeButton(android.R.string.ok,
+                                          new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialog, int which) {
+                                                  StartMainStaffAcitivity();
+                                              }
+                                          })
+                                  .setIcon(android.R.drawable.ic_dialog_alert)
+                                  .show();
                       }
                       else{
                           Log.e("GetSession", res.ReturnCode + " - " + res.ReturnMess);
@@ -266,7 +279,7 @@ public class SessionInfoActivity extends AppCompatActivity {
     private void setUIRef()
     {
         //Create a Instance of the Loading Layout
-        mLoading = findViewById(R.id.my_loading_layout);
+        mLoading = findViewById(R.id.my_loading_layout_info);
     }
 
     private void showLoading()

@@ -140,9 +140,11 @@ private  TextView testName, location, time, cause, leader;
 
             layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
 
-
+            layoutensession.setEnabled(true);
+            layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
             layoutnewGroup.setEnabled(true);
             layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
+            hideLoading();
             layoutnewGroup.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
@@ -152,8 +154,7 @@ private  TextView testName, location, time, cause, leader;
                 }
             });
 
-            layoutensession.setEnabled(true);
-            layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
+
             layoutensession.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     endSession();
@@ -174,15 +175,18 @@ private  TextView testName, location, time, cause, leader;
 
             layoutJoinTest.setEnabled(true);
             layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
+            hideLoading();
             layoutJoinTest.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+
                     Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
                     intent.putExtra("scan_qr_type", 0);
                     startActivity(intent);
+
                 }
             });
         }
-        hideLoading();
+
     }
 
     public void signOut(View v) {
@@ -303,7 +307,7 @@ private  TextView testName, location, time, cause, leader;
             if(objSession == null || errorFlag){
                 return;
             }
-            String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>Nguyễn Văn B</b> !";
+            String htmlcontent = "Điều này sẽ được thông báo đến trưởng nhóm <b>"+objSession.Account+"</b> !";
             new Util().showMessage("Xác nhận thoát khỏi phiên xét nghiệm",
                     objSession.SessionName,
                     htmlcontent,
@@ -434,7 +438,7 @@ private  TextView testName, location, time, cause, leader;
     private void setUIRef()
     {
         //Create a Instance of the Loading Layout
-        mLoading = findViewById(R.id.my_loading_layout);
+        mLoading = findViewById(R.id.my_loading_layout_staff);
     }
 
     private void showLoading()
