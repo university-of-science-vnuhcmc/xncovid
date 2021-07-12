@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CovidService.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -64,5 +65,7 @@ namespace CovidService.Utility
             }
             return objStrBuilder.ToString();
         }
+
+        
     }
 }

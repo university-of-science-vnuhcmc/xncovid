@@ -47,7 +47,7 @@ namespace CovidService.Controllers
         // POST api/<controller>
         public LoginReponse Post([FromBody]LoginRequest value)
         {
-            LogWriter.WriteLogMsg(value.Email);
+            LogWriter.WriteLogMsg(value.Email, "Login");
             LoginReponse loginRes = new LoginReponse();
             try
             {
@@ -58,8 +58,8 @@ namespace CovidService.Controllers
                 {
                     if (ggTokenInfo.email != value.Email)
                     {
-                        loginRes.returnCode = 0;
-                        loginRes.returnMess = "Thất bại , email ko đúng";
+                        loginRes.ReturnCode = 0;
+                        loginRes.ReturnMess = "Thất bại , email ko đúng";
 
                     }
                     else
@@ -71,17 +71,18 @@ namespace CovidService.Controllers
                         int intReturn = CallDB(value.Email, MD5Token, out accInfo);
                         if (intReturn == 1)
                         {
-                            loginRes.returnCode = 1;
-                            loginRes.returnMess = "Thành công";
+                            loginRes.ReturnCode = 1;
+                            loginRes.ReturnMess = "Thành công";
                             loginRes.Token = token;
                             loginRes.AccountID = accInfo.AccountID;
                             loginRes.CustomerName = accInfo.AccountName;
                             loginRes.Role = accInfo.RoleName;
+                            loginRes.FullName = accInfo.FullName;
                         }
                         else
                         {
-                            loginRes.returnCode = intReturn;
-                            loginRes.returnMess = "Thất bại";
+                            loginRes.ReturnCode = intReturn;
+                            loginRes.ReturnMess = "Thất bại";
                         }
 
                     }
@@ -96,25 +97,27 @@ namespace CovidService.Controllers
                     int intReturn = CallDB(value.Email, MD5Token, out accInfo);
                     if (intReturn == 1)
                     {
-                        loginRes.returnCode = 1;
-                        loginRes.returnMess = "Thành công";
+                        loginRes.ReturnCode = 1;
+                        loginRes.ReturnMess = "Thành công";
                         loginRes.Token = token;
                         loginRes.AccountID = accInfo.AccountID;
                         loginRes.CustomerName = accInfo.AccountName;
                         loginRes.Role = accInfo.RoleName;
+                        loginRes.FullName = accInfo.FullName;
                     }
                     else
                     {
-                        loginRes.returnCode = intReturn;
-                        loginRes.returnMess = "Login fail";
+                        loginRes.ReturnCode = intReturn;
+                        loginRes.ReturnMess = "Login fail";
                     }
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(loginRes), "Login");
                 return loginRes;
             }
             catch (Exception ex)
             {
-                loginRes.returnCode = -1;
-                loginRes.returnMess = ex.ToString();
+                loginRes.ReturnCode = -1;
+                loginRes.ReturnMess = ex.ToString();
                 return loginRes;
             }
         }
@@ -183,14 +186,15 @@ namespace CovidService.Controllers
                     foreach (DataRow objRow in objDT1.Rows)
                     {
                         info.AccountID = long.Parse(objRow["AccountID"].ToString());
-                        info.AccountName = objRow["AccountName"].ToString();
+                        info.AccountName = objRow["AccountName"] == null || objRow["AccountName"] == DBNull.Value ? "" : objRow["AccountName"].ToString();
+                        info.FullName = objRow["FullName"] == null || objRow["FullName"] == DBNull.Value ? "" : objRow["FullName"].ToString();
                         info.AccountType = int.Parse(objRow["AccountType"].ToString());
                         info.RoleID = long.Parse(objRow["RoleID"].ToString());
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {
-                        info.RoleName = objRow["RoleName"].ToString();
-                        info.RoleCode = objRow["RoleCode"].ToString();
+                        info.RoleName = objRow["RoleName"] == null || objRow["RoleName"] == DBNull.Value ? "" : objRow["RoleName"].ToString();
+                        info.RoleCode = objRow["RoleCode"] == null || objRow["RoleCode"] == DBNull.Value ? "" : objRow["RoleCode"].ToString();
                     }
                 }
                 return intReturnValue;

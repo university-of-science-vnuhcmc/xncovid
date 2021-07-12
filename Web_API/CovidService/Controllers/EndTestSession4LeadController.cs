@@ -22,17 +22,17 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "EndTestSession4Lead");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
@@ -45,30 +45,30 @@ namespace CovidService.Controllers
                     switch (intReturnValue)
                     {
                         case -31:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session is not found";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session is not found";
                             return objRes;
                         case -32:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session was finished";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session was finished";
                             return objRes;
                         case 1002:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "DB return failure";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "DB return failure";
                             return objRes;
                     }
 
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead");
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
             }

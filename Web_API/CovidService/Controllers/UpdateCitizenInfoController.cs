@@ -24,17 +24,17 @@ namespace CovidService.Controllers
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
                 if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
                 if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "UpdateCitizenInfo");
 
                 //string sqlString = SqlHelper.sqlString;
                 //List<SqlParameter> parameters = new List<SqlParameter>();
@@ -52,18 +52,18 @@ namespace CovidService.Controllers
 
                 if (intReturnValue != 1)
                 {
-                    objRes.returnCode = 1004;
-                    objRes.returnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    objRes.ReturnCode = 1004;
+                    objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
 
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
+                objRes.ReturnCode = -1;
                 LogWriter.WriteException(ex);   
                 return objRes;
             }

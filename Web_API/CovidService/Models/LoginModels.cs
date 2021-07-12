@@ -17,6 +17,7 @@ namespace CovidService.Models
         public string Role;
         public long AccountID;
         public string CustomerName;
+        public string FullName;
     }
     public class GoogleApiTokenInfo
     {
@@ -44,6 +45,7 @@ namespace CovidService.Models
         public int AccountType;
         public long RoleID;
         public string AccountName;
+        public string FullName;
         public string HandPhone;
         public int Status; //1: Hoạt động, 2: Đóng
         public string RoleCode;

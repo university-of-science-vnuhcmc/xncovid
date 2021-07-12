@@ -12,8 +12,8 @@ namespace CovidService.Models
     }
     public class Response
     {
-        public int returnCode;
-        public string returnMess;
+        public int ReturnCode;
+        public string ReturnMess;
     }
     public class AssembleModels
     {

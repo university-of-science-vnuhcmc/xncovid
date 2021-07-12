@@ -21,25 +21,25 @@ namespace CovidService.Controllers
             try
             {
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
-                if(!checkLogin)
+                if (!checkLogin)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
-                if(objReq == null)
+                if (objReq == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Object request is null";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Object request is null";
                     return objRes;
                 }
-                if(objReq.CitizenInfor == null)
+                if (objReq.CitizenInfor == null)
                 {
-                    objRes.returnCode = 1001;
-                    objRes.returnMess = "List Citizen is null";
+                    objRes.ReturnCode = 1001;
+                    objRes.ReturnMess = "List Citizen is null";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GroupTest");
                 DataTable data = ConvertToDataTable(objReq.CitizenInfor);
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -51,48 +51,123 @@ namespace CovidService.Controllers
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenDetailList", System.Data.SqlDbType.Structured, data);
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenID", System.Data.SqlDbType.BigInt, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
-                SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidSpecimen", parameters.ToArray());
+                DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspAddCovidSpecimen", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
-                if(intReturnValue != 1)
+                if (intReturnValue != 1)
                 {
-
                     switch (intReturnValue)
                     {
                         case -16:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "QR already exists";
+                            DataTable dt = dts.Tables[0];
+                            string strQRCode = GetQRCode(dt);
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = strQRCode;
                             return objRes;
                         case -17:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "CovidSpecimenCode already exists in Session";
+                            long loSpecimenID = 0;
+                            bool isDuplicate = CheckDuplicate(objReq.CovidSpecimenCode, sqlString, objReq.CitizenInfor, ref loSpecimenID);
+                            if (!isDuplicate)
+                            {
+                                objRes.ReturnCode = intReturnValue;
+                                objRes.ReturnMess = "CovidSpecimenCode already exists in Session";
+                                return objRes;
+                            }
+                            objRes.CovidSpecimenID = loSpecimenID;
+                            objRes.ReturnCode = 1;
+                            objRes.ReturnMess = "CovidSpecimenCode is duplicated";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
                             return objRes;
                         case -31:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session is not found";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session is not found";
                             return objRes;
                         case -32:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "Session was finished";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "Session was finished";
                             return objRes;
                         case 1002:
-                            objRes.returnCode = intReturnValue;
-                            objRes.returnMess = "DB return failure";
+                            objRes.ReturnCode = intReturnValue;
+                            objRes.ReturnMess = "DB return failure";
                             return objRes;
                     }
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.CovidSpecimenID = loCovidSpecimenID;
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
+            }
+        }
+
+        private string GetQRCode(DataTable dt)
+        {
+            string QRCode = string.Empty;
+            try
+            {
+                foreach (DataRow item in dt.Rows)
+                {
+                    if (item["QRCode"] != null && item["QRCode"] != DBNull.Value)
+                    {
+                        if (string.IsNullOrEmpty(QRCode))
+                        {
+                            QRCode += item["QRCode"].ToString();
+                            continue;
+                        }
+                        QRCode += "|" + item["QRCode"].ToString();
+                    }
+                }
+                return QRCode;
+            }
+            catch (Exception ex)
+            {
+                LogWriter.WriteException(ex);
+                return QRCode;
+            }
+        }
+
+        private bool CheckDuplicate(string CovidSpecimenCode, string sqlString, List<CitizenInfor> lstInfor, ref long SpecimenID)
+        {
+            try
+            {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                SqlHelper.AddParameter(ref parameters, "@CovidSpecimenCode", System.Data.SqlDbType.NVarChar, 64, CovidSpecimenCode);
+                SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
+                DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidSpecimenDetail ", parameters.ToArray());
+                int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
+                if (intReturnValue != 1)
+                {
+                    return false;
+                }
+                DataTable dt = dts.Tables[0];
+                if (dt.Rows.Count == 0)
+                {
+                    LogWriter.WriteLogMsg("DB return table null", "GroupTest");
+                    return false;
+                }
+                string strQRCode = string.Join("|", lstInfor.Select(x => x.QRCode.ToArray()));
+                foreach (DataRow item in dt.Rows)
+                {
+                    string QRCode = item["QRCode"] == null || item["QRCode"] == DBNull.Value ? "" : item["QRCode"].ToString();
+                    SpecimenID = long.Parse(item["CovidSpecimenID"].ToString());
+                    if (!strQRCode.Contains(QRCode))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogWriter.WriteException(ex);
+                return false;
             }
         }
 

@@ -21,35 +21,35 @@ namespace CovidService.Controllers
                 bool isCheck = Util.CheckLogin(objReq.Email, objReq.Token);
                 if (isCheck == false)
                 {
-                    objRes.returnCode = 99;
-                    objRes.returnMess = "Invalid Email or Token";
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq));
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetLocate");
                 List<LocateInfor> lstLocate = new List<LocateInfor>();
                 lstLocate = LocateConfig.Instance.GetLocateInfor(objReq.Value);
                 if(string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
-                    objRes.returnCode = 1000;
-                    objRes.returnMess = "Get list Province return fail";
+                    objRes.ReturnCode = 1000;
+                    objRes.ReturnMess = "Get list Province return fail";
                     return objRes;
                 }
                 if (!string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
-                    objRes.returnCode = 1001;
-                    objRes.returnMess = "Get list locate return fail";
+                    objRes.ReturnCode = 1001;
+                    objRes.ReturnMess = "Get list locate return fail";
                     return objRes;
                 }
-                objRes.locateInfors = lstLocate;
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes));
+                objRes.LocateInfors = lstLocate;
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate");
                 return objRes;
             }
             catch (Exception ex)
             {
-                objRes.returnCode = -1;
-                objRes.returnMess = ex.ToString();
+                objRes.ReturnCode = -1;
+                objRes.ReturnMess = ex.ToString();
                 LogWriter.WriteException(ex);
                 return objRes;
             }
