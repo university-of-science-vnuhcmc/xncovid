@@ -237,7 +237,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                       else{
                           Log.e("GetSession", res.ReturnCode + " - " + res.ReturnMess);
                           new AlertDialog.Builder(SessionInfoActivity.this)
-                                  .setMessage("Không lấy được thônn tin phiên xét nghiệm. Vui lòng thử lại sau.")
+                                  .setMessage("Không lấy được thông tin phiên xét nghiệm. Vui lòng thử lại sau.")
                                   .setNegativeButton(android.R.string.ok,
                                           new DialogInterface.OnClickListener() {
                                               @Override
