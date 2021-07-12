@@ -13,14 +13,22 @@ namespace WebXNCovid.Models
 
     public class LoginRequestModel : RequestModel
     {
+
     }
 
     public class CreateQRRequestModel : RequestModel
     {
         public int QRAmount;
     }
+
     public class LogoutRequestModel : RequestModel
     {
 
+    }
+
+    public class GetHistoryCreateQRRequestModel : RequestModel
+    {
+        public string FromDate;
+        public string ToDate;
     }
 }

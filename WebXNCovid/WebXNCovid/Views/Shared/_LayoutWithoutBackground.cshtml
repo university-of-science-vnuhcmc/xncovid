@@ -59,11 +59,8 @@
                 <h2 class="title-section">@ViewBag.Title</h2>
             </div>
             @*@Html.Partial("_LoginPartial")*@
-            <div id="content" style="position: relative">
+            <div id="content" style="position: relative; background-color: white;">
                 <div>
-                    <div class="div5k">
-                        <img style="max-width: 800px" src="~/Assets/5K.png" />
-                    </div>
                 </div>
                 @RenderBody()
             </div>
@@ -82,6 +79,18 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
+            $('#confirmModal').on('show.bs.modal', function (e) {
+                var _button = $(e.relatedTarget); // Button that triggered the modal
+
+                var _row = _button.parents("tr");
+                var _numOfPages = _row.find(".num-of-pages").text();
+                var _idFrom = _row.find(".id-from").text();
+                var _ifTo = _row.find(".id-to").text();
+
+                $(this).find("#num-of-pages").text(_numOfPages);
+                $(this).find("#id-from").text(_idFrom);
+                $(this).find("#id-to").text(_ifTo);
+            });
         });
     </script>
     <script>
@@ -92,12 +101,6 @@
 
         function SidebarCollapse() {
             $('.menu-collapsed').toggleClass('d-none');
-        }
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                window.location.href = '@Url.Action("Logout", "Account")';
-            });
         }
     </script>
 </body>

@@ -27,17 +27,6 @@ namespace WebXNCovid.Models
 
     public class SearchHistoryCreateQRViewModel
     {
-        public List<HistoryInfo> ListHistory;
+        public List<HistoryLog> ListHistory;
     }
-
-    public class HistoryInfo
-    {
-        public DateTime CreateDate;
-        public string CreatedUser;
-        public int AmountQR;
-        public int IdFrom;
-        public int IdTo;
-        public int AmountPage;
-    }
-
 }

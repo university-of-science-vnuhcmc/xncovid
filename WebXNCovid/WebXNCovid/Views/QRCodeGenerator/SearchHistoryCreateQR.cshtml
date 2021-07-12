@@ -1,49 +1,95 @@
-﻿@using WebXNCovid.Models
+﻿@using WebXNCovid.Models;
+@using System.Globalization;
 @using System.Collections.Generic;
 @model SearchHistoryCreateQRViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutBackground.cshtml";
+    ViewBag.Title = "Tra cứu QR";
+}
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $('#confirmModal').on('show.bs.modal', function (e) {
+            var _button = $(e.relatedTarget); // Button that triggered the modal
 
-<div class="container-fluid">
-    <div class="row">
+            var _row = _button.parents("tr");
+            var _idFrom = _row.find(".id-from").text();
+            var _ifTo = _row.find(".id-to").text();
+            var _numOfPages = _row.find(".num-of-pages").text();
 
-        @using (Html.BeginForm("SearchHistoryCreateQR", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal form-search", role = "form" }))
-        {
-            <div class="inline">
-                <label class="">Chọn ngày</label>
-            </div>
-            <div class="col-sm-4 col-md-3 col-xl-3 input-date">
-                <input type="date" name="FromCreateDate" class="form-control" required />
-            </div>
-            <div class="col-sm-4 col-md-3 col-xl-3 input-date">
-                <input type="date" name="ToCreateDate" class="form-control" required />
-            </div>
-            <div class="col-sm-2 col-md-1 inline">
-                <input type="submit" class="btn btn-search" value="Tra cứu" />
-            </div>
-        }
-        <div>
-            <table class="table table-bordered table-responsive table-hover">
-                <tr>
-                    <th>Ngày</th>
-                    <th>Số lượng</th>
-                    <th>Người tạo</th>
-                    <th>Từ số</th>
-                    <th>Đến số</th>
-                    <th>Số trang</th>
-                    <th>In lại</th>
-                </tr>
-                @foreach (var item in Model.ListHistory)
-                {
+            $(this).find("#num-of-pages").val(_idFrom);
+            $(this).find("#id-from").val(_ifTo);
+            $(this).find("#num-of-pages").val(_numOfPages);
+        });
+    });
+</script>*@
+<div style="background-color: white; width: 100%">
+    <div class="container-fluid">
+        <div class="row">
+
+            @using (Html.BeginForm("SearchHistoryCreateQR", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal form-search", role = "form" }))
+            {
+                <div class="inline">
+                    <label class="">Chọn ngày</label>
+                </div>
+                <div class="col-sm-4 col-md-3 col-xl-3 input-date">
+                    <input type="date" name="FromCreateDate" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+                @*<div class="col-sm-4 col-md-3 col-xl-3 input-date">
+                        <input type="date" name="ToCreateDate" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+                    </div>*@
+                <div class="col-sm-2 col-md-1 inline">
+                    <input type="submit" class="btn btn-submit" value="Tra cứu" />
+                </div>
+            }
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
-                        <td>@item.AmountQR</td>
-                        <td>@item.CreatedUser</td>
-                        <td>@item.IdFrom</td>
-                        <td>@item.IdTo</td>
-                        <td>@item.AmountPage</td>
-                        <td><input type="submit" class="btn btn-search" value="In lại" /></td>
+                        <th scope="col" style="width: 15%;">Ngày</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col" style="width: 20%;">Người tạo</th>
+                        <th scope="col">Từ số</th>
+                        <th scope="col">Đến số</th>
+                        <th scope="col" style="width: 12%">Số trang</th>
+                        <th scope="col">In lại</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model.ListHistory)
+                        {
+                            <tr>
+                                <td class="left-align">@DateTime.ParseExact(item.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")</td>
+                                <td>@item.QRAmount</td>
+                                <td>@item.CreateUser</td>
+                                <td class="id-from">@item.MinNumber</td>
+                                <td class="id-to">@item.MaxNumber</td>
+                                <td class="num-of-pages">@item.NumOfPrint</td>
+                                <td><input id="print-btn" type="submit" class="btn btn-submit" value="In lại" data-toggle="modal" data-target="#confirmModal" /></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
             </table>
+
+            <!-- Modal -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="border-radius: 32px">
+                        <div class="modal-header modal-header-custom" style="border-bottom: none !important;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="confirm-content center-text-align">Bạn chắc chắn muốn in lại <span id="num-of-pages" style="color: #86CF3C;"></span> trang<br /> từ số <span id="id-from" style="color: #64A0F3;"></span> đến số <span id="id-to" style="color: #64A0F3;"></span>?</p>
+                        </div>
+                        <div class="h-align-center pt-2 pb-4">
+                            <button type="button" class="btn btn-submit">In lại</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

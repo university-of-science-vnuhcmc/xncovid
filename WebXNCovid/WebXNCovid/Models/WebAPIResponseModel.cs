@@ -30,4 +30,18 @@ namespace WebXNCovid.Models
     {
 
     }
+
+    public class GetHistoryCreateQRResponseModel : ResponseModel
+    {
+        public List<HistoryLog> HistoryLogs;
+    }
+    public class HistoryLog
+    {
+        public string CreateDate;
+        public string CreateUser;
+        public int QRAmount;
+        public int MinNumber;
+        public int MaxNumber;
+        public int NumOfPrint;
+    }
 }

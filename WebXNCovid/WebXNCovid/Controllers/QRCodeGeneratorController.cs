@@ -78,16 +78,11 @@ namespace WebForCommunityScreening.Controllers
                 model.IdFrom = 10000;
                 model.IdTo = model.IdFrom + QRCodeAmount - 1;
                 model.AmountPage = QRCodeAmount / amtQRPerPage + (QRCodeAmount % amtQRPerPage == 0 ? 0 : 1);
-                ViewData["GenerateQRInfo"] = model;
+                //ViewData["GenerateQRInfo"] = model;
 
                 List<Bitmap> bitmaps = new List<Bitmap>();
                 List<byte[]> bytearrays = new List<byte[]>();
-                string folderPath = "~/Images/";
-                if (!Directory.Exists(Server.MapPath(folderPath)))
-                {
-                    Directory.CreateDirectory(Server.MapPath(folderPath));
-                }
-
+                
                 for (int i = model.IdFrom; i <= model.IdTo; i++)
                 {
                     var bmp = GenerateQR(i);
@@ -114,78 +109,78 @@ namespace WebForCommunityScreening.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult GenerateQRSuccess(FormCollection formCollection)
-        {
-            int IdFrom = Convert.ToInt16(formCollection["IdFrom"]);
-            int IdTo = Convert.ToInt16(formCollection["IdTo"]);
-            List<Bitmap> bitmaps = new List<Bitmap>();
-            List<byte[]> bytearrays = new List<byte[]>();
-            try
-            {
-                string folderPath = "~/Images/";
-                if (!Directory.Exists(Server.MapPath(folderPath)))
-                {
-                    Directory.CreateDirectory(Server.MapPath(folderPath));
-                }
+        //[HttpPost]
+        //public ActionResult GenerateQRSuccess(FormCollection formCollection)
+        //{
+        //    int IdFrom = Convert.ToInt16(formCollection["IdFrom"]);
+        //    int IdTo = Convert.ToInt16(formCollection["IdTo"]);
+        //    List<Bitmap> bitmaps = new List<Bitmap>();
+        //    List<byte[]> bytearrays = new List<byte[]>();
+        //    try
+        //    {
+        //        string folderPath = "~/Images/";
+        //        if (!Directory.Exists(Server.MapPath(folderPath)))
+        //        {
+        //            Directory.CreateDirectory(Server.MapPath(folderPath));
+        //        }
 
-                for (int i = IdFrom; i <= IdTo; i++)
-                {
-                    var bmp = GenerateQR(i);
-                    bitmaps.Add(bmp);
+        //        for (int i = IdFrom; i <= IdTo; i++)
+        //        {
+        //            var bmp = GenerateQR(i);
+        //            bitmaps.Add(bmp);
 
-                    bytearrays.Add(BitmapToBytes(bmp));
-                }
+        //            bytearrays.Add(BitmapToBytes(bmp));
+        //        }
 
-                Session["QRCodeImg"] = bytearrays;
+        //        Session["QRCodeImg"] = bytearrays;
 
-                #region Comment
-                //int intFrom = 10000;
-                //int intTo = intFrom + QRCodeAmount;
-                //int intNumber = QRCodeAmount / intGroup + (QRCodeAmount % intGroup == 0 ? 0 : 1);
+        //        #region Comment
+        //        //int intFrom = 10000;
+        //        //int intTo = intFrom + QRCodeAmount;
+        //        //int intNumber = QRCodeAmount / intGroup + (QRCodeAmount % intGroup == 0 ? 0 : 1);
 
-                //for (int i = 0; i < intNumber; i++)
-                //{
-                //    List<Bitmap> bitmaps = new List<Bitmap>();
-                //    int n = intFrom + (i + 1) * intGroup > intTo ? intTo : intFrom + (i + 1) * intGroup;
-                //    for (int j = intFrom + i * intGroup; j < n; j++)
-                //    {
-                //        var bitmap = GenerateQR(j);
-                //        bitmaps.Add(bitmap);
-                //    }
+        //        //for (int i = 0; i < intNumber; i++)
+        //        //{
+        //        //    List<Bitmap> bitmaps = new List<Bitmap>();
+        //        //    int n = intFrom + (i + 1) * intGroup > intTo ? intTo : intFrom + (i + 1) * intGroup;
+        //        //    for (int j = intFrom + i * intGroup; j < n; j++)
+        //        //    {
+        //        //        var bitmap = GenerateQR(j);
+        //        //        bitmaps.Add(bitmap);
+        //        //    }
 
-                //    Bitmap bmp = MergeImages(bitmaps, 2, 4);
+        //        //    Bitmap bmp = MergeImages(bitmaps, 2, 4);
 
-                //    string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
-                //    string barcodePath = Server.MapPath(imagePath);
-                //    using (MemoryStream memory = new MemoryStream())
-                //    {
-                //        using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
-                //        {
-                //            bmp.Save(memory, ImageFormat.Jpeg);
-                //            byte[] bytes = memory.ToArray();
-                //            fs.Write(bytes, 0, bytes.Length);
-                //        }
-                //    }
-                //}
+        //        //    string imagePath = string.Format("~/Images/QrCode{0}.jpg", i);
+        //        //    string barcodePath = Server.MapPath(imagePath);
+        //        //    using (MemoryStream memory = new MemoryStream())
+        //        //    {
+        //        //        using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
+        //        //        {
+        //        //            bmp.Save(memory, ImageFormat.Jpeg);
+        //        //            byte[] bytes = memory.ToArray();
+        //        //            fs.Write(bytes, 0, bytes.Length);
+        //        //        }
+        //        //    }
+        //        //}
 
-                //ViewBag.Message = "QR Code Created successfully"; 
-                #endregion
-            }
-            catch //(Exception ex)
-            {
-                //catch exception if there is any
-            }
-            return RedirectToAction("PreviewQRCode", new { page = 1 });
-        }
+        //        //ViewBag.Message = "QR Code Created successfully"; 
+        //        #endregion
+        //    }
+        //    catch //(Exception ex)
+        //    {
+        //        //catch exception if there is any
+        //    }
+        //    return RedirectToAction("PreviewQRCode", new { page = 1 });
+        //}
 
-        [HttpGet]
-        public ActionResult PreviewQRCode(int page)
-        {
-            List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
-            var pagedList = imageBytes.ToPagedList(page, 6);
-            return View(pagedList);
-        }
+        //[HttpGet]
+        //public ActionResult PreviewQRCode(int page)
+        //{
+        //    List<byte[]> imageBytes = (List<byte[]>)Session["QRCodeImg"];
+        //    var pagedList = imageBytes.ToPagedList(page, 6);
+        //    return View(pagedList);
+        //}
 
         private static byte[] BitmapToBytes(Bitmap img)
         {
@@ -194,6 +189,68 @@ namespace WebForCommunityScreening.Controllers
                 img.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
                 return stream.ToArray();
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SearchHistoryCreateQR(FormCollection form)
+        {
+            SearchHistoryCreateQRViewModel model = new SearchHistoryCreateQRViewModel();
+            try
+            {
+                string FromDate = form["FromCreateDate"];
+                DateTime FromCreateDate = DateTime.ParseExact(FromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
+                DateTime ToCreateDate = FromCreateDate.AddDays(1).AddMilliseconds(-1);
+
+                GetHistoryCreateQRRequestModel request = new GetHistoryCreateQRRequestModel();
+                request.Email = Session["Email"].ToString();
+                request.Token = Session["Token"].ToString();
+                request.FromDate = FromCreateDate.ToString("yyyyMMddHHmmss");
+                request.ToDate = ToCreateDate.ToString("yyyyMMddHHmmss");
+
+                string postData = JsonConvert.SerializeObject(request);
+
+                var response = await CallWebAPI.Instance().Call("GetHistoryCreateQR", postData);
+
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                }
+
+                GetHistoryCreateQRResponseModel objRes = JsonConvert.DeserializeObject<GetHistoryCreateQRResponseModel>(result);
+
+                if (objRes.ReturnCode != 1)
+                {
+                    if (objRes.ReturnCode == 0)
+                    {
+                        return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, responseText = "Lỗi hệ thống." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                model.ListHistory = objRes.HistoryLogs;
+            }
+            catch (Exception objEx)
+            {
+                var a = objEx.ToString();
+                throw;
+            }
+            return View(model);
+        }
+
+        public ActionResult Confirm(int id)
+        {
+            //Write your logic here 
+            return PartialView("_TestPartial");
         }
 
         private Bitmap GenerateQR(int Id)

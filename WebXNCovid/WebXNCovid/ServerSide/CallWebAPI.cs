@@ -16,7 +16,8 @@ namespace WebXNCovid
 
         protected CallWebAPI()
         {
-            baseAddress = "http://localhost:59767/";
+            //baseAddress = "http://localhost:59767/";
+            baseAddress = "http://45.122.249.68:7070/";
         }
 
         public static CallWebAPI Instance()

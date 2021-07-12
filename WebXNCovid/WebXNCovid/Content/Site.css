@@ -124,7 +124,8 @@ span {
 }
 
 #sidebar ul.components {
-    padding: 20px 0;
+    /*padding: 20px 0;*/
+    padding: 20px 10px;
 }
 
 #sidebar ul li a {
@@ -192,7 +193,7 @@ a.article, a.article:hover {
 
 #content {
     width: 100%;
-    padding: 20px;
+    /*padding: 20px;*/
     min-height: 100vh;
     transition: all 0.3s;
 }
@@ -279,9 +280,9 @@ a.article, a.article:hover {
     color: #fff !important;
 }
 
-.Header{
-    background-color: white;
-    min-height: 60px;
+.Header {
+    background-color: #114897;
+    min-height: 70px;
     margin-left: 0px;
 }
 
@@ -392,7 +393,8 @@ body {
 }
 
 .header-section {
-    text-align: center;    font-weight: bold;
+    text-align: center;
+    font-weight: bold;
 }
 
 .paging-custom {
@@ -408,9 +410,10 @@ body {
 
 .divlout {
     position: absolute;
-    width: 80px;
+    min-width: 80px;
+    max-width: 250px;
     left: 0px;
-    bottom: 20px;
+    bottom: 0px;
 }
 .form-search {
     background: linear-gradient(180deg, #A2C6F8 -26.39%, rgba(162, 198, 248, 0) 100%);
@@ -418,13 +421,14 @@ body {
     padding: 20px 20px;
 }
 
-.btn-search {
+.btn-submit {
     background: #64A0F3;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
     color: white;
     padding-left: 20px;
     padding-right: 20px;
+    max-width: 150px;
 }
 
 .inline {
@@ -440,4 +444,41 @@ body {
     .input-date {
         max-width: 300px;
     }
+/*
+    .table-section {
+        max-width: 1200px;
+    }
+
+    .form-search {
+        max-width: 1200px;
+    }*/
+}
+ table {
+     margin: 20px;
+ }
+ 
+table tr {
+    text-align: center;
+}
+
+.left-align {
+    text-align: left;
+}
+
+table td {
+    vertical-align: middle !important;
+}
+
+.title-section {
+    margin: auto;
+    color: white;
+}
+
+.confirm-content {
+    font-size: 1.4rem;
+    margin: 0px 30px;
+}
+
+.modal-header-custom {
+    padding: 15px 20px;
 }
