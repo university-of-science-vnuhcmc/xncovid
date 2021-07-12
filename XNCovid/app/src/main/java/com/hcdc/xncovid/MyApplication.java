@@ -24,7 +24,7 @@ public class MyApplication extends Application {
     }
 
     public void setId(String id) {
-        id = id;
+        this.id = id;
     }
 
     private String url;
