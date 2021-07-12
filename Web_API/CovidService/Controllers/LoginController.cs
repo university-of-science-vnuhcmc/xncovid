@@ -77,6 +77,7 @@ namespace CovidService.Controllers
                             loginRes.AccountID = accInfo.AccountID;
                             loginRes.CustomerName = accInfo.AccountName;
                             loginRes.Role = accInfo.RoleName;
+                            loginRes.FullName = accInfo.FullName;
                         }
                         else
                         {
@@ -102,6 +103,7 @@ namespace CovidService.Controllers
                         loginRes.AccountID = accInfo.AccountID;
                         loginRes.CustomerName = accInfo.AccountName;
                         loginRes.Role = accInfo.RoleName;
+                        loginRes.FullName = accInfo.FullName;
                     }
                     else
                     {
