@@ -371,7 +371,11 @@ private  TextView testName, location, time, cause, leader;
                                 }
                             }, null, Request.Method.POST);
                         }
-                    }, null, MainStaffActivity.this);
+                    }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    hideLoading();
+                }}, MainStaffActivity.this);
 
         }catch (Exception e){
             Log.e("endSession", e.toString(), e);
