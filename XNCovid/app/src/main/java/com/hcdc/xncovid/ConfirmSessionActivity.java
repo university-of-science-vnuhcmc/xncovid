@@ -3,6 +3,7 @@ package com.hcdc.xncovid;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +20,13 @@ import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 
 public class ConfirmSessionActivity extends AppCompatActivity {
+    private View mLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_confirm_session);
+            setUIRef();
             Bundle bundle = getIntent().getExtras();
             String sessionName = bundle.getString("SessionName");
             String address = bundle.getString("Address");
@@ -88,19 +91,15 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                     .show();
         }
     }
-    private boolean flag = false;
+
     private void createSession(CreateTestSessionReq req){
-        if(flag){
-            return;
-        } else {
-            flag = true;
-        }
         Caller caller = new Caller();
+        showLoading();
         caller.call(this, "createtestsession", req, CreateTestSessionRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
                 try {
-                    flag = false;
+                    hideLoading();
                     CreateTestSessionRes res = (CreateTestSessionRes) response;
                     if(res.ReturnCode != 1){
                         new AlertDialog.Builder(ConfirmSessionActivity.this)
@@ -110,6 +109,8 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                                 .show();
                         return;
                     }
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
                     Intent intent = new Intent(ConfirmSessionActivity.this, QRSessionActivity.class);
                     intent.putExtra("SessionName", req.SessionName);
                     intent.putExtra("SessionID", res.SessionID);
@@ -126,5 +127,28 @@ public class ConfirmSessionActivity extends AppCompatActivity {
                 }
             }
         }, null, Request.Method.POST);
+    }
+    private void setUIRef()
+    {
+        //Create a Instance of the Loading Layout
+        mLoading = findViewById(R.id.my_loading_layout);
+    }
+
+    private void showLoading()
+    {
+        /*Call this function when you want progress dialog to appear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoading()
+    {
+        /*Call this function when you want progress dialog to disappear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.GONE);
+        }
     }
 }

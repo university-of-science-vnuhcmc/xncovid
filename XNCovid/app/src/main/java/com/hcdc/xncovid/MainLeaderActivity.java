@@ -30,10 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MainLeaderActivity extends AppCompatActivity {
+    private View mLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_leader);
+        setUIRef();
     }
 
     @Override
@@ -59,10 +61,12 @@ public class MainLeaderActivity extends AppCompatActivity {
         Caller caller = new Caller();
         CheckAccountReq req = new CheckAccountReq();
         req.AccountID = ((MyApplication)getApplication()).getUserInfo().AccountID;
+        showLoading();
         caller.call(MainLeaderActivity.this, "checkaccount", req, CheckAccountRes.class, new ICallback() {
             @Override
             public void callback(Object response) {
                 try {
+                    hideLoading();
                     CheckAccountRes res = (CheckAccountRes) response;
                     if(res.ReturnCode != 1 && res.ReturnCode != 0){
                         new AlertDialog.Builder(MainLeaderActivity.this)
@@ -193,18 +197,12 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .show();
         }
     }
-    private boolean flag = false;
     private Session session;
     private UserInfo[] LstUser;
     public void endSession(View v){
         try {
             if(session == null || errorFlag){
                 return;
-            }
-            if(flag){
-                return;
-            } else {
-                flag = true;
             }
             String htmlcontent = String.format("Toàn bộ quá trình sẽ được lưu lại và toàn bộ (%d) nhân viên sẽ bị buộc thoát khỏi phiên xét nghiệm",
                     LstUser == null ? 0 : LstUser.length);
@@ -219,11 +217,12 @@ public class MainLeaderActivity extends AppCompatActivity {
                             Caller caller = new Caller();
                             EndTestSessionReq req = new EndTestSessionReq();
                             req.CovidTestingSessionID = session.SessionID;
+                            showLoading();
                             caller.call(MainLeaderActivity.this, "endtestsession4lead", req, EndTestSessionRes.class, new ICallback() {
                                 @Override
                                 public void callback(Object response) {
                                     try {
-                                        flag = false;
+                                        hideLoading();
                                         EndTestSessionRes res = (EndTestSessionRes) response;
                                         if(res.ReturnCode != 1){
                                             new androidx.appcompat.app.AlertDialog.Builder(MainLeaderActivity.this)
@@ -297,6 +296,30 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        }
+    }
+
+    private void setUIRef()
+    {
+        //Create a Instance of the Loading Layout
+        mLoading = findViewById(R.id.my_loading_layout);
+    }
+
+    private void showLoading()
+    {
+        /*Call this function when you want progress dialog to appear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoading()
+    {
+        /*Call this function when you want progress dialog to disappear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.GONE);
         }
     }
 }

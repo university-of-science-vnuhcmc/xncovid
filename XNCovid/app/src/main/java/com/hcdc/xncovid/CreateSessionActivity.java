@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -104,7 +105,7 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
             }
         }, null, Request.Method.POST);
     }
-
+    private int LAUNCH_SECOND_ACTIVITY = 1;
     public void createSession(View v) {
         try {
             EditText sessionName = findViewById(R.id.sessionName);
@@ -174,7 +175,7 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
             intent.putExtra("Province", new Gson().toJson(province));
             intent.putExtra("District", new Gson().toJson(district));
             intent.putExtra("Ward", new Gson().toJson(ward));
-            startActivity(intent);
+            startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
         } catch (Exception ex){
             Log.w("createSession", ex.toString());
             new android.app.AlertDialog.Builder(this)
@@ -182,6 +183,17 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
+                finish();
+            }
         }
     }
 
