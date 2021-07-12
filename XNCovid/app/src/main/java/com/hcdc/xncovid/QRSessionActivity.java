@@ -30,7 +30,7 @@ public class QRSessionActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             String sessionName = bundle.getString("SessionName");
             Long sessionID = bundle.getLong("SessionID");
-            isNew = bundle.getBoolean("IsNew");
+            boolean isNew = bundle.getBoolean("IsNew");
 
             if(!isNew){
                 ((LinearLayout) findViewById(R.id.success)).setVisibility(View.GONE);
@@ -63,17 +63,8 @@ public class QRSessionActivity extends AppCompatActivity {
                     .show();
         }
     }
-    private boolean isNew;
-    @Override
-    public void onBackPressed() {
-        if(!isNew){
-            super.onBackPressed();
-        }
-    }
     public void gotoHome(View v){
         try {
-            Intent intent = new Intent(this, MainLeaderActivity.class);
-            startActivity(intent);
             finish();
         } catch (Exception ex){
             Log.w("gotoHome", ex.toString());
