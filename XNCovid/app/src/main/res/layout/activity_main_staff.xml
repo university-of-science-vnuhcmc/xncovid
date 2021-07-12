@@ -5,6 +5,10 @@
     android:background="@color/background_color"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainStaffActivity">
+    <!--Full Screen Progress Layout-->
+    <include
+        android:id="@+id/my_loading_layout"
+        layout="@layout/my_loading_layout" />
     <ScrollView
         android:fillViewport="true"
         android:layout_width="match_parent"
@@ -359,4 +363,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

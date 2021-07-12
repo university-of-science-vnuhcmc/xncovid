@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color">
+    <!--Full Screen Progress Layout-->
+    <include
+        android:id="@+id/my_loading_layout"
+        layout="@layout/my_loading_layout" />
     <ScrollView
         android:fillViewport="true"
         android:layout_width="match_parent"

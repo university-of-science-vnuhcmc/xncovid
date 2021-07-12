@@ -33,6 +33,7 @@ public class SessionInfoActivity extends AppCompatActivity {
     String xn_session;
     private TextView tenphien, province, district, ward, address, chooseTime, chooseDate, cause, leader;
      LinearLayout btnConfirm;
+    private View mLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,8 @@ public class SessionInfoActivity extends AppCompatActivity {
             btnConfirm = findViewById(R.id.next);
             //tenphien.setText(xn_session);
 
-
+            setUIRef();
+            showLoading();
 
         }catch (Exception e){
             Log.e("SessionInfoActivity", e.toString(), e);
@@ -241,7 +243,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                               .setIcon(android.R.drawable.ic_dialog_alert)
                               .show();
                   }
-
+                  hideLoading();
               }
           }, null, Request.Method.POST);
       }catch (Exception e){
@@ -259,5 +261,29 @@ public class SessionInfoActivity extends AppCompatActivity {
         // intent.putExtra("xn_session", "");
         startActivity(intent);
         finish();
+    }
+
+    private void setUIRef()
+    {
+        //Create a Instance of the Loading Layout
+        mLoading = findViewById(R.id.my_loading_layout);
+    }
+
+    private void showLoading()
+    {
+        /*Call this function when you want progress dialog to appear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoading()
+    {
+        /*Call this function when you want progress dialog to disappear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.GONE);
+        }
     }
 }

@@ -35,6 +35,7 @@ String sessionId;
 long accountID;
     int flag = 0;
     public  static  boolean isFirst = false;
+    private View mLoading;
 private  TextView testName, location, time, cause, leader;
     MyApplication myapp = null;
     Session objSession = null;
@@ -84,6 +85,7 @@ private  TextView testName, location, time, cause, leader;
             time = (TextView) findViewById(R.id.time);
             cause = (TextView) findViewById(R.id.cause);
             leader = (TextView) findViewById(R.id.leader);
+            setUIRef();
 
         } catch (Exception e){
             Log.e("MainStaffActivity", e.toString(), e);
@@ -100,6 +102,7 @@ private  TextView testName, location, time, cause, leader;
     protected void onResume() {
         super.onResume();
         try{
+            showLoading();
         if(flag == 1){ // tu man hinh gom nhom ve
             objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
             if(objSession != null){
@@ -179,6 +182,7 @@ private  TextView testName, location, time, cause, leader;
                 }
             });
         }
+        hideLoading();
     }
 
     public void signOut(View v) {
@@ -295,7 +299,7 @@ private  TextView testName, location, time, cause, leader;
 
     public void endSession(){
         try{
-
+            showLoading();
             if(objSession == null || errorFlag){
                 return;
             }
@@ -333,6 +337,7 @@ private  TextView testName, location, time, cause, leader;
                                                     })
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                                     .show();
+                                            hideLoading();
                                             return;
                                         }
                                         if(res.ReturnCode != 1){
@@ -341,6 +346,7 @@ private  TextView testName, location, time, cause, leader;
                                                     .setNegativeButton(android.R.string.ok, null)
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                                     .show();
+                                            hideLoading();
                                             return;
                                         }
                                         objSession = null;
@@ -355,6 +361,7 @@ private  TextView testName, location, time, cause, leader;
                                                 .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
+                                        hideLoading();
                                     }
 
                                 }
@@ -369,6 +376,7 @@ private  TextView testName, location, time, cause, leader;
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            hideLoading();
         }
         }
 
@@ -421,5 +429,29 @@ private  TextView testName, location, time, cause, leader;
                 .show();
     }
 
+    }
+
+    private void setUIRef()
+    {
+        //Create a Instance of the Loading Layout
+        mLoading = findViewById(R.id.my_loading_layout);
+    }
+
+    private void showLoading()
+    {
+        /*Call this function when you want progress dialog to appear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoading()
+    {
+        /*Call this function when you want progress dialog to disappear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.GONE);
+        }
     }
 }

@@ -52,6 +52,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
     Hashtable<String, GroupedUserInfo> hashObj;
     Boolean isStop  = false;
     Session session = null;
+    private View mLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +137,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     }
                 }
             });
+            setUIRef();
         }catch (Exception e){
             Log.e("ListGroupXnActivity", e.toString(), e);
             new android.app.AlertDialog.Builder(this)
@@ -185,6 +187,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
     }
     public  Boolean UploadGroupXN(){
         final Boolean[] isOK = {true};
+        showLoading();
         try{
             GroupTestReq req  = new GroupTestReq();
             req.CovidTestingSessionID = Long.parseLong(session_code);
@@ -285,10 +288,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 .show();
                         isOK[0] = false;
                     }
+                    hideLoading();
 
                 }
             }, null, Request.Method.POST);
-
+            hideLoading();
             return isOK[0];
         } catch (Exception e){
             Log.e("ListGroupXnActivity", e.toString(), e);
@@ -298,6 +302,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
             isOK[0] = false;
+            hideLoading();
             return   isOK[0] ;
         }
 
@@ -458,5 +463,28 @@ public class ListGroupXnActivity extends AppCompatActivity {
         }
 
 
+    }
+    private void setUIRef()
+    {
+        //Create a Instance of the Loading Layout
+        mLoading = findViewById(R.id.my_loading_layout);
+    }
+
+    private void showLoading()
+    {
+        /*Call this function when you want progress dialog to appear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoading()
+    {
+        /*Call this function when you want progress dialog to disappear*/
+        if (mLoading != null)
+        {
+            mLoading.setVisibility(View.GONE);
+        }
     }
 }
