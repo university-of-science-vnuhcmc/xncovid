@@ -12,9 +12,9 @@ using System.Web;
 
 public class LocateConfig
 {
-    public List<LocateInfor> lstProvince = new List<LocateInfor>();
-    public Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
-    public Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
+    static List<LocateInfor> lstProvince = new List<LocateInfor>();
+    static Dictionary<string, List<LocateInfor>> dicDistrict = new Dictionary<string, List<LocateInfor>>();
+    static Dictionary<string, List<LocateInfor>> dicWard = new Dictionary<string, List<LocateInfor>>();
     private static LocateConfig instance;
     public static LocateConfig Instance
     {
