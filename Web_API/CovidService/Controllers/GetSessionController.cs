@@ -57,6 +57,7 @@ namespace CovidService.Controllers
                     DataTable dt = dts.Tables[0];
                     foreach (DataRow item in dt.Rows)
                     {
+                        objSession.SessionID = long.Parse(item["CovidTestingSessionID"].ToString());
                         objSession.SessionName = item["CovidTestingSessionName"] == null || item["CovidTestingSessionName"] == DBNull.Value ? "" : item["CovidTestingSessionName"].ToString();
                         objSession.Address = item["Address"] == null || item["Address"] == DBNull.Value ? "" : item["Address"].ToString();
                         objSession.ProvinceName = item["ProvinceName"] == null || item["ProvinceName"] == DBNull.Value ? "" : item["ProvinceName"].ToString();
