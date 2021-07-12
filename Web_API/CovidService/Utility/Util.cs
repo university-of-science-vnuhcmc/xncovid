@@ -13,7 +13,7 @@ namespace CovidService.Utility
         public static bool CheckLogin(string Email, string Token)
         {
             bool isOK = false;
-
+            LogWriter.WriteLogMsg("Emai: " + Email + " ; Token: " + Token, "Login Request");
             try
             {
                 if (String.IsNullOrEmpty(Email) || String.IsNullOrEmpty(Token))
@@ -26,6 +26,7 @@ namespace CovidService.Utility
                 {
                     isOK = true;
                 }
+                LogWriter.WriteLogMsg(isOK.ToString(), "Login Response");
                 return isOK;
             }
             catch (Exception)

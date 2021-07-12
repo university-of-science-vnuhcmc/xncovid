@@ -40,7 +40,7 @@ namespace CovidService.Utility
                 wr = new StreamWriter(LogFile, true, Encoding.UTF8);
                 wr.WriteLine("==============================================================");
                 wr.WriteLine(apiName + " :");
-                wr.WriteLine("[" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "]");
+                wr.WriteLine("[" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + "]");
                 wr.WriteLine(strLogContent);
                 wr.Flush();
                 flag = true;
@@ -66,7 +66,7 @@ namespace CovidService.Utility
             try
             {
                 wr = new StreamWriter(LogFile, true, Encoding.UTF8);
-                wr.WriteLine("BEGIN EXCEPTION [" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " " + ex.GetType().ToString() + "] ---------------------------------------------");
+                wr.WriteLine("BEGIN EXCEPTION [" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") + " " + ex.GetType().ToString() + "] ---------------------------------------------");
                 wr.WriteLine("Method: " + ex.TargetSite);
                 wr.WriteLine("Message: " + ex.Message);
                 wr.WriteLine("Source: " + ex.Source);
