@@ -54,16 +54,16 @@ namespace CovidService.Controllers
                 DataTable objDt = ds.Tables[0];
                 if (objDt.Rows.Count == 0)
                 {
-                    objRes.returnCode = -2;
-                    objRes.returnMess = "No data found";
+                    objRes.ReturnCode = -2;
+                    objRes.ReturnMess = "No data found";
                     return objRes;
                 }
                 objRes.CreateDate = DateTime.Parse(objDt.Rows[0]["CreateDate"].ToString()).ToString("yyyy/MM/dd HH:mm:ss");
                 objRes.MinNumber = int.Parse(objDt.Rows[0]["MinNumber"].ToString());
                 objRes.MaxNumber = int.Parse(objDt.Rows[0]["MaxNumber"].ToString());
                 objRes.NumOfPrint = int.Parse(objDt.Rows[0]["NumOfPrint"].ToString());
-                objRes.returnCode = 1;
-                objRes.returnMess = "Success";
+                objRes.ReturnCode = 1;
+                objRes.ReturnMess = "Success";
                 return objRes;
             }
             catch (Exception ex)
