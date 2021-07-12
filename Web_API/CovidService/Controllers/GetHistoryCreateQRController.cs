@@ -30,8 +30,8 @@ namespace CovidService.Controllers
                 }
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                SqlHelper.AddParameter(ref parameters, "@FromCreateDate", SqlDbType.DateTime, DateTime.ParseExact(objReq.FromDate, "yyyyMMddHHmm", CultureInfo.InvariantCulture));
-                SqlHelper.AddParameter(ref parameters, "@ToCreateDate", SqlDbType.DateTime, DateTime.ParseExact(objReq.ToDate, "yyyyMMddHHmm", CultureInfo.InvariantCulture));
+                SqlHelper.AddParameter(ref parameters, "@FromCreateDate", SqlDbType.DateTime, DateTime.ParseExact(objReq.FromDate, "yyyyMMddHHmmss", CultureInfo.InvariantCulture));
+                SqlHelper.AddParameter(ref parameters, "@ToCreateDate", SqlDbType.DateTime, DateTime.ParseExact(objReq.ToDate, "yyyyMMddHHmmss", CultureInfo.InvariantCulture));
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", SqlDbType.Int, ParameterDirection.ReturnValue);
                 DataSet ds = SqlHelper.ExecuteDataset(sqlString, CommandType.StoredProcedure, "dbo.uspSearchIdentityNumber", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
@@ -48,6 +48,7 @@ namespace CovidService.Controllers
                     objRes.returnMess = "No data found";
                     return objRes;
                 }
+                objRes.HistoryLogs = new List<HistoryLog>();
                 foreach (DataRow objRow in objDt.Rows)
                 {
                     HistoryLog log = new HistoryLog();
@@ -57,6 +58,7 @@ namespace CovidService.Controllers
                     log.MinNumber = int.Parse(objRow["MinNumber"].ToString());
                     log.MaxNumber = int.Parse(objRow["MaxNumber"].ToString());
                     log.NumOfPrint = int.Parse(objRow["NumOfPrint"].ToString());
+                    objRes.HistoryLogs.Add(log);
                 }
                 objRes.returnCode = 1;
                 objRes.returnMess = "Success";

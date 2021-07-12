@@ -1,0 +1,118 @@
+﻿[2021/07/11 12:44:08]
+testweblogin123@gmail.com
+[2021/07/11 12:44:59]
+testweblogin123@gmail.com
+[2021/07/11 12:45:52]
+testweblogin123@gmail.com
+[2021/07/11 12:46:06]
+{"QRAmount":100,"Token":"c6a8f974-dec7-4963-a7c8-44548efb0565","Email":"testweblogin123@gmail.com"}
+BEGIN EXCEPTION [2021/07/11 12:46:06 System.Data.SqlClient.SqlException] ---------------------------------------------
+Method: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+Message: Procedure or function 'uspAddCovidTestingSession' expects parameter '@CovidTestingSessionID', which was not supplied.
+Source: .Net SqlClient Data Provider
+Stack Trace:
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at SqlHelper.ExecuteNonQuery(SqlConnection connection, CommandType commandType, String commandText, SqlParameter[] commandParameters) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Utility\SqlHelper.cs:line 411
+   at SqlHelper.ExecuteNonQuery(String connectionString, CommandType commandType, String commandText, SqlParameter[] commandParameters) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Utility\SqlHelper.cs:line 313
+   at CovidService.Controllers.CreateQRManualDeclarationController.Post(CreateQRManualDeclarationRequest objReq) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Controllers\CreateQRManualDeclarationController.cs:line 46
+END EXCEPTION ---------------------------------------------------------------------
+
+[2021/07/11 12:46:35]
+{"QRAmount":100,"Token":"c6a8f974-dec7-4963-a7c8-44548efb0565","Email":"testweblogin123@gmail.com"}
+BEGIN EXCEPTION [2021/07/11 12:46:35 System.Data.SqlClient.SqlException] ---------------------------------------------
+Method: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+Message: Procedure or function 'uspAddCovidTestingSession' expects parameter '@CovidTestingSessionID', which was not supplied.
+Source: .Net SqlClient Data Provider
+Stack Trace:
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at SqlHelper.ExecuteNonQuery(SqlConnection connection, CommandType commandType, String commandText, SqlParameter[] commandParameters) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Utility\SqlHelper.cs:line 411
+   at SqlHelper.ExecuteNonQuery(String connectionString, CommandType commandType, String commandText, SqlParameter[] commandParameters) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Utility\SqlHelper.cs:line 313
+   at CovidService.Controllers.CreateQRManualDeclarationController.Post(CreateQRManualDeclarationRequest objReq) in E:\Tech4Covid\WebAPI\Web_API\CovidService\Controllers\CreateQRManualDeclarationController.cs:line 46
+END EXCEPTION ---------------------------------------------------------------------
+
+[2021/07/11 12:47:16]
+{"QRAmount":100,"Token":"c6a8f974-dec7-4963-a7c8-44548efb0565","Email":"testweblogin123@gmail.com"}
+[2021/07/11 12:58:58]
+testweblogin123@gmail.com
+[2021/07/11 12:59:04]
+{"QRAmount":100,"Token":"40506165-181c-4af9-a96c-7345de621dfb","Email":"testweblogin123@gmail.com"}
+[2021/07/11 12:59:20]
+{"QRAmount":200,"Token":"40506165-181c-4af9-a96c-7345de621dfb","Email":"testweblogin123@gmail.com"}
+[2021/07/11 14:30:34]
+testweblogin123@gmail.com
+[2021/07/11 14:43:06]
+testweblogin123@gmail.com
+[2021/07/11 14:46:10]
+{"QRAmount":100,"Token":"b9a9f1f0-0d20-437a-8c2c-45be57f9e56d","Email":"testweblogin123@gmail.com"}
+[2021/07/11 15:02:32]
+testweblogin123@gmail.com
+[2021/07/11 15:21:01]
+testweblogin123@gmail.com
+[2021/07/11 15:52:10]
+testweblogin123@gmail.com
+[2021/07/11 17:14:44]
+testweblogin123@gmail.com
+[2021/07/11 17:15:02]
+{"QRAmount":100,"Token":"3e39c18c-dcc8-483f-817f-f19cca6439a5","Email":"testweblogin123@gmail.com"}
+[2021/07/11 17:24:12]
+testweblogin123@gmail.com
+[2021/07/11 17:24:43]
+testweblogin123@gmail.com
+[2021/07/11 17:29:02]
+testweblogin123@gmail.com
+[2021/07/11 17:49:35]
+testweblogin123@gmail.com
+[2021/07/11 19:30:28]
+testweblogin123@gmail.com
+[2021/07/11 20:53:45]
+testweblogin123@gmail.com
+[2021/07/11 21:25:35]
+testweblogin123@gmail.com
+[2021/07/11 21:34:48]
+testweblogin123@gmail.com
+[2021/07/11 21:36:01]
+testweblogin123@gmail.com
+[2021/07/11 21:37:34]
+testweblogin123@gmail.com
+[2021/07/11 21:39:36]
+testweblogin123@gmail.com
+[2021/07/11 21:39:56]
+testweblogin123@gmail.com
+[2021/07/11 21:41:02]
+testweblogin123@gmail.com
+[2021/07/12 08:01:08]
+testweblogin123@gmail.com
+[2021/07/12 08:15:11]
+testweblogin123@gmail.com
+[2021/07/12 08:16:56]
+testweblogin123@gmail.com
+[2021/07/12 08:31:48]
+{"QRAmount":100,"Token":"0dbd7821-d47c-42f0-bc8a-ef858bd8dfe5","Email":"testweblogin123@gmail.com"}
+[2021/07/12 09:24:36]
+testweblogin123@gmail.com
+[2021/07/12 10:40:55]
+testweblogin123@gmail.com
+[2021/07/12 11:47:43]
+testweblogin123@gmail.com
+[2021/07/12 11:50:59]
+testweblogin123@gmail.com
+[2021/07/12 12:00:32]
+testweblogin123@gmail.com
+[2021/07/12 12:43:59]
+testweblogin123@gmail.com
