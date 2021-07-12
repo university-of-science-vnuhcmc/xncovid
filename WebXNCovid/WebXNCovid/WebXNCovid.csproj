@@ -184,6 +184,8 @@
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Views\QRCodeGenerator\SearchHistoryCreateQR.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutBackground.cshtml" />
+    <Content Include="Views\QRCodeGenerator\PrintQR.cshtml" />
+    <Content Include="Views\Account\LoginError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

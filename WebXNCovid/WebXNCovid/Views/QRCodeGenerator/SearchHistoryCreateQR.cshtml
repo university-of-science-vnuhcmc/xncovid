@@ -6,22 +6,6 @@
     Layout = "~/Views/Shared/_LayoutWithoutBackground.cshtml";
     ViewBag.Title = "Tra cứu QR";
 }
-@*<script type="text/javascript">
-    $(document).ready(function () {
-        $('#confirmModal').on('show.bs.modal', function (e) {
-            var _button = $(e.relatedTarget); // Button that triggered the modal
-
-            var _row = _button.parents("tr");
-            var _idFrom = _row.find(".id-from").text();
-            var _ifTo = _row.find(".id-to").text();
-            var _numOfPages = _row.find(".num-of-pages").text();
-
-            $(this).find("#num-of-pages").val(_idFrom);
-            $(this).find("#id-from").val(_ifTo);
-            $(this).find("#num-of-pages").val(_numOfPages);
-        });
-    });
-</script>*@
 <div style="background-color: white; width: 100%">
     <div class="container-fluid">
         <div class="row">
@@ -65,7 +49,7 @@
                                 <td class="id-from">@item.MinNumber</td>
                                 <td class="id-to">@item.MaxNumber</td>
                                 <td class="num-of-pages">@item.NumOfPrint</td>
-                                <td><input id="print-btn" type="submit" class="btn btn-submit" value="In lại" data-toggle="modal" data-target="#confirmModal" /></td>
+                                <td><input id="print-btn" type="button" class="btn btn-submit" onclick="print(@item.MinNumber,@item.MaxNumber)" value="In lại" data-toggle="modal" data-target="#confirmModal" /></td>
                             </tr>
                         }
                     }
@@ -85,7 +69,7 @@
                             <p class="confirm-content center-text-align">Bạn chắc chắn muốn in lại <span id="num-of-pages" style="color: #86CF3C;"></span> trang<br /> từ số <span id="id-from" style="color: #64A0F3;"></span> đến số <span id="id-to" style="color: #64A0F3;"></span>?</p>
                         </div>
                         <div class="h-align-center pt-2 pb-4">
-                            <button type="button" class="btn btn-submit">In lại</button>
+                            <button type="button" id="btncfp" onclick="printqr()" class="btn btn-submit">In lại</button>
                         </div>
                     </div>
                 </div>
@@ -93,3 +77,32 @@
         </div>
     </div>
 </div>
+<script>
+    function printqr(min, max) {
+        $.ajax({
+            url: "/QRCodeGenerator/PrintQR?min=" + min + '&max=' + max,
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            cache: false,
+            timeout: (10 * 1000),
+            success: function (obj) {
+                if (obj.valid) {
+                    newWin = window.open("");
+                    newWin.document.write(obj.data);
+                    setTimeout(newWin.print(), 3000);
+                    newWin.close();
+                }
+                else {
+                }
+            },
+            error: function (req, status, error) {
+                return false;
+            }
+        });
+    }
+
+    function print(min, max) {
+        document.getElementById("btncfp").onclick = function () { printqr(min, max) };
+    }
+</script>

@@ -18,6 +18,12 @@ namespace WebXNCovid.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult LoginError()
+        {
+            return View();
+        }
+
         // POST: /Account/TokenSignin
         [HttpPost]
         [AllowAnonymous]
