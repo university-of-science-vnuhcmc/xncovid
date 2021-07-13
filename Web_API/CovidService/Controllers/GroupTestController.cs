@@ -68,7 +68,7 @@ namespace CovidService.Controllers
                             return objRes;
                         case -17:
                             long loSpecimenID = 0;
-                            bool isDuplicate = CheckDuplicate(objReq.CovidSpecimenCode, sqlString, objReq.CitizenInfor, ref loSpecimenID);
+                            bool isDuplicate = CheckDuplicate(objReq.CovidSpecimenCode, objReq.CovidTestingSessionID, sqlString, objReq.CitizenInfor, ref loSpecimenID);
                             if (!isDuplicate)
                             {
                                 objRes.ReturnCode = intReturnValue;
@@ -140,12 +140,13 @@ namespace CovidService.Controllers
             }
         }
 
-        private bool CheckDuplicate(string CovidSpecimenCode, string sqlString, List<CitizenInfor> lstInfor, ref long SpecimenID)
+        private bool CheckDuplicate(string CovidSpecimenCode, long CovidTestingSessionID, string sqlString, List<CitizenInfor> lstInfor, ref long SpecimenID)
         {
             try
             {
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenCode", System.Data.SqlDbType.NVarChar, 64, CovidSpecimenCode);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, CovidSpecimenCode);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidSpecimenDetail ", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
