@@ -146,7 +146,7 @@ namespace CovidService.Controllers
             {
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenCode", System.Data.SqlDbType.NVarChar, 64, CovidSpecimenCode);
-                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, CovidSpecimenCode);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, CovidTestingSessionID);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 DataSet dts = SqlHelper.GetDataTable(sqlString, "dbo.uspGetCovidSpecimenDetail ", parameters.ToArray());
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
