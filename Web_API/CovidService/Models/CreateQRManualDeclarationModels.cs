@@ -15,6 +15,6 @@ namespace CovidService.Models
         public string CreateDate;
         public int MinNumber;
         public int MaxNumber;
-        public int NumOfPrint;
+        public int Numbers;
     }
 }

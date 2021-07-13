@@ -116,3 +116,127 @@ testweblogin123@gmail.com
 testweblogin123@gmail.com
 [2021/07/12 12:43:59]
 testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 18:42:10]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 18:42:11]
+{"Token":"09b0b412-1800-41ef-a9ad-e5a0d95cd394","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 18:42:23]
+{"QRAmount":100,"Token":"09b0b412-1800-41ef-a9ad-e5a0d95cd394","Email":"testweblogin123@gmail.com"}
+==============================================================
+Login :
+[2021/07/12 18:53:25]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 18:53:26]
+{"Token":"b10ebd25-5ed0-4c3c-9b4f-eace2cc4e3ee","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 18:53:34]
+{"QRAmount":100,"Token":"b10ebd25-5ed0-4c3c-9b4f-eace2cc4e3ee","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 18:55:46]
+{"QRAmount":100,"Token":"b10ebd25-5ed0-4c3c-9b4f-eace2cc4e3ee","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 18:56:11]
+{"QRAmount":100,"Token":"b10ebd25-5ed0-4c3c-9b4f-eace2cc4e3ee","Email":"testweblogin123@gmail.com"}
+==============================================================
+Login :
+[2021/07/12 18:57:29]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 18:57:29]
+{"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 18:57:35]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:14:27]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:14:48]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:22:34]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:22:37]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:23:06]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:26:09]
+{"QRAmount":100,"Token":"7b8ca5e4-fb60-4143-ac25-2e25df0a5d84","Email":"testweblogin123@gmail.com"}
+==============================================================
+Login :
+[2021/07/12 19:35:38]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 19:35:38]
+{"Token":"c3c79a1f-678e-405f-8f98-f3dcbdd78d86","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:35:44]
+{"QRAmount":100,"Token":"c3c79a1f-678e-405f-8f98-f3dcbdd78d86","Email":"testweblogin123@gmail.com"}
+==============================================================
+CreateQRManualDeclaration :
+[2021/07/12 19:35:47]
+{"QRAmount":100,"Token":"c3c79a1f-678e-405f-8f98-f3dcbdd78d86","Email":"testweblogin123@gmail.com"}
+==============================================================
+Login :
+[2021/07/12 20:39:07]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 20:39:07]
+{"Token":"ebc33f85-43af-46ee-abf0-93ef166ad842","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+Login :
+[2021/07/12 20:41:24]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 20:41:24]
+{"Token":"241cb41d-e868-4983-81bb-29ab074a20ab","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+Login :
+[2021/07/12 20:43:02]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 20:43:02]
+{"Token":"44c29e9a-cc10-43dc-8867-f78cd8cd8e78","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+Login :
+[2021/07/12 20:43:48]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 20:43:48]
+{"Token":"a8c22ae5-579d-4404-94f7-b0f10d617907","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}
+==============================================================
+Login :
+[2021/07/12 20:53:38]
+testweblogin123@gmail.com
+==============================================================
+Login :
+[2021/07/12 20:53:38]
+{"Token":"8b5c1755-9a34-4dd1-8c97-7a4fbc824a2e","Role":"Staff","AccountID":1,"CustomerName":"testweblogin123@gmail.com","FullName":"","ReturnCode":1,"ReturnMess":"Thành công"}

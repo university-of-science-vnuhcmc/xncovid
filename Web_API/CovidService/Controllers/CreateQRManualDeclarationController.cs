@@ -61,7 +61,7 @@ namespace CovidService.Controllers
                 objRes.CreateDate = DateTime.Parse(objDt.Rows[0]["CreateDate"].ToString()).ToString("yyyy/MM/dd HH:mm:ss");
                 objRes.MinNumber = int.Parse(objDt.Rows[0]["MinNumber"].ToString());
                 objRes.MaxNumber = int.Parse(objDt.Rows[0]["MaxNumber"].ToString());
-                objRes.NumOfPrint = int.Parse(objDt.Rows[0]["NumOfPrint"].ToString());
+                objRes.Numbers = int.Parse(objDt.Rows[0]["Numbers"].ToString());
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
                 return objRes;
