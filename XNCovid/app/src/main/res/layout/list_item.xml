@@ -38,10 +38,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        android:layout_centerInParent="true"
-        android:text="1111-1111-1111"
+        android:text="1111-1111-1111-11111"
         android:textAppearance="@style/blue_28"
        android:layout_marginLeft="17dp"
         android:gravity="center_vertical"
         android:textStyle="bold"
-        />
+        android:ellipsize="end"
+        android:singleLine="true"/>
 </RelativeLayout>

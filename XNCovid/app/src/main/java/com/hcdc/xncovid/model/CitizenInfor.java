@@ -20,4 +20,6 @@ public class CitizenInfor {
     public  String PartnerProvinceID;
     public  String PartnerProvinceName;
 
+    public  int Gender;
+
 }

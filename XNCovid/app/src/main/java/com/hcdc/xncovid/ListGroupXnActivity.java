@@ -124,6 +124,32 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         isStop = true;
+                                        showLoading();
+                                        if(!UploadGroupXN()){
+                                            isStop = false;
+                                        }
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        isStop = false;
+                                    }
+                                }, ListGroupXnActivity.this);
+                    }else {
+                        String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
+                        String htmlcontent = "Đã đủ "
+                                +groupAdapter.getCount()
+                                +" / 10, vui lòng chọn tiếp tục";
+                        new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
+                                txtUId,
+                                htmlcontent,
+                                "Tiếp tục",
+                                "Hủy",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        isStop = true;
+                                        showLoading();
                                         if(!UploadGroupXN()){
                                             isStop = false;
                                         }
@@ -188,7 +214,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
     }
     public  Boolean UploadGroupXN(){
         final Boolean[] isOK = {true};
-        showLoading();
+        btnStartGroup.setEnabled(false);
+        listViewGroupItem.setEnabled(false);
         try{
             GroupTestReq req  = new GroupTestReq();
             req.CovidTestingSessionID = Long.parseLong(session_code);
@@ -218,6 +245,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     objReq.PartnerDistrictName = obj.getDistrict();
                     objReq.PartnerProvinceID = obj.getProvinceID();
                     objReq.PartnerProvinceName = obj.getProvince();
+                    objReq.Gender = obj.getGent() == 1 ? 1 : 2;
                     tmp.add(objReq);
                     continue;
                 }
@@ -244,22 +272,28 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             isOK[0] = false;
+                            isStop = false;
+                            btnStartGroup.setEnabled(true);
+                            listViewGroupItem.setEnabled(true);
                         }
                         else if (res.ReturnCode == -16) //trung QR
                         {
                             Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
-                            String strcontent = "Danh sách mã tồn tại:";
-                            String[] arrIds = res.ReturnMess.split("|");
+                            String strcontent = "<font color='#FF0000'>Danh sách mã tồn tại:</font>";
+                            String[] arrIds = res.ReturnMess.split("\\|");
                             for (String uid: arrIds) {
                                 strcontent += "<br/><font color='#FF0000'><i>" + uid + "</i></font>";
                             }
-                            new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp củ phiên.",
+                            new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
+                                    session.SessionName,
                                     strcontent,
-                                    null,
                                     null,
                                     "OK",
                                     null, null, ListGroupXnActivity.this);
                             isOK[0] = false;
+                            isStop = false;
+                            btnStartGroup.setEnabled(true);
+                            listViewGroupItem.setEnabled(true);
                         }
                         else if (res.ReturnCode == -31 || res.ReturnCode == -32)
                         {
@@ -270,6 +304,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             isOK[0] = false;
+                            isStop = false;
+                            btnStartGroup.setEnabled(true);
+                            listViewGroupItem.setEnabled(true);
                         }
                         else{
                             Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
@@ -279,6 +316,9 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             isOK[0] = false;
+                            isStop = false;
+                            btnStartGroup.setEnabled(true);
+                            listViewGroupItem.setEnabled(true);
                         }
                     }catch (Exception e){
                         Log.e("ListGroupXnActivity", e.toString(), e);
@@ -288,12 +328,15 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                         isOK[0] = false;
+                        isStop = false;
+                        btnStartGroup.setEnabled(true);
+                        listViewGroupItem.setEnabled(true);
                     }
                     hideLoading();
 
                 }
             }, null, Request.Method.POST);
-            hideLoading();
+          //  hideLoading();
             return isOK[0];
         } catch (Exception e){
             Log.e("ListGroupXnActivity", e.toString(), e);
@@ -303,7 +346,10 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
             isOK[0] = false;
+            isStop = false;
             hideLoading();
+            btnStartGroup.setEnabled(true);
+            listViewGroupItem.setEnabled(true);
             return   isOK[0] ;
         }
 
