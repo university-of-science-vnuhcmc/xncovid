@@ -24,7 +24,7 @@ namespace WebXNCovid.Models
         public string CreateDate;
         public int MinNumber;
         public int MaxNumber;
-        public int NumOfPrint;
+        public int Numbers;
     }
     public class LogoutResponse : ResponseModel
     {

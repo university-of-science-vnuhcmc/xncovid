@@ -3,31 +3,26 @@
 @{
     ViewBag.Title = "Tạo mã QR thành công";
 }
-<div class="row">
-    <div class="input-dialog">
+<div class="centered-dialog justify-centered">
 
-        @using (Html.BeginForm("GenerateQRSuccess", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            var info = ViewData["GenerateQRInfo"] as GenerateQRSuccessViewModel;
-
-            <p class="success-header">Tạo mã thành công!</p>
-            <div class="success-info">
-                <p>Ngày tạo: <span class="info-display">@info.CreateDate.ToString("dd/MM/yyyy hh:mm")</span></p>
-                <p>Người tạo: <span class="info-display">@info.CreatedUser</span></p>
-                <p>Số lượng: <span class="info-display">@info.AmountQR</span></p>
-                <p>Đã xuất các mã từ <span class="info-display">@info.IdFrom</span> - <span class="info-display">@info.IdTo</span></p>
-                <p>Gồm <span class="info-display">@info.AmountPage</span> trang A4</p>
-                @Html.HiddenFor(m => m.IdFrom, Model.IdFrom)
-                @Html.HiddenFor(m => m.IdTo, Model.IdTo)
+    @using (Html.BeginForm("GenerateQRSuccess", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <p class="success-header">Tạo mã thành công!</p>
+        <div class="success-info">
+            <p>Ngày tạo: <span class="info-display">@Model.CreateDate.ToString("dd/MM/yyyy hh:mm")</span></p>
+            <p>Người tạo: <span class="info-display">@Model.CreatedUser</span></p>
+            <p>Số lượng: <span class="info-display">@Model.AmountQR</span></p>
+            <p>Đã xuất các mã từ <span class="info-display">@Model.IdFrom</span> - <span class="info-display">@Model.IdTo</span></p>
+            <p>Gồm <span class="info-display">@Model.AmountPage</span> trang A4</p>
+            @Html.HiddenFor(m => m.IdFrom, Model.IdFrom)
+            @Html.HiddenFor(m => m.IdTo, Model.IdTo)
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 h-align-center">
+                <input type="button" onclick="print()" class="btn btn-submit" value="In mã" />
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10 h-align-center">
-                    <input type="button" onclick="print()" class="btn btn-custom" value="In mã" />
-                </div>
-            </div>
-        }
-
-    </div>
+        </div>
+    }
 </div>
 
 <div style="display: none">
@@ -104,8 +99,10 @@
         var divToPrint = document.getElementById("printarea");
         newWin = window.open("");
         newWin.document.write(divToPrint.outerHTML);
-        newWin.print();
-        newWin.close();
+        setTimeout(function () {
+            newWin.print();
+            newWin.close();
+        }, 100);
     }
 
 </script>

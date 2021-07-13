@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using WebXNCovid;
 using WebXNCovid.Models;
 using ZXing;
@@ -34,7 +35,7 @@ namespace WebForCommunityScreening.Controllers
         {
             try
             {
-                const int amtQRPerPage = 6;
+                const double amtQRPerPage = 6;
 
                 CreateQRRequestModel request = new CreateQRRequestModel();
                 request.Email = Session["Email"].ToString();
@@ -57,7 +58,7 @@ namespace WebForCommunityScreening.Controllers
                     return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                 }
 
-                LoginResponse objRes = JsonConvert.DeserializeObject<LoginResponse>(result);
+                CreateQRResponse objRes = JsonConvert.DeserializeObject<CreateQRResponse>(result);
 
                 if (objRes.ReturnCode != 1)
                 {
@@ -72,12 +73,12 @@ namespace WebForCommunityScreening.Controllers
                 }
 
                 GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
-                model.CreateDate = DateTime.Now;
+                model.CreateDate = DateTime.ParseExact(objRes.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                 model.CreatedUser = Session["Email"].ToString();
-                model.AmountQR = QRCodeAmount;
-                model.IdFrom = 10000;
-                model.IdTo = model.IdFrom + QRCodeAmount - 1;
-                model.AmountPage = QRCodeAmount / amtQRPerPage + (QRCodeAmount % amtQRPerPage == 0 ? 0 : 1);
+                model.AmountQR = objRes.Numbers;
+                model.IdFrom = objRes.MinNumber;
+                model.IdTo = objRes.MaxNumber;
+                model.AmountPage = Convert.ToInt16(Math.Ceiling(((double)objRes.Numbers) / amtQRPerPage));
                 //ViewData["GenerateQRInfo"] = model;
 
                 List<Bitmap> bitmaps = new List<Bitmap>();
@@ -197,6 +198,7 @@ namespace WebForCommunityScreening.Controllers
             SearchHistoryCreateQRViewModel model = new SearchHistoryCreateQRViewModel();
             try
             {
+                const double amtQRPerPage = 6;
                 string FromDate = form["FromCreateDate"];
                 DateTime FromCreateDate = DateTime.ParseExact(FromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
                 DateTime ToCreateDate = FromCreateDate.AddDays(1).AddMilliseconds(-1);
@@ -237,7 +239,16 @@ namespace WebForCommunityScreening.Controllers
                     }
                 }
 
-                model.ListHistory = objRes.HistoryLogs;
+                model.ListHistory = objRes.HistoryLogs.Select(log =>
+                      new HistoryLog
+                      {
+                          CreateDate = log.CreateDate,
+                          CreateUser = log.CreateUser,
+                          QRAmount = log.QRAmount,
+                          MinNumber = log.MinNumber,
+                          MaxNumber = log.MaxNumber,
+                          NumOfPrint = Convert.ToInt16(Math.Ceiling(((double)log.QRAmount) / amtQRPerPage))
+                      }).ToList();
             }
             catch (Exception objEx)
             {
@@ -318,6 +329,71 @@ namespace WebForCommunityScreening.Controllers
             return bmp;
         }
 
+
+        public ActionResult PrintQR(int min, int max)
+        {
+            var obj = new
+            {
+                valid = false,
+                data = ""
+            };
+            try
+            {
+                GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
+                model.CreateDate = DateTime.Now;
+                model.IdFrom = min;
+                model.IdTo = max;
+                List<Bitmap> bitmaps = new List<Bitmap>();
+                List<byte[]> bytearrays = new List<byte[]>();
+
+                for (int i = model.IdFrom; i <= model.IdTo; i++)
+                {
+                    var bmp = GenerateQR(i);
+                    bitmaps.Add(bmp);
+                    bytearrays.Add(BitmapToBytes(bmp));
+                }
+                model.lstQR = bytearrays;
+                string strData = RenderPartialViewToString("PrintQR", model);
+                obj = new
+                {
+                    valid = true,
+                    data = strData,
+                };
+
+                var serializer = new JavaScriptSerializer();
+
+                // For simplicity just use Int32's max value.
+                // You could always read the value from the config section mentioned above.
+                serializer.MaxJsonLength = Int32.MaxValue;
+
+                //var resultData = new { Value = "foo", Text = "var" };
+                var result = new ContentResult
+                {
+                    Content = serializer.Serialize(obj),
+                    ContentType = "application/json"
+                };
+                return result;
+                //return Json(obj);
+            }
+            catch
+            {
+                return Json(obj);
+            }
+        }
+
+        protected string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+            ViewData.Model = model;
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
         //private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
         //{
         //    const int padding = 20;

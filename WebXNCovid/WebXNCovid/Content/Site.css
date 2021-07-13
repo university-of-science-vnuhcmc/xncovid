@@ -194,7 +194,7 @@ a.article, a.article:hover {
 #content {
     width: 100%;
     /*padding: 20px;*/
-    min-height: 100vh;
+    min-height: 91vh;
     transition: all 0.3s;
 }
 
@@ -324,28 +324,27 @@ body {
     line-height: 29px;
 }
 
-.input-dialog {
+.centered-dialog {
     background-color: white;
-    padding: 20px 80px 10px 80px;
     margin: auto;
+    width: 70%;
+    max-width: 550px;
+    padding: 20px 40px 10px 40px;
     text-align: center;
     border: 1px solid #a6dfed;
+    border-radius: 32px;
 }
 
 .h-align-center {
     margin: auto;
 }
-
+/*
 .btn-custom {
     background-color: #379FFF;
     border-radius: 10px;
     color: white;
     margin-top: 10px;
-}
-
-.center-text-align {
-    text-align: center;
-}
+}*/
 
 .success-header {
     margin-bottom: 10px;
@@ -478,7 +477,7 @@ table td {
 
 .confirm-content {
     font-size: 1.4rem;
-    margin: 0px 30px;
+    margin: 0px 20px;
 }
 
 .modal-header-custom {

@@ -1,0 +1,44 @@
+﻿@using WebXNCovid.Models
+@model  GenerateQRSuccessViewModel
+
+<div id="printarea" style=" width: 811px;    min-height: 29.7cm;     background-color: white;    padding: 10px 0px;">
+    @{
+        int i = 0;
+    }
+    @foreach (var item in Model.lstQR)
+    {
+        i++;
+        <table style="width: 100%;   border-bottom: 1px #000000 dotted;">
+            <tr>
+                <td style="width: 130px ;margin: 10px 0px; padding: 10px 5px 10px 10px;">
+                    <img style="margin-left: 22px" src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(item))" />
+                </td>
+                <td>
+                    <h5 style="margin-top: 30px; text-align: center;    font-weight: bold;">PHIẾU THÔNG TIN XÉT NGHIỆM</h5>
+                    <div class="">
+                        <span class="background-color: #FFFFFF; display: inline-block;">Họ và tên:.....................................................................................Nam/Nữ:....................................</span>
+                        @*<span class="offset-7 field">Nam: &#11036 Nữ: &#11036 </span>*@
+                    </div>
+                    <div class="">
+                        <span class="background-color: #FFFFFF; display: inline-block;">Ngày sinh:....../...../............Số điện thoại:........................................................................................</span>
+                        @*<span class="offset-4 field">Số điện thoại: </span>*@
+                    </div>
+                    <div class="">
+                        <span class="background-color: #FFFFFF; display: inline-block;">Sống tại: Số nhà/Tổ/Xóm.............................Đường/Phố/Thôn:......................................................</span>
+                        @*<span class="offset-3 field">Đường/Phố/Thôn: </span>*@
+                    </div>
+                    <div class="" style="margin-bottom: 20px">
+                        <span class="background-color: #FFFFFF; display: inline-block;">Phường/Xã.................................Quận/Huyện:..............................Tỉnh/TP:....................................</span>
+                        @*<span class="offset-2 field">Quận/Huyện: </span>
+                            <span class="offset-2 field">Tỉnh/Thành phố: </span>*@
+                    </div>
+                </td>
+            </tr>
+        </table>
+        if (i == 6)
+        {
+            <div style="page-break-after: always;"></div>
+            i = 0;
+        }
+    }
+</div>
