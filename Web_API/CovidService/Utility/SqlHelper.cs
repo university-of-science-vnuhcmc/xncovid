@@ -216,6 +216,7 @@ public sealed class SqlHelper
         }
         catch (Exception ex)
         {
+            LogWriter.WriteException(ex);
         }
         return ds;
     }

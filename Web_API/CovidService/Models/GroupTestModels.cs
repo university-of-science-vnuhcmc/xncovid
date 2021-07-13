@@ -36,7 +36,7 @@ namespace CovidService.Models
         public string PartnerDistrictName { get; set; }
         public string PartnerProvinceID { get; set; }
         public string PartnerProvinceName { get; set; }
-
+        public int Gender { get; set; }
     }
 
     public class GroupTestResponse : Response

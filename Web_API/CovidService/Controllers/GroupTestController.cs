@@ -42,6 +42,7 @@ namespace CovidService.Controllers
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GroupTest");
                 DataTable data = ConvertToDataTable(objReq.CitizenInfor);
                 string sqlString = SqlHelper.sqlString;
+                LogWriter.WriteLogMsg("da vao day", "GroupTest");
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenCode", System.Data.SqlDbType.NVarChar, 64, objReq.CovidSpecimenCode);
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
@@ -85,9 +86,9 @@ namespace CovidService.Controllers
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "Session was finished";
                             return objRes;
-                        case 1002:
-                            objRes.ReturnCode = intReturnValue;
-                            objRes.ReturnMess = "DB return failure";
+                        default:
+                            objRes.ReturnCode = 1002;
+                            objRes.ReturnMess = "DB return failure, ReturnCode: " + intReturnValue;
                             return objRes;
                     }
                 }
