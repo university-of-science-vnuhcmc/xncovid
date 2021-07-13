@@ -47,13 +47,13 @@ namespace CovidService.Controllers
         // POST api/<controller>
         public LoginReponse Post([FromBody]LoginRequest value)
         {
-            LogWriter.WriteLogMsg(value.Email, "Login");
+            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(value), "LoginRequest");
             LoginReponse loginRes = new LoginReponse();
             try
             {
                 bool checkTonken = CheckValidRequest();
                 string strRes = "";
-                GoogleApiTokenInfo ggTokenInfo = null;// GetUserDetails(value.TokenID, out strRes);
+                GoogleApiTokenInfo ggTokenInfo =  GetUserDetails(value.TokenID, out strRes);
                 if (ggTokenInfo != null)
                 {
                     if (ggTokenInfo.email != value.Email)
@@ -82,7 +82,7 @@ namespace CovidService.Controllers
                         else
                         {
                             loginRes.ReturnCode = intReturn;
-                            loginRes.ReturnMess = "Thất bại";
+                            loginRes.ReturnMess = "Login fail " + strRes;
                         }
 
                     }
@@ -91,23 +91,23 @@ namespace CovidService.Controllers
                 {
 
                     //goi db 
-                    string token = Guid.NewGuid().ToString();
-                    AccountInfo accInfo = new AccountInfo();
-                    string MD5Token = Util.GetMD5Hash(token);
-                    int intReturn = CallDB(value.Email, MD5Token, out accInfo);
-                    if (intReturn == 1)
+                    //string token = Guid.NewGuid().ToString();
+                    //AccountInfo accInfo = new AccountInfo();
+                    //string MD5Token = Util.GetMD5Hash(token);
+                    //int intReturn = CallDB(value.Email, MD5Token, out accInfo);
+                    //if (intReturn == 1)
+                    //{
+                    //    loginRes.ReturnCode = 1;
+                    //    loginRes.ReturnMess = "Thành công";
+                    //    loginRes.Token = token;
+                    //    loginRes.AccountID = accInfo.AccountID;
+                    //    loginRes.CustomerName = accInfo.AccountName;
+                    //    loginRes.Role = accInfo.RoleName;
+                    //    loginRes.FullName = accInfo.FullName;
+                    //}
+                    //else
                     {
-                        loginRes.ReturnCode = 1;
-                        loginRes.ReturnMess = "Thành công";
-                        loginRes.Token = token;
-                        loginRes.AccountID = accInfo.AccountID;
-                        loginRes.CustomerName = accInfo.AccountName;
-                        loginRes.Role = accInfo.RoleName;
-                        loginRes.FullName = accInfo.FullName;
-                    }
-                    else
-                    {
-                        loginRes.ReturnCode = intReturn;
+                        loginRes.ReturnCode = 0;
                         loginRes.ReturnMess = "Login fail";
                     }
                 }
@@ -134,35 +134,45 @@ namespace CovidService.Controllers
         private GoogleApiTokenInfo GetUserDetails(string providerToken, out string strRes)
         {
             strRes = "";
-            var httpClient = new HttpClient();
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-            var requestUri = new Uri(string.Format(GoogleApiTokenInfoUrl, providerToken));
-
-            HttpResponseMessage httpResponseMessage;
             try
             {
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(TrustAllValidationCallback);
-                httpResponseMessage = httpClient.GetAsync(requestUri).Result;
+               
+                var httpClient = new HttpClient();
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
+                var requestUri = new Uri(string.Format(GoogleApiTokenInfoUrl, providerToken));
+
+                HttpResponseMessage httpResponseMessage;
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(TrustAllValidationCallback);
+                    httpResponseMessage = httpClient.GetAsync(requestUri).Result;
+
+                }
+                catch (Exception ex)
+                {
+                    strRes = ex.ToString();
+                    return null;
+                }
+
+                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                {
+                    strRes = httpResponseMessage.StatusCode + " | " + httpResponseMessage.RequestMessage;
+                    return null;
+                }
+
+                var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                strRes = response;
+                var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
+
+                return googleApiTokenInfo;
             }
             catch (Exception ex)
             {
-                strRes = ex.ToString();
+                LogWriter.WriteException(ex);
                 return null;
             }
-
-            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                strRes = httpResponseMessage.StatusCode + " | " + httpResponseMessage.RequestMessage;
-                return null;
-            }
-
-            var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            strRes = response;
-            var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
-
-            return googleApiTokenInfo;
+           
 
         }
         private int CallDB(string Email, string Token, out AccountInfo info)
