@@ -16,16 +16,17 @@ namespace CovidService.Controllers
     {
         public CheckAccountResponse Post([FromBody]CheckAccountRequest objReq)
         {
+            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CheckAccountRequest");
             CheckAccountResponse objRes = new CheckAccountResponse();
             try
             {
                 bool checkLogin = Utility.Util.CheckLogin(objReq.Email, objReq.Token);
-                //if (!checkLogin)
-                //{
-                //    objRes.ReturnCode = 99;
-                //    objRes.ReturnMess = "Invalid Email or Token";
-                //    return objRes;
-                //}
+                if (!checkLogin)
+                {
+                    objRes.ReturnCode = 99;
+                    objRes.ReturnMess = "Invalid Email or Token";
+                    return objRes;
+                }
                 Session sesInfo = new Session();
                 if (objReq == null)
                 {
@@ -82,7 +83,7 @@ namespace CovidService.Controllers
                         info.Address = objRow["Address"].ToString();
                         info.Purpose = objRow["Note"].ToString();
                         info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
-                        info.Account = objRow["CreateAccountName"].ToString();
+                        info.Account = objRow["FullName"].ToString();
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {

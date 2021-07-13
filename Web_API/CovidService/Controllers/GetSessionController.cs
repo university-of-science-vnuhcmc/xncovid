@@ -41,13 +41,19 @@ namespace CovidService.Controllers
                 int intReturnValue = Convert.ToInt32(parameters[parameters.Count - 1].Value);
                 if (intReturnValue != 1)
                 {
-                    objRes.ReturnCode = 1001;
+                    if (intReturnValue == -196)
+                    {
+                        objRes.ReturnCode = -196;
+                        objRes.ReturnMess = "Session was finished";
+                        return objRes;
+                    }
+                    objRes.ReturnCode = 1002;
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
                     return objRes;
                 }
                 if (dts == null)
                 {
-                    objRes.ReturnCode = 1002;
+                    objRes.ReturnCode = 1001;
                     objRes.ReturnMess = "Error, Dataset is null";
                     return objRes;
                 }
