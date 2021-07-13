@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebXNCovid</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="~/Content/Site.css">
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="~/Assets/web-fonts-with-css/css/fontawesome-all.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+</head>
+<body style="background-color: #A2C6F8">
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" class="active">
+            <div class="sidebar-header">
+                <a href="#" id="sidebarCollapse" data-toggle="sidebar-colapse">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li @*class="active"*@>
+                    <a href="/QRCodeGenerator/Index">
+                        <i class="fas fa-plus"></i>
+                        <span class="menu-collapsed d-none">Tạo mã</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/QRCodeGenerator/SearchHistoryCreateQR">
+                        <i class="fas fa-search"></i>
+                        <span class="menu-collapsed d-none">Tra cứu mã</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="divlout list-unstyled components">
+                <li>
+                    <a href="/Account/LogOut" onclick="signOut()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="menu-collapsed d-none">Log out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content-body">
+            <div class="row Header">
+                <h2 class="title-section">@ViewBag.Title</h2>
+            </div>
+            @Html.Partial("_LoginPartial")
+            <div id="content" style="position: relative">
+                <div>
+                    <div class="div5k">
+                        <img style="max-width: 800px" src="~/Assets/5K.png" />
+                    </div>
+                </div>
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    <script>
+        // Collapse click
+        $('[data-toggle=sidebar-colapse]').click(function () {
+            SidebarCollapse();
+        });
+
+        function SidebarCollapse() {
+            $('.menu-collapsed').toggleClass('d-none');
+        }
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                window.location.href = '@Url.Action("Logout", "Account")';
+            });
+        }
+    </script>
+</body>
+</html>
