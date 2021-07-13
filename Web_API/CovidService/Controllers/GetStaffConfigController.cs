@@ -39,8 +39,8 @@ namespace CovidService.Controllers
             "ward::pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong\n" +
             "district::pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen\n" +
             "province::pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh\n" +
-            "provinceid::pattern==},\"tinhthanh_id\":\"(?<provinceid>.*)\",\"tinhthanh\"==>key==provinceid\n" +
-            "districtid::pattern==},\"quanhuyen_id\":\"(?<districtid>.*)\",\"quanhuyen\"==>key==districtid\n" +
+            "provinceid::pattern==\\},\"tinhthanh_id\":\"(?<provinceid>.*)\",\"tinhthanh\"==>key==provinceid\n" +
+            "districtid::pattern==\\},\"quanhuyen_id\":\"(?<districtid>.*)\",\"quanhuyen\"==>key==districtid\n" +
             "wardid::pattern==\"xaphuong_id\":\"(?<wardid>.*)\",\"xaphuong\"==>key==wardid\n" +
             "address::pattern==\"dia_chi\":\"(?<diadiem>[^,]*)\"==>key==diadiem##pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong##pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen##pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
 
