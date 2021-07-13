@@ -13,12 +13,6 @@ namespace CovidService.Controllers
 {
     public class GetStaffConfigController : ApiController
     {
-       
-
-        
-
-       
-
         // POST api/<controller>
         public GetStaffConfigResponse Post([FromBody]GetStaffConfigRequest value)
         {
@@ -32,7 +26,17 @@ namespace CovidService.Controllers
                 GetStaffRes.Domain = "https://kbytcq.khambenh.gov.vn/";
                 GetStaffRes.Id = "id=([A-z0-9-]*)";
 
-                GetStaffRes.Form = "phone::pattern==\"so_dien_thoai\":\"(?<sodienthoai>[0-9]+)\",==>key==sodienthoai\n" +            "fullname::pattern==\"so_dien_thoai\":\"[0-9]+\",\"ten\":\"(?<hoten>[^,]*)\",==>key==hoten\n" +            "gent::pattern==\"gioi_tinh\":(?<gioitinh>\\d{1})==>key==gioitinh\n" +            "birthdateyear::pattern==\"namsinh\":(?<namsinh>\\d{4})==>key==namsinh\n" +            "ward::pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong\n" +            "district::pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen\n" +            "province::pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh\n" +            "provinceid::parttern==},\"tinhthanh_id\":\"(?<provinceid>.*)\",\"tinhthanh\"==>key==provinceid\n" +            "districtid::parttern==},\"quanhuyen_id\":\"(?<districtid>.*)\",\"quanhuyen\"==>key==districtid\n" +            "wardid::parttern==\"xaphuong_id\":\"(?<wardid>.*)\",\"xaphuong\"==>key==wardid\n" +            "address::pattern==\"dia_chi\":\"(?<diadiem>[^,]*)\"==>key==diadiem##pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong##pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen##pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
+                GetStaffRes.Form = "phone::pattern==\"so_dien_thoai\":\"(?<sodienthoai>[0-9]+)\",==>key==sodienthoai\n" +
+            "fullname::pattern==\"so_dien_thoai\":\"[0-9]+\",\"ten\":\"(?<hoten>[^,]*)\",==>key==hoten\n" +
+            "gent::pattern==\"gioi_tinh\":(?<gioitinh>\\d{1})==>key==gioitinh\n" +
+            "birthdateyear::pattern==\"namsinh\":(?<namsinh>\\d{4})==>key==namsinh\n" +
+            "ward::pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong\n" +
+            "district::pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen\n" +
+            "province::pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh\n" +
+            "provinceid::parttern==},\"tinhthanh_id\":\"(?<provinceid>.*)\",\"tinhthanh\"==>key==provinceid\n" +
+            "districtid::parttern==},\"quanhuyen_id\":\"(?<districtid>.*)\",\"quanhuyen\"==>key==districtid\n" +
+            "wardid::parttern==\"xaphuong_id\":\"(?<wardid>.*)\",\"xaphuong\"==>key==wardid\n" +
+            "address::pattern==\"dia_chi\":\"(?<diadiem>[^,]*)\"==>key==diadiem##pattern==\"xaphuong\":.*\"ten\":\"(?<xaphuong>[^,]+)\",\"quanhuyen_id\"==>key==xaphuong##pattern==\"quanhuyen\":.*\"ten\":\"(?<quanhuyen>[^,]+)\",\"tinhthanh_id\"==>key==quanhuyen##pattern==\"tinhthanh\":.*\"ten\":\"(?<tinhthanh>[^,]+)\",\"quocgia_id\"==>key==tinhthanh::out==%diadiem%###, ###%xaphuong%###, ###%quanhuyen%###, ###%tinhthanh%###.";
 
                 return GetStaffRes;
             }

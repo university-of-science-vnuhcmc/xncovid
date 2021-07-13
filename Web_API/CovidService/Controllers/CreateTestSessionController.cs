@@ -26,31 +26,36 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateTestSession");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateTestSession Request");
                 if (string.IsNullOrEmpty(objReq.SessionName))
                 {
                     objRes.ReturnCode = 1001;
                     objRes.ReturnMess = "SessionName is null or empty";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
                 if (string.IsNullOrEmpty(objReq.FullLocation))
                 {
                     objRes.ReturnCode = 1002;
                     objRes.ReturnMess = "FullLocation is null or empty";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
                 if (string.IsNullOrEmpty(objReq.TestingDate))
                 {
                     objRes.ReturnCode = 1003;
                     objRes.ReturnMess = "TestingDate is null or empty";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
 
@@ -74,13 +79,14 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 1004;
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.SessionID = loCovidSpecimenID;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                 return objRes;
             }
             catch (Exception ex)

@@ -26,15 +26,17 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Request");
 
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -49,6 +51,7 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 1004;
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Response");
                     return objRes;
                 }
                 DataTable objDt = ds.Tables[0];
@@ -56,6 +59,7 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = -2;
                     objRes.ReturnMess = "No data found";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Response");
                     return objRes;
                 }
                 objRes.CreateDate = DateTime.Parse(objDt.Rows[0]["CreateDate"].ToString()).ToString("yyyy/MM/dd HH:mm:ss");
@@ -64,6 +68,7 @@ namespace CovidService.Controllers
                 objRes.Numbers = int.Parse(objDt.Rows[0]["Numbers"].ToString());
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "CreateQRManualDeclaration Response");
                 return objRes;
             }
             catch (Exception ex)

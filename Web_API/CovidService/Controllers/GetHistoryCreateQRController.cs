@@ -1,4 +1,6 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,14 +22,18 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetHistoryCreateQR Request");
+
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@FromCreateDate", SqlDbType.DateTime, DateTime.ParseExact(objReq.FromDate, "yyyyMMddHHmmss", CultureInfo.InvariantCulture));
@@ -39,6 +45,7 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 1002;
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
                     return objRes;
                 }
                 DataTable objDt = ds.Tables[0];
@@ -46,6 +53,7 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = -2;
                     objRes.ReturnMess = "No data found";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
                     return objRes;
                 }
                 objRes.HistoryLogs = new List<HistoryLog>();
@@ -62,6 +70,7 @@ namespace CovidService.Controllers
                 }
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
                 return objRes;
             }
             catch (Exception ex)

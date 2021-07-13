@@ -1,4 +1,6 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,14 +25,17 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "LeaveTestSession Request");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@AccountID", SqlDbType.BigInt, objReq.AccountID);
@@ -45,25 +50,27 @@ namespace CovidService.Controllers
                     {
                         objRes.ReturnCode = -61;
                         objRes.ReturnMess = "DB return: Session is not found, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                         return objRes;
                     }
                     else if (intReturnValue == -62)
                     {
                         objRes.ReturnCode = -62;
                         objRes.ReturnMess = "DB return: Session was finished, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                         return objRes;
                     }
                     else
                     {
                         objRes.ReturnCode = 1002;
                         objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                         return objRes;
                     }
                 }
-                //long loMappingID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
-
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "LeaveTestSession Response");
                 return objRes;
             }
             catch (Exception ex)

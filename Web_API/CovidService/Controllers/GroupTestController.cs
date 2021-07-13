@@ -25,24 +25,26 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                     return objRes;
                 }
                 if (objReq.CitizenInfor == null)
                 {
                     objRes.ReturnCode = 1001;
                     objRes.ReturnMess = "List Citizen is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GroupTest");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GroupTest Request");
                 DataTable data = ConvertToDataTable(objReq.CitizenInfor);
                 string sqlString = SqlHelper.sqlString;
-                LogWriter.WriteLogMsg("da vao day", "GroupTest");
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidSpecimenCode", System.Data.SqlDbType.NVarChar, 64, objReq.CovidSpecimenCode);
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
@@ -71,24 +73,28 @@ namespace CovidService.Controllers
                             {
                                 objRes.ReturnCode = intReturnValue;
                                 objRes.ReturnMess = "CovidSpecimenCode already exists in Session";
+                                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                                 return objRes;
                             }
                             objRes.CovidSpecimenID = loSpecimenID;
                             objRes.ReturnCode = 1;
                             objRes.ReturnMess = "CovidSpecimenCode is duplicated";
-                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                             return objRes;
                         case -31:
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "Session is not found";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                             return objRes;
                         case -32:
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "Session was finished";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                             return objRes;
                         default:
                             objRes.ReturnCode = 1002;
                             objRes.ReturnMess = "DB return failure, ReturnCode: " + intReturnValue;
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                             return objRes;
                     }
                 }
@@ -96,7 +102,7 @@ namespace CovidService.Controllers
                 objRes.CovidSpecimenID = loCovidSpecimenID;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                 return objRes;
             }
             catch (Exception ex)
@@ -153,7 +159,7 @@ namespace CovidService.Controllers
                     LogWriter.WriteLogMsg("DB return table null", "GroupTest");
                     return false;
                 }
-                string strQRCode = string.Join("|", lstInfor.Select(x => x.QRCode.ToArray()));
+                string strQRCode = string.Join("|", lstInfor.Select(x => x.QRCode).ToArray());
                 foreach (DataRow item in dt.Rows)
                 {
                     string QRCode = item["QRCode"] == null || item["QRCode"] == DBNull.Value ? "" : item["QRCode"].ToString();

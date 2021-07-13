@@ -23,27 +23,30 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetLocate");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetLocate Request");
                 List<LocateInfor> lstLocate = new List<LocateInfor>();
                 lstLocate = LocateConfig.Instance.GetLocateInfor(objReq.Value);
                 if(string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Get list Province return fail";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate Response");
                     return objRes;
                 }
                 if (!string.IsNullOrEmpty(objReq.Value) && lstLocate == null)
                 {
                     objRes.ReturnCode = 1001;
                     objRes.ReturnMess = "Get list locate return fail";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate Response");
                     return objRes;
                 }
                 objRes.LocateInfors = lstLocate;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetLocate Response");
                 return objRes;
             }
             catch (Exception ex)

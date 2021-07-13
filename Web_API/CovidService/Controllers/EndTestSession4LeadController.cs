@@ -24,15 +24,17 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "EndTestSession4Lead");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "EndTestSession4Lead Request");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.BigInt, objReq.CovidTestingSessionID);
@@ -47,14 +49,17 @@ namespace CovidService.Controllers
                         case -31:
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "Session is not found";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                             return objRes;
                         case -32:
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "Session was finished";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                             return objRes;
                         case 1002:
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = "DB return failure";
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                             return objRes;
                     }
 
@@ -62,7 +67,7 @@ namespace CovidService.Controllers
                 long loCovidSpecimenID = Convert.ToInt32(parameters[parameters.Count - 2].Value);
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "EndTestSession4Lead Response");
                 return objRes;
             }
             catch (Exception ex)

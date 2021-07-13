@@ -24,15 +24,17 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                     return objRes;
                 }
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetSession");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "GetSession Request");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID ", System.Data.SqlDbType.BigInt, objReq.SessionID);
@@ -45,16 +47,19 @@ namespace CovidService.Controllers
                     {
                         objRes.ReturnCode = -196;
                         objRes.ReturnMess = "Session was finished";
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                         return objRes;
                     }
                     objRes.ReturnCode = 1002;
                     objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                     return objRes;
                 }
                 if (dts == null)
                 {
                     objRes.ReturnCode = 1001;
                     objRes.ReturnMess = "Error, Dataset is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                     return objRes;
                 }
                 Session objSession = new Session();
@@ -77,7 +82,7 @@ namespace CovidService.Controllers
                 objRes.Data = objSession;
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
-                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession");
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                 return objRes;
             }
             catch (Exception ex)

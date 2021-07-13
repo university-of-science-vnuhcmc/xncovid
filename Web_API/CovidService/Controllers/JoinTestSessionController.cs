@@ -1,4 +1,6 @@
 ﻿using CovidService.Models;
+using CovidService.Utility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,14 +25,17 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                     return objRes;
                 }
                 if (objReq == null)
                 {
                     objRes.ReturnCode = 1000;
                     objRes.ReturnMess = "Object request is null";
+                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                     return objRes;
                 }
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objReq), "JoinTestSession Request");
                 string sqlString = SqlHelper.sqlString;
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 SqlHelper.AddParameter(ref parameters, "@AccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
@@ -45,6 +50,7 @@ namespace CovidService.Controllers
                     {
                         objRes.ReturnCode = -31;
                         objRes.ReturnMess = "DB return: Session is not found, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                         return objRes;
                     }
                     else if (intReturnValue == -32)
@@ -57,12 +63,14 @@ namespace CovidService.Controllers
                     {
                         objRes.ReturnCode = -91;
                         objRes.ReturnMess = "DB return: Staff have already joined another testing session, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                         return objRes;
                     }
                     else
                     {
                         objRes.ReturnCode = 1002;
                         objRes.ReturnMess = "DB return fail, ReturnCode: " + intReturnValue;
+                        LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                         return objRes;
                     }
                 }
@@ -70,6 +78,7 @@ namespace CovidService.Controllers
 
                 objRes.ReturnCode = 1;
                 objRes.ReturnMess = "Success";
+                LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "JoinTestSession Response");
                 return objRes;
             }
             catch (Exception ex)

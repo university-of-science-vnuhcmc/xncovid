@@ -21,7 +21,7 @@ public sealed class SqlHelper
     // instances from being created with "new SqlHelper()"
     public static string sqlString = Config.Instance.dicConfig["SqlString"];
     //public static string sqlString = @"Data Source=45.122.249.76,1433;Initial Catalog=XNCovid;User ID=sa;Password=mhWZ9PvOwDQSViFO0d1S";
-    
+
     private SqlHelper()
     {
     }
@@ -401,21 +401,29 @@ public sealed class SqlHelper
     /// <returns>An int representing the number of rows affected by the command</returns>
     public static int ExecuteNonQuery(SqlConnection connection, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
     {
-        if (connection == null) throw new ArgumentNullException("connection");
+        try
+        {
+            if (connection == null) throw new ArgumentNullException("connection");
 
-        // Create a command and prepare it for execution
-        SqlCommand cmd = new SqlCommand();
-        bool mustCloseConnection = false;
-        PrepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters, out mustCloseConnection);
+            // Create a command and prepare it for execution
+            SqlCommand cmd = new SqlCommand();
+            bool mustCloseConnection = false;
+            PrepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters, out mustCloseConnection);
 
-        // Finally, execute the command
-        int retval = cmd.ExecuteNonQuery();
+            // Finally, execute the command
+            int retval = cmd.ExecuteNonQuery();
 
-        // Detach the SqlParameters from the command object, so they can be used again
-        cmd.Parameters.Clear();
-        if (mustCloseConnection)
-            connection.Close();
-        return retval;
+            // Detach the SqlParameters from the command object, so they can be used again
+            cmd.Parameters.Clear();
+            if (mustCloseConnection)
+                connection.Close();
+            return retval;
+        }
+        catch (Exception ex)
+        {
+            LogWriter.WriteException(ex);
+            return 0;
+        }
     }
 
     /// <summary>
