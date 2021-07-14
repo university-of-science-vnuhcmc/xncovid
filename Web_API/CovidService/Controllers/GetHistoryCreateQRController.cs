@@ -49,13 +49,13 @@ namespace CovidService.Controllers
                     return objRes;
                 }
                 DataTable objDt = ds.Tables[0];
-                if (objDt.Rows.Count == 0)
-                {
-                    objRes.ReturnCode = -2;
-                    objRes.ReturnMess = "No data found";
-                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
-                    return objRes;
-                }
+                //if (objDt.Rows.Count == 0)
+                //{
+                //    objRes.ReturnCode = -2;
+                //    objRes.ReturnMess = "No data found";
+                //    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetHistoryCreateQR Response");
+                //    return objRes;
+                //}
                 objRes.HistoryLogs = new List<HistoryLog>();
                 foreach (DataRow objRow in objDt.Rows)
                 {
