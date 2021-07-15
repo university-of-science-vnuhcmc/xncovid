@@ -9,7 +9,7 @@
         @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
         <div class="form-group">
             <div class="col-md-10 h-align-center mt-3">
-                <input type="text" name="QRCodeAmount" min="1" max="10000" class="form-control text-center" required />
+                <input type="number" name="QRCodeAmount" min="1" max="10000" class="form-control text-center" required />
             </div>
         </div>
         <h6 style="margin: 20px auto">Lưu ý: chỉ tạo tối đa <span style="color:red">10000</span> mã một lần</h6>

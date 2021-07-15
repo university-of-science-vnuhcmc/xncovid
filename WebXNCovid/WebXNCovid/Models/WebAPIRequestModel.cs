@@ -11,9 +11,10 @@ namespace WebXNCovid.Models
         public string Token;
     }
 
-    public class LoginRequestModel : RequestModel
+    public class LoginRequestModel
     {
-
+        public string Email;
+        public string TokenID;
     }
 
     public class CreateQRRequestModel : RequestModel

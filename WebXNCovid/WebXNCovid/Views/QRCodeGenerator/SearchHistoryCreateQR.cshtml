@@ -12,15 +12,16 @@
 
             @using (Html.BeginForm("SearchHistoryCreateQR", "QRCodeGenerator", FormMethod.Post, new { @class = "form-horizontal form-search", role = "form" }))
             {
+                var date = @Model != null ? @Model.DateSearch.ToString("yyyy-MM-dd") : @DateTime.Now.ToString("yyyy-MM-dd");
                 <div class="inline">
                     <label class="">Chọn ngày</label>
                 </div>
                 <div class="col-sm-4 col-md-3 col-xl-3 input-date">
-                    <input type="date" name="FromCreateDate" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <input type="date" name="FromCreateDate" class="form-control" required value="@date" />
                 </div>
                 @*<div class="col-sm-4 col-md-3 col-xl-3 input-date">
-                        <input type="date" name="ToCreateDate" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
-                    </div>*@
+                <input type="date" name="ToCreateDate" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+            </div>*@
                 <div class="col-sm-2 col-md-1 inline">
                     <input type="submit" class="btn btn-submit" value="Tra cứu" />
                 </div>
@@ -37,24 +38,31 @@
                         <th scope="col">In lại</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @if (Model != null)
+                @if (Model != null)
+                {
+                    if (Model.ListHistory.Count > 0)
                     {
-                        foreach (var item in Model.ListHistory)
-                        {
-                            <tr>
-                                <td class="left-align">@DateTime.ParseExact(item.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")</td>
-                                <td>@item.QRAmount</td>
-                                <td>@item.CreateUser</td>
-                                <td class="id-from">@item.MinNumber</td>
-                                <td class="id-to">@item.MaxNumber</td>
-                                <td class="num-of-pages">@item.NumOfPrint</td>
-                                <td><input id="print-btn" type="button" class="btn btn-submit" onclick="print(@item.MinNumber,@item.MaxNumber)" value="In lại" data-toggle="modal" data-target="#confirmModal" /></td>
-                            </tr>
-                        }
+                        <tbody>
+                            @foreach (var item in Model.ListHistory)
+                            {
+                                <tr>
+                                    <td class="left-align">@DateTime.ParseExact(item.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy")</td>
+                                    <td>@item.QRAmount</td>
+                                    <td>@item.CreateUser</td>
+                                    <td class="id-from">@item.MinNumber</td>
+                                    <td class="id-to">@item.MaxNumber</td>
+                                    <td class="num-of-pages">@item.NumOfPrint</td>
+                                    <td><input id="print-btn" type="button" class="btn btn-submit" onclick="print(@item.MinNumber,@item.MaxNumber)" value="In lại" data-toggle="modal" data-target="#confirmModal" /></td>
+                                </tr>
+                            }
+                        </tbody>
                     }
-                </tbody>
+                }
             </table>
+            @if (Model != null && Model.ListHistory.Count == 0)
+            {
+                <p style="margin-left: 30px;">Không tìm thấy kết quả phù hợp</p>
+            }
 
             <!-- Modal -->
             <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -90,10 +98,13 @@
                 if (obj.valid) {
                     newWin = window.open("");
                     newWin.document.write(obj.data);
+                    newWin.document.close();
+                    newWin.focus();
                     setTimeout(function () {
                         newWin.print();
-                        newWin.close();
-                    }, 100);}
+                        /*newWin.close();*/
+                    }, 200);
+                }
                 else {
                 }
             },

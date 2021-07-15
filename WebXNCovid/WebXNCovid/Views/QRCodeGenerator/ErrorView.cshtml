@@ -3,7 +3,7 @@
 }
 
 <div class="login-error-notify justify-centered">
-    <p class="confirm-content">Tài khoản này chưa được cấp quyền.<br />Vui lòng kiểm tra lại.</p>
+    @ViewBag.EncodedHtml
     <div class="h-align-center pt-2 pb-2">
         <button type="button" class="btn btn-submit" onclick="window.location='/Account/Login';">Quay lại</button>
     </div>

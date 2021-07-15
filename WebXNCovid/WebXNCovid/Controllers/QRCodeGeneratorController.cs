@@ -12,8 +12,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.Security;
 using WebXNCovid;
 using WebXNCovid.Models;
+using WebXNCovid.Utility;
 using ZXing;
 
 namespace WebForCommunityScreening.Controllers
@@ -31,33 +33,46 @@ namespace WebForCommunityScreening.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult GenerateQRSuccess()
+        {
+            return View();
+        }
+
         public async Task<ActionResult> GenerateCode(int QRCodeAmount)
         {
             try
             {
-                const double amtQRPerPage = 6;
-
-                CreateQRRequestModel request = new CreateQRRequestModel();
-                request.Email = Session["Email"].ToString();
-                request.Token = Session["Token"].ToString();
-                request.QRAmount = QRCodeAmount;
-
-                string postData = JsonConvert.SerializeObject(request);
-
-                var response = await CallWebAPI.Instance().Call("CreateQRManualDeclaration", postData);
-
-                if (response.IsSuccessStatusCode != true)
+                if (Request.Cookies["Authen"] == null)
                 {
-                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                    return ValidateSessionFail();
                 }
+                var cookies = Request.Cookies["Authen"];
+                CreateQRRequestModel request = new CreateQRRequestModel() {
+                    Email = cookies.Values["Email"].ToString(),
+                    Token = cookies.Values["Token"].ToString(),
+                    QRAmount = QRCodeAmount
+                };
+                string postData = JsonConvert.SerializeObject(request);
+                var response = CallWebAPI.Instance().CallAsync("CreateQRManualDeclaration", postData);
 
-                var result = await response.Content.ReadAsStringAsync();
+                LogWriter.WriteLogMsg(postData, "CreateQRManualDeclaration");
+
+                const double amtQRPerPage = 5;
+                GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
+                model.CreatedUser = request.Email;
+                model.AmountQR = QRCodeAmount;
+                model.AmountPage = Convert.ToInt16(Math.Ceiling(((double)QRCodeAmount) / amtQRPerPage));
+
+                List<byte[]> bytearrays = new List<byte[]>();
+
+                string result = await response;
+                LogWriter.WriteLogMsg(string.Format("request: {0}\r\nresponse: {1}", postData, result), "CreateQRManualDeclaration");
 
                 if (string.IsNullOrEmpty(result))
                 {
                     return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                 }
-
                 CreateQRResponse objRes = JsonConvert.DeserializeObject<CreateQRResponse>(result);
 
                 if (objRes.ReturnCode != 1)
@@ -66,48 +81,34 @@ namespace WebForCommunityScreening.Controllers
                     {
                         return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
                     }
+                    else if (objRes.ReturnCode == 99)
+                    {
+                        return ValidateSessionFail();
+                    }
                     else
                     {
                         return Json(new { success = false, responseText = "Lỗi hệ thống." }, JsonRequestBehavior.AllowGet);
                     }
                 }
 
-                GenerateQRSuccessViewModel model = new GenerateQRSuccessViewModel();
                 model.CreateDate = DateTime.ParseExact(objRes.CreateDate, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
-                model.CreatedUser = Session["Email"].ToString();
-                model.AmountQR = objRes.Numbers;
                 model.IdFrom = objRes.MinNumber;
                 model.IdTo = objRes.MaxNumber;
-                model.AmountPage = Convert.ToInt16(Math.Ceiling(((double)objRes.Numbers) / amtQRPerPage));
-                //ViewData["GenerateQRInfo"] = model;
 
-                List<Bitmap> bitmaps = new List<Bitmap>();
-                List<byte[]> bytearrays = new List<byte[]>();
-                
                 for (int i = model.IdFrom; i <= model.IdTo; i++)
                 {
                     var bmp = GenerateQR(i);
-                    bitmaps.Add(bmp);
-
                     bytearrays.Add(BitmapToBytes(bmp));
                 }
                 model.lstQR = bytearrays;
-                //Session["QRCodeImg"] = bytearrays;
 
                 return View("GenerateQRSuccess", model);
-                //return View("GenerateQRSuccess");
             }
-            catch (Exception)
+            catch (Exception objEx)
             {
-
+                LogWriter.WriteException(objEx);
                 throw;
             }
-        }
-
-        [HttpGet]
-        public ActionResult GenerateQRSuccess()
-        {
-            return View();
         }
 
         //[HttpPost]
@@ -195,30 +196,35 @@ namespace WebForCommunityScreening.Controllers
         [HttpPost]
         public async Task<ActionResult> SearchHistoryCreateQR(FormCollection form)
         {
-            SearchHistoryCreateQRViewModel model = new SearchHistoryCreateQRViewModel();
             try
             {
-                const double amtQRPerPage = 6;
+                if (Request.Cookies["Authen"] == null)
+                {
+                    return ValidateSessionFail();
+                }
                 string FromDate = form["FromCreateDate"];
                 DateTime FromCreateDate = DateTime.ParseExact(FromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
                 DateTime ToCreateDate = FromCreateDate.AddDays(1).AddMilliseconds(-1);
 
-                GetHistoryCreateQRRequestModel request = new GetHistoryCreateQRRequestModel();
-                request.Email = Session["Email"].ToString();
-                request.Token = Session["Token"].ToString();
-                request.FromDate = FromCreateDate.ToString("yyyyMMddHHmmss");
-                request.ToDate = ToCreateDate.ToString("yyyyMMddHHmmss");
+                var cookies = Request.Cookies["Authen"];
+                GetHistoryCreateQRRequestModel request = new GetHistoryCreateQRRequestModel()
+                {
+                    Email = cookies.Values["Email"].ToString(),
+                    Token = cookies.Values["Token"].ToString(),
+                    FromDate = FromCreateDate.ToString("yyyyMMddHHmmss"),
+                    ToDate = ToCreateDate.ToString("yyyyMMddHHmmss")
+                };
 
                 string postData = JsonConvert.SerializeObject(request);
+                var response = CallWebAPI.Instance().CallAsync("GetHistoryCreateQR", postData);
 
-                var response = await CallWebAPI.Instance().Call("GetHistoryCreateQR", postData);
+                LogWriter.WriteLogMsg(postData, "GetHistoryCreateQR");
+                const double amtQRPerPage = 5;
+                SearchHistoryCreateQRViewModel model = new SearchHistoryCreateQRViewModel();
+                model.DateSearch = FromCreateDate;
 
-                if (response.IsSuccessStatusCode != true)
-                {
-                    return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
-                }
-
-                var result = await response.Content.ReadAsStringAsync();
+                string result = await response;
+                LogWriter.WriteLogMsg(string.Format("request: {0}\r\nresponse: {1}", postData, result), "GetHistoryCreateQR");
 
                 if (string.IsNullOrEmpty(result))
                 {
@@ -232,6 +238,10 @@ namespace WebForCommunityScreening.Controllers
                     if (objRes.ReturnCode == 0)
                     {
                         return Json(new { success = false, responseText = "Thất bại." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (objRes.ReturnCode == 99)
+                    {
+                        return ValidateSessionFail();
                     }
                     else
                     {
@@ -249,86 +259,88 @@ namespace WebForCommunityScreening.Controllers
                           MaxNumber = log.MaxNumber,
                           NumOfPrint = Convert.ToInt16(Math.Ceiling(((double)log.QRAmount) / amtQRPerPage))
                       }).ToList();
+                return View(model);
             }
             catch (Exception objEx)
             {
-                var a = objEx.ToString();
-                throw;
+                LogWriter.WriteException(objEx);
+                return View((SearchHistoryCreateQRViewModel)null);
             }
-            return View(model);
-        }
-
-        public ActionResult Confirm(int id)
-        {
-            //Write your logic here 
-            return PartialView("_TestPartial");
         }
 
         private Bitmap GenerateQR(int Id)
         {
-            string strID = Id.ToString();
-            var barcodeWriter = new BarcodeWriter();
-            barcodeWriter.Format = BarcodeFormat.QR_CODE;
-            barcodeWriter.Options.Height = 113;
-            barcodeWriter.Options.Width = 113;
-            var result = barcodeWriter.Write(strID);
-
-            var f = new NumberFormatInfo { NumberGroupSeparator = " " };
-
-            strID = Id.ToString("n0", f); // 2 000 000.00
-
-            var barcodeBitmap = new Bitmap(result);
-
-            #region Add text below QRCode
-
-            // Load the original image
-            Bitmap bmp = barcodeBitmap;
-
-            // Create a rectangle for the entire bitmap
-            RectangleF rectf = new RectangleF(0, 0, bmp.Width, bmp.Height - 1);
-
-            // Create graphic object that will draw onto the bitma p
-            Graphics g = Graphics.FromImage(bmp);
-
-            // ------------------------------------------
-            // Ensure the best possible quality rendering
-            // ------------------------------------------
-            // The smoothing mode specifies whether lines, curves, and the edges of filled areas use smoothing (also called antialiasing). 
-            // One exception is that path gradient brushes do not obey the smoothing mode. 
-            // Areas filled using a PathGradientBrush are rendered the same way (aliased) regardless of the SmoothingMode property.
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            // The interpolation mode determines how intermediate values between two endpoints are calculated.
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-            // Use this property to specify either higher quality, slower rendering, or lower quality, faster rendering of the contents of this Graphics object.
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            // This one is important
-            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-
-            // Create string formatting options (used for alignment)
-            StringFormat format = new StringFormat()
+            try
             {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Far
-            };
+                string strID = Id.ToString();
+                string strLuhnNum = GetLuhnCheckDigit(strID);
+                var barcodeWriter = new BarcodeWriter();
+                barcodeWriter.Format = BarcodeFormat.QR_CODE;
+                barcodeWriter.Options.Height = 240;
+                barcodeWriter.Options.Width = 240;
+                Bitmap bmp = barcodeWriter.Write(strLuhnNum + "-" + strID);
 
-            // Draw the text onto the image
-            g.DrawString(strID, new Font("Tahoma", 9), Brushes.Black, rectf, format);
+                var f = new NumberFormatInfo { NumberGroupSeparator = " " };
 
-            // Flush all graphics changes to the bitmap
-            g.Flush();
+                strID = strLuhnNum + "-" + Id.ToString("n0", f); // 2 000 000
 
-            #endregion
-
-            using (Graphics gr = Graphics.FromImage(bmp))
-            {
-                gr.DrawRectangle(new Pen(Brushes.Black, 2), new Rectangle(0, 0, bmp.Width, bmp.Height));
+                using (Bitmap frame = new Bitmap(200, 230))
+                using (Graphics gframe = Graphics.FromImage(frame))
+                {
+                    gframe.SmoothingMode = SmoothingMode.AntiAlias;
+                    gframe.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gframe.FillRectangle(Brushes.White, 0, 0, frame.Width, frame.Height);
+                    gframe.DrawImage(bmp, (frame.Width - bmp.Width) / 2, -25, bmp.Width, bmp.Height);
+                    bmp = (Bitmap)frame.Clone();
+                }
+                RectangleF rectf = new RectangleF(0, 0, bmp.Width, bmp.Height - 10);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    StringFormat format = new StringFormat()
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Far
+                    };
+                    g.DrawString(strID, new Font("Tahoma", 20), Brushes.Black, rectf, format);
+                    g.Flush();
+                    //g.DrawRectangle(new Pen(Brushes.Black, 2), new Rectangle(0, 0, bmp.Width, bmp.Height));
+                }
+                return bmp;
             }
-            return bmp;
+            catch (Exception objEx)
+            {
+                LogWriter.WriteException(objEx);
+                return null;
+            }
         }
 
+        private string GetLuhnCheckDigit(string number)
+        {
+            var sum = 0;
+            var alt = true;
+            var digits = number.ToCharArray();
+            for (int i = digits.Length - 1; i >= 0; i--)
+            {
+                var curDigit = (digits[i] - 48);
+                if (alt)
+                {
+                    curDigit *= 2;
+                    if (curDigit > 9)
+                        curDigit -= 9;
+                }
+                sum += curDigit;
+                alt = !alt;
+            }
+            if ((sum % 10) == 0)
+            {
+                return "0";
+            }
+            return (10 - (sum % 10)).ToString();
+        }
 
         public ActionResult PrintQR(int min, int max)
         {
@@ -375,54 +387,45 @@ namespace WebForCommunityScreening.Controllers
                 return result;
                 //return Json(obj);
             }
-            catch
+            catch (Exception objEx)
             {
+                LogWriter.WriteException(objEx);
                 return Json(obj);
             }
         }
 
         protected string RenderPartialViewToString(string viewName, object model)
         {
-            if (string.IsNullOrEmpty(viewName))
-                viewName = ControllerContext.RouteData.GetRequiredString("action");
-            ViewData.Model = model;
-            using (StringWriter sw = new StringWriter())
+            try
             {
-                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                return sw.GetStringBuilder().ToString();
+                if (string.IsNullOrEmpty(viewName))
+                    viewName = ControllerContext.RouteData.GetRequiredString("action");
+                ViewData.Model = model;
+                using (StringWriter sw = new StringWriter())
+                {
+                    ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                    ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                    viewResult.View.Render(viewContext, sw);
+                    return sw.GetStringBuilder().ToString();
+                }
+            }
+            catch (Exception objEx)
+            {
+                LogWriter.WriteException(objEx);
+                throw;
             }
         }
-        //private Bitmap MergeImages(IEnumerable<Bitmap> images, int row, int column)
-        //{
-        //    const int padding = 20;
-        //    var enumerable = images as IList<Bitmap> ?? images.ToList();
 
-        //    var width = enumerable[0].Width * column + padding * (column - 1);
-        //    var height = enumerable[0].Height * row + padding * (row - 1);
-
-        //    var bitmap = new Bitmap(width, height);
-
-        //    using (var g = Graphics.FromImage(bitmap))
-        //    {
-        //        g.Clear(Color.White);
-        //        var localWidth = 0;
-        //        var localHeight = 0;
-        //        int length = enumerable.Count;
-        //        for (int i = 0; i < length; i++)
-        //        {
-        //            Bitmap image = enumerable[i];
-        //            g.DrawImage(enumerable[i], localWidth, localHeight);
-        //            localWidth += image.Width + padding;
-        //            if (i % column == column - 1)
-        //            {
-        //                localWidth = 0;
-        //                localHeight += image.Height + padding;
-        //            }
-        //        }
-        //    }
-        //    return bitmap;
-        //}
+        public ActionResult ValidateSessionFail()
+        {
+            if (Request.Cookies["Authen"] != null)
+            {
+                Response.Cookies["Authen"].Expires = DateTime.Now.AddDays(-1);
+            }
+            FormsAuthentication.SignOut();
+            string rawHtml = "<p class=\"confirm-content\">Phiên đăng nhập đã quá hạn<br/>hoặc bạn đã đăng nhập tài khoản<br/>trên một thiết bị khác.<br/>Vui lòng đăng nhập lại.</p>";
+            ViewBag.EncodedHtml = MvcHtmlString.Create(rawHtml);
+            return View("ErrorView");
+        }
     }
 }

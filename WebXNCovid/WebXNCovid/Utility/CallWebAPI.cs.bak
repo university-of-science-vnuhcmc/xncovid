@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using WebXNCovid.Utility;
 
 namespace WebXNCovid
 {
@@ -17,7 +19,9 @@ namespace WebXNCovid
         protected CallWebAPI()
         {
             //baseAddress = "http://localhost:59767/";
-            baseAddress = "http://45.122.249.68:7070/";
+            //baseAddress = "https://localhost:7070/";
+            //baseAddress = "https://xncovid.uit.edu.vn:7070/";
+            baseAddress = Config.Instance().GetUrl();
         }
 
         public static CallWebAPI Instance()
@@ -33,19 +37,19 @@ namespace WebXNCovid
         {
             try
             {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(baseAddress);
                 var buffer = System.Text.Encoding.UTF8.GetBytes(postData);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 HttpResponseMessage responseMessage = await client.PostAsync("/api/" + api, byteContent);
-                Console.WriteLine("");
                 return responseMessage;
             }
             catch (Exception objEx)
             {
-                throw objEx;
-                //return null;
+                LogWriter.WriteException(objEx);
+                return null;
             }
         }
     }

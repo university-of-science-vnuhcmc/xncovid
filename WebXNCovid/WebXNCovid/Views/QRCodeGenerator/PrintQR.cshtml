@@ -1,41 +1,40 @@
 ﻿@using WebXNCovid.Models
 @model  GenerateQRSuccessViewModel
 
-<div id="printarea" style=" width: 811px;    min-height: 29.7cm;     background-color: white;    padding: 10px 0px;">
+@Html.Raw("<style> @Page {size: A4; margin: 0; } @media print { html, body {width: 210mm; height: 297mm; } } </style>")
+<div id="printarea" style=" width: 910px;    min-height: 29.7cm;     background-color: white;    padding: 10px 0px;">
     @{
         int i = 0;
     }
     @foreach (var item in Model.lstQR)
     {
         i++;
-        <table style="width: 100%;   border-bottom: 1px #000000 dotted;">
-            <tr>
-                <td style="width: 130px ;margin: 10px 0px; padding: 10px 5px 10px 10px;">
-                    <img style="margin-left: 22px" src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(item))" />
+        <table style="width: 100%;">
+            <tr style="">
+                <td style="margin: auto;">
+                    <img style="" src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(item))" />
                 </td>
-                <td>
-                    <h5 style="margin-top: 30px; text-align: center;    font-weight: bold;">PHIẾU THÔNG TIN XÉT NGHIỆM</h5>
+                <td style="font-size: 18px;">
+                    <p style="margin-bottom: 10px; margin-top: 5px; text-align: center; font-weight: bold;">PHIẾU LẤY MẪU XÉT NGHIỆM COVID</p>
                     <div class="">
-                        <span class="background-color: #FFFFFF; display: inline-block;">Họ và tên:.....................................................................................Nam/Nữ:....................................</span>
-                        @*<span class="offset-7 field">Nam: &#11036 Nữ: &#11036 </span>*@
+                        <span style="background-color: #FFFFFF; display: inline-block; line-height: 44px;">Họ và tên:............................................................................................ Giới tính: Nam &#11036 Nữ &#11036 </span>
                     </div>
                     <div class="">
-                        <span class="background-color: #FFFFFF; display: inline-block;">Ngày sinh:....../...../............Số điện thoại:........................................................................................</span>
-                        @*<span class="offset-4 field">Số điện thoại: </span>*@
+                        <span style="background-color: #FFFFFF; display: inline-block; line-height: 44px;">Ngày sinh:........./........./....................Số điện thoại:..............................................................................</span>
                     </div>
                     <div class="">
-                        <span class="background-color: #FFFFFF; display: inline-block;">Sống tại: Số nhà/Tổ/Xóm.............................Đường/Phố/Thôn:......................................................</span>
-                        @*<span class="offset-3 field">Đường/Phố/Thôn: </span>*@
+                        <span style="background-color: #FFFFFF; display: inline-block; line-height: 44px;">Địa chỉ:.................................................................................................................................................</span>
                     </div>
-                    <div class="" style="margin-bottom: 20px">
-                        <span class="background-color: #FFFFFF; display: inline-block;">Phường/Xã.................................Quận/Huyện:..............................Tỉnh/TP:....................................</span>
-                        @*<span class="offset-2 field">Quận/Huyện: </span>
-                            <span class="offset-2 field">Tỉnh/Thành phố: </span>*@
+                    <div class="" style="margin-bottom: 10px">
+                        <span style="background-color: #FFFFFF; display: inline-block; line-height: 44px;">Phường/Xã.....................................Quận/Huyện:..................................Tỉnh/TP:..................................</span>
                     </div>
                 </td>
             </tr>
         </table>
-        if (i == 6)
+        <div style="height: 22px; width: 97%; margin: auto auto; background-image: url('../../Assets/scissors-icon.png'); background-repeat: no-repeat; background-position: right; position: relative; -webkit-print-color-adjust: exact;">
+            <div style="position: relative; top: 50%; border-top: 1px dotted black; margin-top: -3px;"></div>
+        </div>
+        if (i == 5)
         {
             <div style="page-break-after: always;"></div>
             i = 0;

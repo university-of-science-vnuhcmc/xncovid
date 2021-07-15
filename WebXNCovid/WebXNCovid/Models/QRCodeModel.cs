@@ -28,5 +28,6 @@ namespace WebXNCovid.Models
     public class SearchHistoryCreateQRViewModel
     {
         public List<HistoryLog> ListHistory;
+        public DateTime DateSearch;
     }
 }
