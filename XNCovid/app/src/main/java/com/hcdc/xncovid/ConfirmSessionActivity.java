@@ -44,7 +44,7 @@ public class ConfirmSessionActivity extends AppCompatActivity {
             viewSessionName.setText(sessionName);
             TextView viewAddress = findViewById(R.id.address);
             viewAddress.setText(address);
-            TextView viewCause = findViewById(R.id.cause);
+            TextView viewCause = findViewById(R.id.cause1);
             viewCause.setText(cause);
             TextView chooseTime = findViewById(R.id.chooseTime);
             chooseTime.setText(String.format("%02d:%02d", hour, minute));

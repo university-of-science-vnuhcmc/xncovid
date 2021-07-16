@@ -145,7 +145,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Tạo nhóm mới"
+                        android:text="Tạo mẫu gộp"
                         android:textSize="18dp"
                         android:textStyle="bold"
                         android:gravity="center_horizontal|top"
@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textSize="18dp"
-                        android:text="Danh sách đã gom nhóm"
+                        android:text="Danh sách mẫu gộp"
                         android:textStyle="bold"
                         android:gravity="center_horizontal|top"
                         android:layout_gravity="center"
@@ -286,21 +286,133 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="16dp"
-                                    android:text="Lý do:"
+                                    android:text="Loại xét nghiệm:"
                                     android:textSize="20dp"
                                     android:textColor="@color/white"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/cause"
+                                    android:id="@+id/type"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="18dp"
                                     android:layout_marginLeft="5dp"
-                                    android:text="Phát hiện F0 tầng 14 block A6"
                                     android:textColor="@color/white" />
                             </LinearLayout>
+                            <LinearLayout android:id="@+id/type1"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="16dp"
+                                        android:text="- Đối tượng:"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/target1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="18dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="16dp"
+                                        android:text="- Lý do:"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/cause"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="18dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white" />
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/type2"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="16dp"
+                                        android:text="- Lý do:"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/cause2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="18dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="16dp"
+                                        android:text="- Đối tượng:"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/target2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="18dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="16dp"
+                                        android:text="- Đối tượng liên quan:"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/relativeTarget"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="18dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white" />
+                                </LinearLayout>
+                            </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

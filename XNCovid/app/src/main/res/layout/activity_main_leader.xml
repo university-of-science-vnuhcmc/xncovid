@@ -106,7 +106,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Danh sách các phiên xét nghiệm"
+                        android:text="Danh sách phiên đã tham gia"
                         android:textStyle="bold"
                         android:textSize="18dp"
                         android:gravity="center_horizontal|top"
@@ -114,7 +114,77 @@
                         />
                 </LinearLayout>
             </LinearLayout>
-
+            <LinearLayout android:layout_width="match_parent"
+                android:baselineAligned="false"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/newGroup"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:layout_width="125dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_menu_disable">
+                        <View
+                            android:id="@+id/create_icon"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@drawable/image_8_1"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Tạo mẫu gộp"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:gravity="center_horizontal|top"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/listGroup"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:layout_width="125dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_menu_disable">
+                        <View
+                            android:id="@+id/image_4_1"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@drawable/image_8_1"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18dp"
+                        android:text="Danh sách mẫu gộp"
+                        android:textStyle="bold"
+                        android:gravity="center_horizontal|top"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -221,18 +291,132 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
-                                android:text="Lý do:"
+                                android:text="Loại xét nghiệm:"
                                 android:textSize="20dp"
                                 android:textColor="@color/white"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/cause"
+                                android:id="@+id/type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="18dp"
                                 android:layout_marginLeft="5dp"
                                 android:textColor="@color/white" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/type1"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="- Đối tượng:"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/target1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="- Lý do:"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/cause"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/type2"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="- Lý do:"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/cause2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="- Đối tượng:"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/target2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="- Đối tượng liên quan:"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/relativeTarget"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout

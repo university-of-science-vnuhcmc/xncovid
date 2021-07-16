@@ -110,7 +110,7 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
         try {
             EditText sessionName = findViewById(R.id.sessionName);
             EditText address = findViewById(R.id.address);
-            EditText cause = findViewById(R.id.cause);
+            EditText cause = findViewById(R.id.cause1);
             TextView time = findViewById(R.id.chooseTime);
             TextView date = findViewById(R.id.chooseDate);
 

@@ -49,7 +49,7 @@ public class SessionInfoActivity extends AppCompatActivity {
             address=(TextView) findViewById(R.id.address);
             chooseTime=(TextView) findViewById(R.id.chooseTime);
             chooseDate=(TextView) findViewById(R.id.chooseDate);
-            cause=(TextView) findViewById(R.id.cause);
+            cause=(TextView) findViewById(R.id.cause1);
             leader=(TextView) findViewById(R.id.leader);
             btnConfirm = findViewById(R.id.next);
             //tenphien.setText(xn_session);

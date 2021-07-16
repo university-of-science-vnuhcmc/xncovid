@@ -58,7 +58,7 @@
                     android:layout_marginLeft="5dp"
                     android:padding="5dp"
                     android:textSize="18dp"
-                    android:textColor="@color/red"
+                    android:textColor="@color/blue"
                     android:text="XN_Covid19_HCM_123"
                     android:background="@drawable/rectangle_name_session"/>
 
@@ -108,7 +108,7 @@
                                 android:id="@+id/province"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/red"
+                                android:textColor="@color/blue"
                                 android:paddingLeft="5dp"
                                 android:text="TP. Hồ Chí Minh"
                                 />
@@ -139,7 +139,7 @@
                             android:id="@+id/district"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/red"
+                            android:textColor="@color/blue"
                             android:paddingLeft="5dp"
                             android:text="Quận Bình Tân"
                             />
@@ -170,7 +170,7 @@
                             android:id="@+id/ward"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/red"
+                            android:textColor="@color/blue"
                             android:paddingLeft="5dp"
                             android:text="Phường An Lạc"
                             />
@@ -201,7 +201,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/red"
+                    android:textColor="@color/blue"
                     android:textSize="18dp"
                     android:padding="5dp"
                     android:text="Block A0 chung cư Ehome 3"
@@ -225,62 +225,51 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#FF0000"
-                    android:text="! Thời gian bắt đầu phiên xét nghiệm"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:paddingLeft="50dp"
-                    android:orientation="vertical"
-                    android:background="@drawable/rectangle_time_session">
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/rectangle_name_session">
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
                         <View
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:onClick="showTimePickerDialog"
                             android:background="@drawable/clock"
                             />
                         <TextView
                             android:id="@+id/chooseTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="10dp"
                             android:textSize="18dp"
-                            android:textColor="@color/red"
-                            android:text="13:00"
-                            android:onClick="showTimePickerDialog"/>
+                            android:textColor="@color/blue"
+                            android:text="13:00"/>
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:layout_width="match_parent"
+                        android:layout_marginLeft="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
                         <View
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:onClick="showDatePickerDialog"
                             android:background="@drawable/calendar"
                             />
                         <TextView
                             android:id="@+id/chooseDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="10dp"
                             android:textSize="18dp"
-                            android:onClick="showDatePickerDialog"
-                            android:textColor="@color/red"
+                            android:textColor="@color/blue"
                             android:text="13/06/20201"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -293,27 +282,185 @@
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:text="Lý do:"
+                        android:text="Loại xét nghiệm:"
                         android:textSize="24dp"
                         android:textStyle="bold" />
-
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:padding="5dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_choose_address">
+                        <TextView
+                            android:id="@+id/type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/blue"
+                            android:paddingLeft="5dp"
+                            android:text="Xét nghiệm giám sát"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
-                <TextView
-                    android:id="@+id/cause"
-                    android:layout_marginTop="10dp"
+                <LinearLayout android:id="@+id/type1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/red"
-                    android:padding="5dp"
-                    android:textSize="18dp"
-                    android:text="Phát hiện F0 tầng 14 block A6 chung cư Ehome3"
-                    android:background="@drawable/rectangle_name_session"
-                    />
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="- Đối tượng:"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:padding="5dp"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:background="@drawable/rectangle_choose_address">
+                                <TextView
+                                    android:id="@+id/target1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="5dp"
+                                    android:text="KHU CHỢ"
+                                    android:textColor="@color/blue"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="- Lý do (nếu có):"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/cause1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text=""
+                        android:textColor="@color/blue"
+                        android:padding="5dp"
+                        android:textSize="18dp"
+                        android:background="@drawable/rectangle_name_session"/>
+                </LinearLayout>
+                <LinearLayout android:id="@+id/type2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="- Lý do:"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:padding="5dp"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:background="@drawable/rectangle_choose_address">
+                                <TextView
+                                    android:id="@+id/cause2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="5dp"
+                                    android:text="Điều tra dịch"
+                                    android:textColor="@color/blue"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="- Đối tượng:"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:padding="5dp"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:background="@drawable/rectangle_choose_address">
+                                <TextView
+                                    android:id="@+id/target2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="5dp"
+                                    android:text="Tiếp xúc gần với F0"
+                                    android:textColor="@color/blue"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:text="- Đối tượng liên quan (nếu có):"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/relativeTarget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Nguyễn Văn X, 199x"
+                        android:textColor="@color/blue"
+                        android:padding="5dp"
+                        android:textSize="18dp"
+                        android:background="@drawable/rectangle_name_session"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -329,7 +476,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tiếp tục"
+                    android:text="Xác nhận"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="16sp"
