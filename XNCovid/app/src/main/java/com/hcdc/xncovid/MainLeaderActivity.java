@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,11 +34,41 @@ import java.util.List;
 
 public class MainLeaderActivity extends AppCompatActivity {
     private View mLoading;
+    private boolean flagSlideButton = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_leader);
         setUIRef();
+        SeekBar sb = findViewById(R.id.endSession);
+        sb.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
+                            flagSlideButton = true;
+                            sb.onTouchEvent(event);
+                        } else {
+                            flagSlideButton = false;
+                            return false;
+                        }
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (sb.getProgress() > 95 && flagSlideButton) {
+                            endSession();
+                            return true;
+                        }
+                        flagSlideButton = false;
+                        sb.setProgress(0);
+                    } else {
+                        sb.onTouchEvent(event);
+                    }
+                } catch (Exception ex){
+                    Log.w("MainLeaderActivity", ex.toString());
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -85,12 +118,15 @@ public class MainLeaderActivity extends AppCompatActivity {
                     }
                     if(errorFlag){
                         findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+                        findViewById(R.id.newGroup).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
                     }
                     if(session != null){
                         findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+                        findViewById(R.id.newGroup).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
                         findViewById(R.id.sessionInfo).setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
                         findViewById(R.id.scanQR).setBackground(getResources().getDrawable( R.drawable.button_scan_qr_session_enable));
-                        findViewById(R.id.endSession).setBackground(getResources().getDrawable( R.drawable.end_session_enable));
+                        findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
+                        findViewById(R.id.endSession).setVisibility(View.VISIBLE);
                         ((TextView)findViewById(R.id.sessionName)).setText(session.SessionName);
                         ((TextView)findViewById(R.id.location)).setText(session.Address);
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
@@ -199,7 +235,7 @@ public class MainLeaderActivity extends AppCompatActivity {
     }
     private Session session;
     private UserInfo[] LstUser;
-    public void endSession(View v){
+    public void endSession(){
         try {
             if(session == null || errorFlag){
                 return;
@@ -247,7 +283,18 @@ public class MainLeaderActivity extends AppCompatActivity {
                                 }
                             }, null, Request.Method.POST);
                         }
-                    }, null, MainLeaderActivity.this);
+                    },
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                SeekBar sb = findViewById(R.id.endSession);
+                                sb.setProgress(0);
+                            } catch (Exception ex){
+                                Log.w("endSession", ex.toString());
+                            }
+                        }
+                    }, MainLeaderActivity.this);
         } catch (Exception ex){
             Log.w("endSession", ex.toString());
             new AlertDialog.Builder(this)
