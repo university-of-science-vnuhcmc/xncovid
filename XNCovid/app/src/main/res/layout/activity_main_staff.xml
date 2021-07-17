@@ -441,38 +441,39 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:background="@drawable/end_session_disable"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:id="@+id/endSession">
-                <LinearLayout
+            <LinearLayout android:id="@+id/endSessionDisable"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:clickable="false"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/slide_button_disable">
+                <View
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/right_arrow_disable"/>
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/cancel"
-                        android:layout_gravity="center"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thoát phiên xét nghiệm hiện tại"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"/>
-                </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/white"
+                    android:text="Trượt để thoát phiên xét nghiệm"/>
             </LinearLayout>
+            <SeekBar android:background="@drawable/slide_button_exit_session"
+                android:visibility="gone"
+                android:layout_margin="20dp"
+                android:id="@+id/endSession"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:clickable="false"
+                android:max="100"
+                android:thumb="@drawable/right_arrow"
+                android:thumbOffset="16dp"
+                android:progressDrawable="@drawable/slide_red_progess"
+                >
+            </SeekBar>
         </LinearLayout>
     </ScrollView>
 

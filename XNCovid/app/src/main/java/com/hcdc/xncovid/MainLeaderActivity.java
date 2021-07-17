@@ -34,41 +34,11 @@ import java.util.List;
 
 public class MainLeaderActivity extends AppCompatActivity {
     private View mLoading;
-    private boolean flagSlideButton = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_leader);
         setUIRef();
-        SeekBar sb = findViewById(R.id.endSession);
-        sb.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                try {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
-                            flagSlideButton = true;
-                            sb.onTouchEvent(event);
-                        } else {
-                            flagSlideButton = false;
-                            return false;
-                        }
-                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                        if (sb.getProgress() > 95 && flagSlideButton) {
-                            endSession();
-                            return true;
-                        }
-                        flagSlideButton = false;
-                        sb.setProgress(0);
-                    } else {
-                        sb.onTouchEvent(event);
-                    }
-                } catch (Exception ex){
-                    Log.w("MainLeaderActivity", ex.toString());
-                }
-                return true;
-            }
-        });
     }
 
     @Override
@@ -88,7 +58,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .show();
         }
     }
-
+    private boolean flagSlideButton = false;
     private boolean errorFlag = false;
     public void getCurrentSession(){
         Caller caller = new Caller();
@@ -126,7 +96,36 @@ public class MainLeaderActivity extends AppCompatActivity {
                         findViewById(R.id.sessionInfo).setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
                         findViewById(R.id.scanQR).setBackground(getResources().getDrawable( R.drawable.button_scan_qr_session_enable));
                         findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
-                        findViewById(R.id.endSession).setVisibility(View.VISIBLE);
+                        SeekBar sb = findViewById(R.id.endSession);
+                        sb.setVisibility(View.VISIBLE);
+                        sb.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                try {
+                                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                        if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
+                                            flagSlideButton = true;
+                                            sb.onTouchEvent(event);
+                                        } else {
+                                            flagSlideButton = false;
+                                            return false;
+                                        }
+                                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                                        if (sb.getProgress() > 95 && flagSlideButton) {
+                                            endSession();
+                                            return true;
+                                        }
+                                        flagSlideButton = false;
+                                        sb.setProgress(0);
+                                    } else {
+                                        sb.onTouchEvent(event);
+                                    }
+                                } catch (Exception ex){
+                                    Log.w("MainLeaderActivity", ex.toString());
+                                }
+                                return true;
+                            }
+                        });
                         ((TextView)findViewById(R.id.sessionName)).setText(session.SessionName);
                         ((TextView)findViewById(R.id.location)).setText(session.Address);
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");

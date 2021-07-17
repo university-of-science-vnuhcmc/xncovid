@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -30,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MainStaffActivity extends AppCompatActivity {
-private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutensession, layoutsessioninfo;
+private LinearLayout layoutJoinTest, layoutListTest, layoutnewGroup, layoutlistGroup, layoutsessioninfo;
 String sessionId;
 long accountID;
     int flag = 0;
@@ -66,7 +68,6 @@ private  TextView testName, location, time, cause, leader;
             layoutListTest = findViewById(R.id.listTest);
             layoutnewGroup = findViewById(R.id.newGroup);
             layoutlistGroup = findViewById(R.id.listGroup);
-            layoutensession = findViewById(R.id.endSession);
             layoutsessioninfo = findViewById(R.id.layout_main_session_info_staff);
 
             //layoutJoinTest.setEnabled(false);
@@ -126,7 +127,7 @@ private  TextView testName, location, time, cause, leader;
                 .show();
     }
     }
-
+    private boolean flagSlideButton = false;
     private  void  SetupActivit(int caseType){
         if(sessionId != null && sessionId != "")
         {
@@ -140,8 +141,37 @@ private  TextView testName, location, time, cause, leader;
 
             layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
 
-            layoutensession.setEnabled(true);
-            layoutensession.setBackground(getResources().getDrawable( R.drawable.end_session_enable));
+            findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
+            SeekBar sb = findViewById(R.id.endSession);
+            sb.setVisibility(View.VISIBLE);
+            sb.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    try {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
+                                flagSlideButton = true;
+                                sb.onTouchEvent(event);
+                            } else {
+                                flagSlideButton = false;
+                                return false;
+                            }
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                            if (sb.getProgress() > 95 && flagSlideButton) {
+                                endSession();
+                                return true;
+                            }
+                            flagSlideButton = false;
+                            sb.setProgress(0);
+                        } else {
+                            sb.onTouchEvent(event);
+                        }
+                    } catch (Exception ex){
+                        Log.w("MainStaffActivity", ex.toString());
+                    }
+                    return true;
+                }
+            });
             layoutnewGroup.setEnabled(true);
             layoutnewGroup.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
             hideLoading();
@@ -153,14 +183,6 @@ private  TextView testName, location, time, cause, leader;
                     startActivity(intent);
                 }
             });
-
-
-            layoutensession.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    endSession();
-                }
-            });
-
         }else if(caseType == 0){
 
             //TextView
@@ -374,7 +396,13 @@ private  TextView testName, location, time, cause, leader;
                     }, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    hideLoading();
+                    try {
+                        SeekBar sb = findViewById(R.id.endSession);
+                        sb.setProgress(0);
+                        hideLoading();
+                    } catch (Exception ex){
+                        Log.w("endSession", ex.toString());
+                    }
                 }}, MainStaffActivity.this);
 
         }catch (Exception e){
