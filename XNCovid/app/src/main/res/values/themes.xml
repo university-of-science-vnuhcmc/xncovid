@@ -184,4 +184,16 @@
         </item>
 
     </style>
+    <style name="blue_42">
+
+        <item name="android:textSize">
+            42sp
+        </item>
+
+        <item name="android:textColor">
+            #293EFB
+        </item>
+
+    </style>
+
 </resources>

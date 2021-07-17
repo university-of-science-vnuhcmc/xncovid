@@ -75,4 +75,14 @@ public class MyApplication extends Application {
     public void setGroupMaxCount(int groupMaxCount) {
         this.groupMaxCount = groupMaxCount;
     }
+
+    private boolean isDefaultMaxGroup;
+
+    public boolean isDefaultMaxGroup() {
+        return isDefaultMaxGroup;
+    }
+
+    public void setDefaultMaxGroup(boolean defaultMaxGroup) {
+        isDefaultMaxGroup = defaultMaxGroup;
+    }
 }

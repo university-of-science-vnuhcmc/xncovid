@@ -54,11 +54,15 @@ public class ListGroupXnActivity extends AppCompatActivity {
     Boolean isStop  = false;
     Session session = null;
     private View mLoading;
+    RelativeLayout btnScan;
+    int _maxGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try{
             setContentView(R.layout.activity_list_group_xn);
+            _maxGroup = ((MyApplication) getApplication()).getGroupMaxCount();
             xn_session = getIntent().getExtras().getString("xn_session");
             xn_code=(TextView) findViewById(R.id.txt_xncode);
             xn_code.setText(xn_session);
@@ -97,7 +101,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             listViewGroupItem = (ListView) findViewById(R.id.list_ds_xn);
             listViewGroupItem.setAdapter(groupAdapter);
 
-            RelativeLayout btnScan = findViewById((R.id.lst_xn_users));
+            btnScan = findViewById((R.id.lst_xn_users));
             btnScan.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
@@ -112,11 +116,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
             btnStartGroup.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(groupAdapter.getCount() < 10){
+                    if(groupAdapter.getCount() < _maxGroup){
                         String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
                         String htmlcontent = "<font color='#FF0000'><i>! Hiện chỉ mới có "
                                 +groupAdapter.getCount()
-                                +" / 10 người, bạn muốn có tiếp tục</i></font>";
+                                +" / "+_maxGroup+" người, bạn muốn có tiếp tục</i></font>";
                         new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
                                 txtUId,
                                 htmlcontent,
@@ -141,7 +145,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
                         String htmlcontent = "Đã đủ "
                                 +groupAdapter.getCount()
-                                +" / 10, vui lòng chọn tiếp tục";
+                                +" / "+_maxGroup+", vui lòng chọn tiếp tục";
                         new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
                                 txtUId,
                                 htmlcontent,
@@ -379,13 +383,16 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         newObj = new GroupedUserInfo(kbyt_id, isOnline);
                         list.add(newObj);
                         setUID.add((kbyt_id));
-                        txt_total.setText("("+groupAdapter.getCount()+"/10)");
-                        if(groupAdapter.getCount() >= 10){
+                        txt_total.setText("("+groupAdapter.getCount()+"/"+_maxGroup+")");
+                        if(groupAdapter.getCount() >= _maxGroup){
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 txt_total.setTextAppearance(R.style.blue_20);
                             }else {
                                 txt_total.setTextAppearance(this , R.style.blue_20);
                             }
+                            btnScan.setVisibility(View.GONE);
+                        }else {
+                            btnScan.setVisibility(View.VISIBLE);
                         }
                         btnStartGroup.setBackground(getResources().getDrawable(R.drawable.rectangle_btn_group_enable));
                         if(isOnline){

@@ -8,12 +8,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ConfirmXNCodeActivity extends AppCompatActivity {
     String xn_session, session_code;
     private TextView xn_code;
     private Button btnConfirm;
+    private EditText _maxGroup;
+    private CheckBox  _isDefault;
+    private boolean isDefault;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +32,16 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
             //if(getIntent().hasExtra("session_code")){
             //    session_code = getIntent().getExtras().getString("session_code");
             //}
-
+            _maxGroup =(EditText) findViewById(R.id.input_max_group);
+            _isDefault =(CheckBox) findViewById(R.id.checkbox_id);
+            int groupd_count = ((MyApplication) getApplication()).getGroupMaxCount();
+            isDefault = ((MyApplication) getApplication()).isDefaultMaxGroup();
+            if(groupd_count < 1 || isDefault == false){
+                _maxGroup.setText(10+"");
+            }else {
+                _maxGroup.setText(groupd_count+"");
+            }
+            _isDefault.setChecked(isDefault);
         }catch (Exception e){
             Log.e("ConfirmXNCodeActivity", e.toString(), e);
             new AlertDialog.Builder(this)
@@ -45,6 +59,10 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String maxGroup =  _maxGroup.getText().toString();
+                ((MyApplication) getApplication()).setGroupMaxCount(Integer.parseInt(maxGroup));
+                isDefault = _isDefault.isChecked();
+                ((MyApplication) getApplication()).setDefaultMaxGroup(isDefault);
                 Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);
                 intent.putExtra("xn_session", xn_session);
                 //intent.putExtra("session_code", session_code);

@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true">
             <!-- Mã xét nghiệm: Covid19_ABC123 -->
             <TextView
-                android:id="@+id/label_ds_xn"
+                android:id="@+id/label_count_xn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_count_group"
@@ -77,7 +77,7 @@
                 android:text="1/10"
                 android:gravity="center"
                 android:textAppearance="@style/red_20"
-                android:layout_below="@+id/label_ds_xn"
+                android:layout_below="@+id/label_count_xn"
                 android:lineSpacingExtra="7sp"
                 android:translationY="-3.28sp"
                 android:textStyle="bold"/>
@@ -91,13 +91,35 @@
         android:orientation="vertical"
         android:layout_below="@+id/relative_top"
         android:layout_above="@+id/btn_confirm_new_group">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="17dp"
+            android:gravity="left"
+            android:paddingLeft="17dp"
+            android:id="@+id/relative_ds_sum">
+            <!-- Danh sách xét nghiệm: (0/10) -->
+            <TextView
+                android:id="@+id/label_ds_xn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Danh sách gộp mẫu:"
+                android:textAppearance="@style/black_20"
+                android:gravity="top|left"
+                />
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:minHeight="10dp"
             android:id="@+id/layout_listview"
             android:orientation="vertical"
-            android:layout_above="@+id/lst_xn_users">
+            android:layout_above="@+id/lst_xn_users"
+            android:layout_below="@+id/relative_ds_sum">
             <ListView
                 android:id="@+id/list_ds_xn"
                 android:layout_width="match_parent"
