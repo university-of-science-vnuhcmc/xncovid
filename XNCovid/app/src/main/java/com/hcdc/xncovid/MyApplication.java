@@ -65,4 +65,14 @@ public class MyApplication extends Application {
     public void setSession(Session session) {
         this.session = session;
     }
+
+    private  int groupMaxCount;
+
+    public int getGroupMaxCount() {
+        return groupMaxCount;
+    }
+
+    public void setGroupMaxCount(int groupMaxCount) {
+        this.groupMaxCount = groupMaxCount;
+    }
 }

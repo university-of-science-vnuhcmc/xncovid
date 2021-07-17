@@ -17,10 +17,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BinaryBitmap;
@@ -52,6 +55,8 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     ViewGroup contentFrame;
     private RelativeLayout lXNInfo;
     private LinearLayout lReadQR, lInputXNCode;
+    public View layout_dialog_add;
+    LayoutInflater inflater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +100,9 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             contentFrame = (ViewGroup) findViewById(R.id.content_frame);
             mScannerView = new ZXingScannerView(this);
             contentFrame.addView(mScannerView);
+
+            inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            layout_dialog_add = inflater.inflate(R.layout.layout_custom_add_xnccode_dialog, (ViewGroup)   findViewById(R.id.layout_add_xn_code_dialog));
         }catch (Exception e){
             Log.e("ScanSessionActivity", e.toString(), e);
             new AlertDialog.Builder(this)
@@ -170,11 +178,25 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             lReadQR.setVisibility(View.GONE);
             lInputXNCode.setVisibility(View.VISIBLE);
             lXNInfo.setVisibility(View.GONE);
-        }else
+            lInputXNCode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InputXNCode();
+                }
+            });
+        }else //QR type == 2
         {
             lReadQR.setVisibility(View.GONE);
             lInputXNCode.setVisibility(View.GONE);
             lXNInfo.setVisibility(View.VISIBLE);
+            if( getIntent().hasExtra("xn_code") == true){
+                ((TextView)  findViewById(R.id.txt_Scan_xncode)).setText(getIntent().getExtras().getString("xn_code"));
+            }
+            int groupd_count = ((MyApplication) getApplication()).getGroupMaxCount();
+            if( getIntent().hasExtra("grouped_count") == true){
+                int _counting = getIntent().getExtras().getInt("grouped_count");
+                ((TextView)  findViewById(R.id.txt_scan_count)).setText(_counting +"/"+ groupd_count);
+            }
         }
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
@@ -318,5 +340,40 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    private  void  InputXNCode(){
+        //------------------- build dialog add new ---------------------
+        // Xây dựng cái view
+        if (layout_dialog_add.getParent() != null) {// xóa các view ở lần bấm chuột trước
+            ((ViewGroup) layout_dialog_add.getParent()).removeAllViews();
+        }
+        //layout_root should be the name of the "top-level" layout node in the dialog_layout.xml file.
+        final EditText item_code = (EditText) layout_dialog_add.findViewById(R.id.item_code);  // editext này lấy ở file layout_custom_dialog
+
+        //Building dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(layout_dialog_add);
+        builder.setTitle("Nhập mã xét nghiệm");
+
+        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // lấy dữ liệu người dùng nhập cho vào biến
+               scanContent = item_code.getText().toString();
+                // có dữ liệu rồi thì bạn gọi lệnh ghi vào csdl ở đây nhé
+                Toast.makeText(getBaseContext(),"Bạn vừa nhập Mã xét nghiệm: " + scanContent , Toast.LENGTH_SHORT).show();
+                dialog.dismiss(); // tắt dialog
+                showResult(false);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // tắt dialog
+            }
+        });
+       builder.create(); // tạo dialog
+        builder.show();
     }
 }

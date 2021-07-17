@@ -68,7 +68,7 @@
                     android:translationY="-3.28sp"
                     android:textStyle="bold"/>
                 <TextView
-                    android:id="@+id/txt_xncode"
+                    android:id="@+id/txt_Scan_xncode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="U07T26200501"
@@ -99,12 +99,12 @@
                     android:translationY="-3.28sp"
                     android:textStyle="bold"/>
                 <TextView
-                    android:id="@+id/txt_count"
+                    android:id="@+id/txt_scan_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1/10"
                     android:gravity="center"
-                    android:textAppearance="@style/red_20"
+                    android:textAppearance="@style/black_20"
                     android:layout_below="@+id/label_ds_xn"
                     android:lineSpacingExtra="7sp"
                     android:translationY="-3.28sp"
