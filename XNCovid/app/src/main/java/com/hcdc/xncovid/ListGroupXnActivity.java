@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -66,7 +67,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
             if(session != null){
                 session_code = session.SessionID + "";
-            }else {
+            }else
+                {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
                         .setNegativeButton(android.R.string.ok,

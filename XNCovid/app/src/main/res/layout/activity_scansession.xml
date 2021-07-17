@@ -9,32 +9,28 @@
         android:layout_gravity="top"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/teal_700"
-        android:weightSum="1"
+        android:background="#54A9FF"
         android:orientation="horizontal">
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/botron_button"
-            android:textSize="18dp"
+            android:background="@drawable/back_white"
             android:textColor="@color/white"
             android:textAlignment="center"
-            android:text="Cancel"
             android:onClick="clickCancel"
-            android:layout_weight="0.1"
-            android:layout_marginLeft="5sp"/>
+            android:layout_marginLeft="10sp" />
 
         <TextView
+            android:id="@+id/txtScan_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:paddingTop="10dp"
-            android:layout_marginLeft="60dp"
-            android:text="Scan"
-            android:textSize="32dp"
-            android:textColor="@color/white"
-            android:layout_weight="0.8"
+            android:text="Quét mã phiên xét nghiệm"
+            android:layout_marginLeft="17dp"
+            android:paddingTop="15dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/white_28"
             />
     </LinearLayout>
 
@@ -42,6 +38,133 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center">
+        <RelativeLayout
+            android:id="@+id/xn_info_progress"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:background="@drawable/rectangle_3"
+            >
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:id="@+id/frag_xncode">
+                <!-- Mã xét nghiệm: Covid19_ABC123 -->
+                <TextView
+                    android:id="@+id/label_xncode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_xncode"
+                    android:textAppearance="@style/black_20"
+                    android:gravity="top"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/txt_xncode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="U07T26200501"
+                    android:textAppearance="@style/black_20"
+                    android:layout_below="@+id/label_xncode"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_toRightOf="@+id/frag_xncode"
+                android:layout_alignParentRight="true">
+                <!-- Mã xét nghiệm: Covid19_ABC123 -->
+                <TextView
+                    android:id="@+id/label_ds_xn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_count_group"
+                    android:textAppearance="@style/black_20"
+                    android:gravity="top|right"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/txt_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1/10"
+                    android:gravity="center"
+                    android:textAppearance="@style/red_20"
+                    android:layout_below="@+id/label_ds_xn"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/uload_qr"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_width="170dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center"
+            android:background="@drawable/rectangle_8"
+            android:layout_marginBottom="120dp">
+            <View
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/upload_img"
+                android:gravity="left"
+                android:layout_marginLeft="17dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="18dp"
+                android:text="Tải ảnh lên"
+               android:textAppearance="@style/black_28"
+                android:textStyle="bold"
+
+                android:layout_gravity="left|center_vertical"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/input_xn_code"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_width="170dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center"
+            android:background="@drawable/rectangle_8"
+            android:layout_marginBottom="120dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Nhập mã"
+                android:textAppearance="@style/black_blue_28"
+                android:textStyle="bold"
+            android:gravity="center"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

@@ -69,4 +69,7 @@ Xác nhận !
     <string name="label_xncode">
     <u>Mã xét nghiệm</u>:
 </string>
+    <string name="label_count_group">
+    <u>Số lượng mẫu gộp</u>:
+</string>
 </resources>

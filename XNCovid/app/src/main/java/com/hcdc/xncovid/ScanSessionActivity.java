@@ -10,16 +10,35 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
 import com.hcdc.xncovid.model.Session;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +50,8 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     private  String regexKBYTId = "id=([A-z0-9-]*)";
     int scanQRType = 0; // 0: QR Session, 1: QR ong xn, 2: QR to khai y te lan dau
     ViewGroup contentFrame;
+    private RelativeLayout lXNInfo;
+    private LinearLayout lReadQR, lInputXNCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +83,15 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                     requestPermission();
                 }
             }
+            lXNInfo = (RelativeLayout) findViewById(R.id.xn_info_progress);
+            lXNInfo.setVisibility(View.GONE);
+
+            lReadQR = (LinearLayout) findViewById(R.id.uload_qr);
+            lReadQR.setVisibility(View.GONE);
+
+            lInputXNCode = (LinearLayout) findViewById(R.id.input_xn_code);
+            lInputXNCode.setVisibility(View.GONE);
+
             contentFrame = (ViewGroup) findViewById(R.id.content_frame);
             mScannerView = new ZXingScannerView(this);
             contentFrame.addView(mScannerView);
@@ -75,12 +105,77 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
         }
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch (requestCode) {
+            //the case is because you might be handling multiple request codes here
+            case 111:
+                Uri selectedImage = imageReturnedIntent.getData();
+                InputStream imageStream = null;
+                try {
+                    //getting the image
+                    imageStream = getContentResolver().openInputStream(selectedImage);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "Không tìm thấy hình QR", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                //decoding bitmap
+                Bitmap bMap = BitmapFactory.decodeStream(imageStream);
+                int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
+                // copy pixel data from the Bitmap into the 'intArray' array
+                bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
 
+                LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                MultiFormatReader reader = new MultiFormatReader();// use this otherwise
+                try {
+                    Hashtable<DecodeHintType, Object> decodeHints = new Hashtable<DecodeHintType, Object>();
+                    decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+                    decodeHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+
+                    Result result = reader.decode(bitmap, decodeHints) ;
+                    scanContent =  result.getText().toString();
+                    showResult(false);
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(scanQRType == 0) //Join Session
+        {
+            lReadQR.setVisibility(View.VISIBLE);
+            lInputXNCode.setVisibility(View.GONE);
+            lXNInfo.setVisibility(View.GONE);
 
+            lReadQR.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   // System.out.println("called hrre>>>");
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK);
+                    pickIntent.setDataAndType( android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                    startActivityForResult(pickIntent, 111);
+                }
+            });
+
+        }else  if(scanQRType == 1) // Quet ma XN
+        {
+            lReadQR.setVisibility(View.GONE);
+            lInputXNCode.setVisibility(View.VISIBLE);
+            lXNInfo.setVisibility(View.GONE);
+        }else
+        {
+            lReadQR.setVisibility(View.GONE);
+            lInputXNCode.setVisibility(View.GONE);
+            lXNInfo.setVisibility(View.VISIBLE);
+        }
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
     }
