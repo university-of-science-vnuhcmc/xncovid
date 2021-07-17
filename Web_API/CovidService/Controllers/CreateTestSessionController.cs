@@ -71,6 +71,9 @@ namespace CovidService.Controllers
                 SqlHelper.AddParameter(ref parameters, "@ProvinceID", System.Data.SqlDbType.BigInt, objReq.ProvinceID);
                 SqlHelper.AddParameter(ref parameters, "@Note", System.Data.SqlDbType.NVarChar, 1000, objReq.Note);
                 SqlHelper.AddParameter(ref parameters, "@CreateAccountID", System.Data.SqlDbType.BigInt, objReq.AccountID);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionType", System.Data.SqlDbType.SmallInt, objReq.CovidTestingSessionTypeID);
+                SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionObject", System.Data.SqlDbType.SmallInt, objReq.CovidTestingSessionObjectID);
+                SqlHelper.AddParameter(ref parameters, "@DesignatedReason", System.Data.SqlDbType.SmallInt, objReq.DesignatedReasonID);
                 SqlHelper.AddParameter(ref parameters, "@CovidTestingSessionID", System.Data.SqlDbType.Int, ParameterDirection.Output);
                 SqlHelper.AddParameter(ref parameters, "@ReturnValue", System.Data.SqlDbType.Int, ParameterDirection.ReturnValue);
                 SqlHelper.ExecuteNonQuery(sqlString, CommandType.StoredProcedure, "dbo.uspAddCovidTestingSession", parameters.ToArray());

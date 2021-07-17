@@ -46,7 +46,7 @@ namespace CovidService.Controllers
                 else
                 {
                     objRes.ReturnCode = 0;
-                    objRes.ReturnMess = "Success";
+                    objRes.ReturnMess = "Error";
                 }
                 LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CheckAccountResponse");
                 return objRes;

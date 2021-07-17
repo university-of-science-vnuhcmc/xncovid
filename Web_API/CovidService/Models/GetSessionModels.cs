@@ -26,5 +26,9 @@ namespace CovidService.Models
         public string Purpose { get; set; }
         public string Account { get; set; }
         public long SessionID;
+        public string CovidTestingSessionTypeName { get; set; }
+        public string CovidTestingSessionObjectName { get; set; }
+        public string DesignatedReasonName { get; set; }
+
     }
 }

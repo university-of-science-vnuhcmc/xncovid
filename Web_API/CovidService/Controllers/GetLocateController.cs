@@ -17,7 +17,6 @@ namespace CovidService.Controllers
             GetLocateResponse objRes = new GetLocateResponse();
             try
             {
-
                 bool isCheck = Util.CheckLogin(objReq.Email, objReq.Token);
                 if (isCheck == false)
                 {

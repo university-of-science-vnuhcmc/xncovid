@@ -18,6 +18,9 @@ namespace CovidService.Models
         public long ProvinceID { get; set; }
         public string Note { get; set; }
         public long AccountID { get; set; }
+        public int CovidTestingSessionTypeID { get; set; }
+        public int CovidTestingSessionObjectID { get; set; }
+        public int DesignatedReasonID { get; set; }
     }
 
     public class CreateTestSessionResponse : Response

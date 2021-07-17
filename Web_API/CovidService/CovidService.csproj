@@ -159,6 +159,7 @@
     <Compile Include="Controllers\GetHistoryCreateQRController.cs" />
     <Compile Include="Controllers\GetLocateController.cs" />
     <Compile Include="Controllers\GetSessionController.cs" />
+    <Compile Include="Controllers\GetTestingTypeController.cs" />
     <Compile Include="Controllers\GroupTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\GetStaffConfigController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Models\GetLocateModels.cs" />
     <Compile Include="Models\GetSessionModels.cs" />
     <Compile Include="Models\GetStaffConfigModels.cs" />
+    <Compile Include="Models\GetTestingTypeModels.cs" />
     <Compile Include="Models\GroupTestModels.cs" />
     <Compile Include="Models\JoinTestSesionModels.cs" />
     <Compile Include="Models\LeaveTestSessionModels.cs" />

@@ -83,7 +83,7 @@ public class LocateConfig
                 i += (temp.Length - 1);
             }
             dtInfor = null;
-            dtInfor = dts.Tables[2]; ;
+            dtInfor = dts.Tables[2];
             for (int i = 0; i < dtInfor.Rows.Count; i++)
             {
                 DataRow[] temp = dtInfor.Select("DistrictCode = '" + dtInfor.Rows[i]["DistrictCode"].ToString() + "'");
