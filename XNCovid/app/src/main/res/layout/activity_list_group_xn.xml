@@ -163,39 +163,45 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:background="@drawable/confirm_new_group_disable"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_gravity="center"
         android:id="@+id/btn_confirm_new_group"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
-        <LinearLayout
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <LinearLayout android:id="@+id/startGroupDisable"
+            android:layout_margin="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:layout_height="48dp"
             android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/slide_green_button_disable">
+            <View
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:background="@drawable/right_green_arrow_disable"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thực hiện gom nhóm"
-                android:textStyle="bold"
-                android:textAppearance="@style/black_24"
-
-                android:layout_marginRight="10dp"
-                android:layout_alignParentLeft="true"
-                />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_plane"
-                android:layout_gravity="center"/>
+                android:gravity="center"
+                android:textSize="18dp"
+                android:text="Trượt để hoàn tất gộp mẫu"/>
         </LinearLayout>
+        <SeekBar android:background="@drawable/slide_button_group"
+            android:visibility="gone"
+            android:layout_margin="20dp"
+            android:id="@+id/startGroup"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="false"
+            android:max="100"
+            android:thumb="@drawable/right_green_arrow"
+            android:thumbOffset="18dp"
+            android:progressDrawable="@drawable/slide_green_progess"
+            android:layout_alignParentBottom="true"
+            >
+        </SeekBar>
     </LinearLayout>
-
 </RelativeLayout>

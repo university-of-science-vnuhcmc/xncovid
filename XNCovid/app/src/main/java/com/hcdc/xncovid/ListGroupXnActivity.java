@@ -11,10 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,14 +51,13 @@ public class ListGroupXnActivity extends AppCompatActivity {
     ListView listViewGroupItem;
     String kbyt_id; //ma dinh danh ng khai bao y te
    SortedSet<String> setUID;
-   LinearLayout btnStartGroup;
     Hashtable<String, GroupedUserInfo> hashObj;
     Boolean isStop  = false;
     Session session = null;
     private View mLoading;
     RelativeLayout btnScan;
     int _maxGroup;
-
+    private boolean flagSlideButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,61 +113,34 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 }
             });
             txt_total = findViewById(R.id.txt_count);
-            btnStartGroup = findViewById(R.id.btn_confirm_new_group);
-            btnStartGroup.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    if(groupAdapter.getCount() < _maxGroup){
-                        String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
-                        String htmlcontent = "<font color='#FF0000'><i>! Hiện chỉ mới có "
-                                +groupAdapter.getCount()
-                                +" / "+_maxGroup+" người, bạn muốn có tiếp tục</i></font>";
-                        new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
-                                txtUId,
-                                htmlcontent,
-                                "Tiếp tục",
-                                "Hủy",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        isStop = true;
-                                        showLoading();
-                                        if(!UploadGroupXN()){
-                                            isStop = false;
-                                        }
-                                    }
-                                }, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        isStop = false;
-                                    }
-                                }, ListGroupXnActivity.this);
-                    }else {
-                        String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
-                        String htmlcontent = "Đã đủ "
-                                +groupAdapter.getCount()
-                                +" / "+_maxGroup+", vui lòng chọn tiếp tục";
-                        new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
-                                txtUId,
-                                htmlcontent,
-                                "Tiếp tục",
-                                "Hủy",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        isStop = true;
-                                        showLoading();
-                                        if(!UploadGroupXN()){
-                                            isStop = false;
-                                        }
-                                    }
-                                }, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        isStop = false;
-                                    }
-                                }, ListGroupXnActivity.this);
+            startGroupDisable = findViewById(R.id.startGroupDisable);
+            startGroup = findViewById(R.id.startGroup);
+            startGroup.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    try {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (startGroup.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
+                                flagSlideButton = true;
+                                startGroup.onTouchEvent(event);
+                            } else {
+                                flagSlideButton = false;
+                                return false;
+                            }
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                            if (startGroup.getProgress() > 95 && flagSlideButton) {
+                                startGroup();
+                                return true;
+                            }
+                            flagSlideButton = false;
+                            startGroup.setProgress(0);
+                        } else {
+                            startGroup.onTouchEvent(event);
+                        }
+                    } catch (Exception ex){
+                        Log.w("ListGroupXnActivity", ex.toString());
                     }
+                    return true;
                 }
             });
             setUIRef();
@@ -180,6 +154,62 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .show();
         }
 
+    }
+
+    public void startGroup() {
+
+        if(groupAdapter.getCount() < _maxGroup){
+            String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
+            String htmlcontent = "<font color='#FF0000'><i>! Hiện chỉ mới có "
+                    +groupAdapter.getCount()
+                    +" / "+_maxGroup+" người, bạn muốn có tiếp tục</i></font>";
+            new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
+                    txtUId,
+                    htmlcontent,
+                    "Tiếp tục",
+                    "Hủy",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isStop = true;
+                            showLoading();
+                            if(!UploadGroupXN()){
+                                isStop = false;
+                            }
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startGroup.setProgress(0);
+                            isStop = false;
+                        }
+                    }, ListGroupXnActivity.this);
+        }else {
+            String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
+            String htmlcontent = "Đã đủ "
+                    +groupAdapter.getCount()
+                    +" / "+_maxGroup+", vui lòng chọn tiếp tục";
+            new Util().showMessage("Thực hiện gom nhóm có mã xét nghiệm",
+                    txtUId,
+                    htmlcontent,
+                    "Tiếp tục",
+                    "Hủy",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isStop = true;
+                            showLoading();
+                            if(!UploadGroupXN()){
+                                isStop = false;
+                            }
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isStop = false;
+                        }
+                    }, ListGroupXnActivity.this);
+        }
     }
 
     @Override
@@ -220,7 +250,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
     }
     public  Boolean UploadGroupXN(){
         final Boolean[] isOK = {true};
-        btnStartGroup.setEnabled(false);
+        setEnableStartGroup(false);
         listViewGroupItem.setEnabled(false);
         try{
             GroupTestReq req  = new GroupTestReq();
@@ -279,7 +309,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                             isStop = false;
-                            btnStartGroup.setEnabled(true);
+                            setEnableStartGroup(true);
                             listViewGroupItem.setEnabled(true);
                         }
                         else if (res.ReturnCode == -16) //trung QR
@@ -298,7 +328,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     null, null, ListGroupXnActivity.this);
                             isOK[0] = false;
                             isStop = false;
-                            btnStartGroup.setEnabled(true);
+                            setEnableStartGroup(true);
                             listViewGroupItem.setEnabled(true);
                         }
                         else if (res.ReturnCode == -31 || res.ReturnCode == -32)
@@ -311,7 +341,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                             isStop = false;
-                            btnStartGroup.setEnabled(true);
+                            setEnableStartGroup(true);
                             listViewGroupItem.setEnabled(true);
                         }
                         else{
@@ -323,7 +353,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .show();
                             isOK[0] = false;
                             isStop = false;
-                            btnStartGroup.setEnabled(true);
+                            setEnableStartGroup(true);
                             listViewGroupItem.setEnabled(true);
                         }
                     }catch (Exception e){
@@ -335,7 +365,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 .show();
                         isOK[0] = false;
                         isStop = false;
-                        btnStartGroup.setEnabled(true);
+                        setEnableStartGroup(true);
                         listViewGroupItem.setEnabled(true);
                     }
                     hideLoading();
@@ -354,7 +384,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             isOK[0] = false;
             isStop = false;
             hideLoading();
-            btnStartGroup.setEnabled(true);
+            setEnableStartGroup(true);
             listViewGroupItem.setEnabled(true);
             return   isOK[0] ;
         }
@@ -394,7 +424,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         }else {
                             btnScan.setVisibility(View.VISIBLE);
                         }
-                        btnStartGroup.setBackground(getResources().getDrawable(R.drawable.rectangle_btn_group_enable));
+                        setEnableStartGroup(true);
                         if(isOnline){
                             new CrawlKBYTAsyncTask(this).execute(kbyt_id);
                         }
@@ -416,6 +446,17 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .show();
         }
 
+    }
+    private LinearLayout startGroupDisable;
+    private SeekBar startGroup;
+    private void setEnableStartGroup(boolean isEnable){
+        if(isEnable){
+            startGroup.setVisibility(View.VISIBLE);
+            startGroupDisable.setVisibility(View.GONE);
+        } else {
+            startGroup.setVisibility(View.GONE);
+            startGroupDisable.setVisibility(View.VISIBLE);
+        }
     }
 
     public void AddNewGroupItem(GroupedUserInfo info){
