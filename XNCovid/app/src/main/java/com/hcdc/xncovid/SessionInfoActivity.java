@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
 
 public class SessionInfoActivity extends AppCompatActivity {
     String xn_session;
-    private TextView tenphien, province, district, ward, address, chooseTime, chooseDate, cause, leader;
+    private TextView tenphien, province, district, ward, address, chooseTime, chooseDate, leader;
+    private TextView sessionTypeName, target_xn_giamsat, reason_xn_giamsat, reason_xn_chidinh, target_xn_chidinh, ralative_target;
      LinearLayout btnConfirm;
     private View mLoading;
     @Override
@@ -49,9 +50,16 @@ public class SessionInfoActivity extends AppCompatActivity {
             address=(TextView) findViewById(R.id.address);
             chooseTime=(TextView) findViewById(R.id.chooseTime);
             chooseDate=(TextView) findViewById(R.id.chooseDate);
-            cause=(TextView) findViewById(R.id.cause1);
             leader=(TextView) findViewById(R.id.leader);
             btnConfirm = findViewById(R.id.next);
+
+            sessionTypeName = (TextView)findViewById(R.id.type);
+            target_xn_giamsat = (TextView)findViewById(R.id.target1);
+            reason_xn_giamsat = (TextView)findViewById(R.id.cause1);
+
+            reason_xn_chidinh = (TextView)findViewById(R.id.cause2);
+            target_xn_chidinh = (TextView)findViewById(R.id.target2);
+            ralative_target = (TextView)findViewById(R.id.relativeTarget);
             //tenphien.setText(xn_session);
 
             setUIRef();
@@ -80,8 +88,23 @@ public class SessionInfoActivity extends AppCompatActivity {
         address.setText("");
         chooseTime.setText("");
         chooseDate.setText("");
-        cause.setText("");
         leader.setText("");
+
+        sessionTypeName.setText("");
+        target_xn_giamsat.setText("");
+        reason_xn_giamsat.setText("");
+
+        reason_xn_chidinh.setText("");
+        target_xn_chidinh.setText("");
+        ralative_target.setText("");
+
+
+        target_xn_giamsat.setVisibility(View.GONE);
+        reason_xn_giamsat.setVisibility(View.GONE);
+
+        reason_xn_chidinh.setVisibility(View.GONE);
+        target_xn_chidinh.setVisibility(View.GONE);
+        ralative_target.setVisibility(View.GONE);
 
         getSessionIf();
 
@@ -147,8 +170,26 @@ public class SessionInfoActivity extends AppCompatActivity {
                               address.setText(res.Data.Address);
                               chooseTime.setText(timeFormat.format(res.Data.getTestingDate()));
                               chooseDate.setText(dateFormat.format(res.Data.getTestingDate()));
-                              cause.setText(res.Data.Purpose);
                               leader.setText(res.Data.Account);
+                              sessionTypeName.setText(res.Data.CovidTestingSessionTypeName);
+
+                              if(res.Data.CovidTestingSessionTypeID == 1) //giam sat
+                              {
+                                  target_xn_giamsat.setText(res.Data.CovidTestingSessionObjectName);
+                                  reason_xn_giamsat.setText(res.Data.Purpose);
+
+                                  target_xn_giamsat.setVisibility(View.VISIBLE);
+                                  reason_xn_giamsat.setVisibility(View.VISIBLE);
+                              }else if(res.Data.CovidTestingSessionTypeID == 2) //chi dinh
+                              {
+                                  reason_xn_chidinh.setText(res.Data.DesignatedReasonName);
+                                  target_xn_chidinh.setText(res.Data.CovidTestingSessionObjectName);
+                                  ralative_target.setText(res.Data.Purpose);
+                                  reason_xn_chidinh.setVisibility(View.VISIBLE);
+                                  target_xn_chidinh.setVisibility(View.VISIBLE);
+                                  ralative_target.setVisibility(View.VISIBLE);
+                              }
+
                               btnConfirm.setOnClickListener(new View.OnClickListener() {
                                   public void onClick(View v) {
                                       JoinTestSessionReq req = new JoinTestSessionReq();

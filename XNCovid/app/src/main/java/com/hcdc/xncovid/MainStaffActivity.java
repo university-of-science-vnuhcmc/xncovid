@@ -38,7 +38,9 @@ long accountID;
     int flag = 0;
     public  static  boolean isFirst = false;
     private View mLoading;
-private  TextView testName, location, time, cause, leader;
+private  TextView testName, location, time, leader, sessionTypeName;
+private  TextView target_xn_giamsat, reason_xn_giamsat;
+private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
     MyApplication myapp = null;
     Session objSession = null;
     UserInfo[] LstUser = null;
@@ -84,8 +86,25 @@ private  TextView testName, location, time, cause, leader;
             testName = (TextView) findViewById(R.id.testName);
             location= (TextView) findViewById(R.id.location);
             time = (TextView) findViewById(R.id.time);
-            cause = (TextView) findViewById(R.id.cause);
             leader = (TextView) findViewById(R.id.leader);
+            sessionTypeName = (TextView) findViewById(R.id.type);
+
+            //xn giam sat
+            target_xn_giamsat = (TextView)findViewById(R.id.target1);
+            reason_xn_giamsat = (TextView)findViewById(R.id.cause);
+
+            //xn chi dinh
+            reason_xn_chidinh = (TextView)findViewById(R.id.cause2);
+            target_xn_chidinh = (TextView)findViewById(R.id.target2);
+            ralative_target = (TextView)findViewById(R.id.relativeTarget);
+
+            target_xn_giamsat.setVisibility(View.GONE);
+            reason_xn_giamsat.setVisibility(View.GONE);
+
+            reason_xn_chidinh.setVisibility(View.GONE);
+            target_xn_chidinh.setVisibility(View.GONE);
+            ralative_target.setVisibility(View.GONE);
+
             setUIRef();
 
         } catch (Exception e){
@@ -136,9 +155,33 @@ private  TextView testName, location, time, cause, leader;
             location.setText((objSession.Address));
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
             time.setText(timeFormat.format(objSession.getTestingDate()));
-            cause.setText(objSession.Purpose);
+            sessionTypeName.setText(objSession.CovidTestingSessionTypeName);
             leader.setText(objSession.Account);
+            if(objSession.CovidTestingSessionTypeID == 1) //giam sat
+            {
+                target_xn_giamsat.setText(objSession.CovidTestingSessionObjectName);
+                reason_xn_giamsat.setText(objSession.Purpose);
 
+                target_xn_giamsat.setVisibility(View.VISIBLE);
+                reason_xn_giamsat.setVisibility(View.VISIBLE);
+
+                reason_xn_chidinh.setVisibility(View.GONE);
+                target_xn_chidinh.setVisibility(View.GONE);
+                ralative_target.setVisibility(View.GONE);
+
+            }else if(objSession.CovidTestingSessionTypeID == 2)//chi dinh
+            {
+                reason_xn_chidinh.setText(objSession.DesignatedReasonName);
+                target_xn_chidinh.setText(objSession.CovidTestingSessionObjectName);
+                ralative_target.setText(objSession.Purpose);
+
+                target_xn_giamsat.setVisibility(View.GONE);
+                reason_xn_giamsat.setVisibility(View.GONE);
+
+                reason_xn_chidinh.setVisibility(View.VISIBLE);
+                target_xn_chidinh.setVisibility(View.VISIBLE);
+                ralative_target.setVisibility(View.VISIBLE);
+            }
             layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
 
             findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
@@ -190,10 +233,22 @@ private  TextView testName, location, time, cause, leader;
             location.setText("");
 
             time.setText("");
-            cause.setText("");
+            sessionTypeName.setText("");
             leader.setText("");
 
+            target_xn_giamsat.setText("");
+            reason_xn_giamsat.setText("");
 
+            reason_xn_chidinh.setText("");
+            target_xn_chidinh.setText("");
+            ralative_target.setText("");
+
+            target_xn_giamsat.setVisibility(View.GONE);
+            reason_xn_giamsat.setVisibility(View.GONE);
+
+            reason_xn_chidinh.setVisibility(View.GONE);
+            target_xn_chidinh.setVisibility(View.GONE);
+            ralative_target.setVisibility(View.GONE);
 
             layoutJoinTest.setEnabled(true);
             layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
