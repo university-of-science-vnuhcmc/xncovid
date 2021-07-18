@@ -21,6 +21,7 @@ import com.hcdc.xncovid.model.GroupedUserInfo;
 import com.hcdc.xncovid.util.Util;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.SortedSet;
 
 import androidx.annotation.RequiresApi;
@@ -29,10 +30,12 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<GroupedUserInfo> list;
     private Context context;
     private SortedSet<String> key;
-    public GroupItemAdapter(ArrayList<GroupedUserInfo> list, Context context, SortedSet<String> set) {
+    private  Hashtable<String, GroupedUserInfo> hashinfo;
+    public GroupItemAdapter(ArrayList<GroupedUserInfo> list, Context context, SortedSet<String> set, Hashtable<String, GroupedUserInfo> hash) {
         this.list = list;
         this.context = context;
         this.key =set;
+        this.hashinfo = hash;
     }
 
     @Override
@@ -60,6 +63,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         ViewHolder holder = null;
         GroupedUserInfo obj = (GroupedUserInfo) getItem(position);
+        GroupedUserInfo objInfo = (GroupedUserInfo) hashinfo.get(obj.getUid());
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             holder = new ViewHolder();
@@ -68,6 +72,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
             holder.txtUID =  (TextView)view.findViewById(R.id.txt_group_user_id);
             holder.btnDelete = (Button) view.findViewById(R.id.btn_remove);
             holder.layout = (RelativeLayout)  view.findViewById(R.id.item_layout);
+            holder.txtInfo = (TextView) view.findViewById(R.id.txt_group_user_info);
             view.setTag(holder);
         }else {
             holder = (ViewHolder) view.getTag();
@@ -106,9 +111,19 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
         if(!obj.isOnline()){
             holder.txtUID.setTextAppearance(R.style.green_28);
             holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item_manual));
+            holder.txtInfo.setVisibility(View.GONE);
          }else {
-            holder.txtUID.setTextAppearance(R.style.blue_28);
-            holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item));
+            if(objInfo != null){
+                holder.txtInfo.setText(objInfo.getFullname() +", "+ objInfo.getBirthYear());
+                holder.txtInfo.setTextAppearance(R.style.blue_14);
+                holder.txtUID.setTextAppearance(R.style.blue_14);
+                holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item));
+                holder.txtInfo.setVisibility(View.VISIBLE);
+            }else {
+                holder.txtUID.setTextAppearance(R.style.blue_28);
+                holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item));
+                holder.txtInfo.setVisibility(View.GONE);
+            }
         }
         if(position % 2 == 0){
             holder.layout.setBackground(view.getResources().getDrawable(R.drawable.rectangle_time_session));
@@ -123,6 +138,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
     static class ViewHolder {
         TextView txtIdx;
         TextView txtUID;
+        TextView txtInfo;
         Button btnDelete;
         RelativeLayout layout;
     }

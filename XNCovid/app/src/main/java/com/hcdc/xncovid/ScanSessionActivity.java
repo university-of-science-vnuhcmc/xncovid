@@ -227,8 +227,10 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             //intent.putExtra("xn_session", xn_session);
             setResult(2,intent);
             finish();//finishing activity
+        }else {
+            onBackPressed();
         }
-        onBackPressed();
+
     }
 
 

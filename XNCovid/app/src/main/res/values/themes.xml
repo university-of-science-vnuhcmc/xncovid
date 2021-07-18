@@ -195,5 +195,15 @@
         </item>
 
     </style>
+    <style name="blue_14">
 
+        <item name="android:textSize">
+            14sp
+        </item>
+
+        <item name="android:textColor">
+            #293EFB
+        </item>
+
+    </style>
 </resources>

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -80,7 +79,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        StartMainStaffAcitivity();
+                                        StartMainAcitivity();
                                     }
                                 })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -97,8 +96,10 @@ public class ListGroupXnActivity extends AppCompatActivity {
             if(list == null){
                 list = new ArrayList<>();
             }
-
-            groupAdapter = new GroupItemAdapter(list, this, setUID);
+            if(hashObj == null){
+                hashObj = new Hashtable<String, GroupedUserInfo>();
+            }
+            groupAdapter = new GroupItemAdapter(list, this, setUID, hashObj);
             listViewGroupItem = (ListView) findViewById(R.id.list_ds_xn);
             listViewGroupItem.setAdapter(groupAdapter);
 
@@ -108,6 +109,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent =new Intent(ListGroupXnActivity.this,ScanSessionActivity.class);
                     intent.putExtra("scan_qr_type", 2); //scan to khai bao y te
+                    intent.putExtra("xn_code", xn_session); //scan to khai bao y te
+                    intent.putExtra("grouped_count", groupAdapter.getCount()); //scan to khai bao y te
                     startActivityForResult(intent, 2);// Activity is started with requestCode 2
 
                 }
@@ -225,7 +228,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        StartMainStaffAcitivity();
+                                        StartMainAcitivity();
                                     }
                                 })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -241,8 +244,18 @@ public class ListGroupXnActivity extends AppCompatActivity {
          }
     }
 
-    private  void StartMainStaffAcitivity(){
-        Intent intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+    private  void StartMainAcitivity(){
+        UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        if(userInfo != null){
+           if(userInfo.Role.equals("Leader")){
+                intent = new Intent(getApplicationContext(), MainLeaderActivity.class);
+
+           }else {
+                intent = new Intent(getApplicationContext(), MainStaffActivity.class);
+
+           }
+        }
         // intent.putExtra("xn_session", "");
         intent.putExtra("flag", 1);//co cho biet la tu view list group
         startActivity(intent);
@@ -298,7 +311,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     try{
                         GroupTestRes res = (GroupTestRes) response;
                         if (res.ReturnCode == 1) {
-                            StartMainStaffAcitivity();
+                            StartMainAcitivity();
                         } else if (res.ReturnCode == -17) //ma ong nghiem da ton tai ton phein xet nghiem
                         {
                             Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
@@ -477,6 +490,11 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 return;
             }
             hashObj.put(uid, info);
+            if(info.isOnline()) //neu la online thi bao adapter de load info len man hinh
+            {
+                groupAdapter.notifyDataSetChanged();
+            }
+
         }catch (Exception e){
             Log.e("AddNewGroupItem", e.toString(), e);
             new android.app.AlertDialog.Builder(this)
