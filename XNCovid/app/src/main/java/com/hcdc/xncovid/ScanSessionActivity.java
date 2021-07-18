@@ -37,6 +37,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.hcdc.xncovid.model.Session;
+import com.hcdc.xncovid.util.Util;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -242,13 +243,45 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             mScannerView.removeAllViews(); //<- here remove all the views, it will make an Activity having no View
             mScannerView.stopCamera(); //<- then stop the camera
 
-            if((scanQRType == 2) &&txtScanedResult.startsWith(urlKBYTOnline)){
-                Pattern p = Pattern.compile(regexKBYTId);
-                Matcher m = p.matcher(txtScanedResult);
-                m.find();
-                String id = m.group(1);
-                scanContent = id;
-                isOnline = true;
+            if(scanQRType == 2){
+                if(txtScanedResult.startsWith(urlKBYTOnline)) //online
+                {
+                    Pattern p = Pattern.compile(regexKBYTId);
+                    Matcher m = p.matcher(txtScanedResult);
+                    m.find();
+                    String id = m.group(1);
+                    scanContent = id;
+                    isOnline = true;
+                }else  //offline
+                {
+                    String tmpContent = txtScanedResult.trim();
+
+                    String[] tmpArr = tmpContent.split("-");
+
+                    if(tmpArr.length < 2){
+                        new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
+                                "",
+                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p>" +
+                                        "<p>Vui lòng quay lại để quét mã khác.",
+                                null,
+                                "OK",
+                                null, null, ScanSessionActivity.this);
+                        return;
+                    }
+                    String _luhnCheck =  Util.GetLuhnCheckDigit(tmpArr[1].trim());
+                    if(!_luhnCheck.equals(tmpArr[0].trim())){
+                        new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
+                                "",
+                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p>" +
+                                        "<p>Vui lòng quay lại để quét mã khác.",
+                                null,
+                                "OK",
+                                null, null, ScanSessionActivity.this);
+                        return;
+                    }
+                    scanContent = txtScanedResult.trim();
+                }
+
             }else {
                 scanContent = txtScanedResult.trim();
             }

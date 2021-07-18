@@ -420,8 +420,14 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
                     //kt co trung uid ko, co thi bao loi va bo qua
                     if(setUID.contains(kbyt_id)){
-                        Toast.makeText(this, "Mã đinh danh đã tồn tại trong mẫu xét nghiệm này!",
-                                Toast.LENGTH_LONG).show();
+
+                        new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
+                                "",
+                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p>" +
+                                        "<p>Vui lòng quay lại để quét mã khác.",
+                                null,
+                                "OK",
+                                null, null, ListGroupXnActivity.this);
                     }
                     else {
                         newObj = new GroupedUserInfo(kbyt_id, isOnline);

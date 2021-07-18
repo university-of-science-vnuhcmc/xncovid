@@ -40,4 +40,28 @@ public class Util  {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    public static String GetLuhnCheckDigit(String number)
+    {
+        int sum = 0;
+        boolean alt = true;
+        char[] digits = number.toCharArray();
+        for (int i = digits.length - 1; i >= 0; i--)
+        {
+            int curDigit = (digits[i] - 48);
+            if (alt)
+            {
+                curDigit *= 2;
+                if (curDigit > 9)
+                    curDigit -= 9;
+            }
+            sum += curDigit;
+            alt = !alt;
+        }
+        if ((sum % 10) == 0)
+        {
+            return "0";
+        }
+        return (10 - (sum % 10)) + "";
+    }
 }
