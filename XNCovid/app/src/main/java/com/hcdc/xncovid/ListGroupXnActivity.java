@@ -317,7 +317,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         {
                             Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
                             new AlertDialog.Builder(ListGroupXnActivity.this)
-                                    .setMessage("Mã ống nghiệm đã tồn tại trong phiên xét nghiệm.")
+                                    .setMessage("Mã xét nghiệm đã tồn tại trong phiên xét nghiệm.")
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
@@ -334,7 +334,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             for (String uid: arrIds) {
                                 strcontent += "<br/><font color='#FF0000'><i>" + uid + "</i></font>";
                             }
-                            new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
+                            new Util().showMessage("Mã định danh đã tồn tại trong các mẫu gộp của phiên xét nghiệm.",
                                     session.SessionName,
                                     strcontent,
                                     null,
@@ -423,7 +423,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
                         new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
                                 "",
-                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p>" +
+                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p></br>" +
                                         "<p>Vui lòng quay lại để quét mã khác.",
                                 null,
                                 "OK",
