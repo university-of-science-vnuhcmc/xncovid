@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.hcdc.xncovid.ListGroupXnActivity;
@@ -100,6 +102,10 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
                                 key.remove(obj.getUid());
                                 list.remove(position); //or some other task
                                 ((TextView) ((Activity) context).findViewById(R.id.txt_count)).setText("("+getCount()+"/10)");
+                                if(getCount() < 1){
+                                    ((SeekBar) ((Activity) context).findViewById(R.id.startGroup)).setVisibility(View.GONE);
+                                    ((LinearLayout) ((Activity) context).findViewById(R.id.startGroupDisable)).setVisibility(View.VISIBLE);
+                                }
                                 notifyDataSetChanged();
                             }
                         }, null, context);

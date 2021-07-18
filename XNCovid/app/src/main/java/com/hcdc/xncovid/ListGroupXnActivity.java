@@ -118,6 +118,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
             txt_total = findViewById(R.id.txt_count);
             startGroupDisable = findViewById(R.id.startGroupDisable);
             startGroup = findViewById(R.id.startGroup);
+            setEnableStartGroup(false);
             startGroup.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -437,7 +438,6 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         }else {
                             btnScan.setVisibility(View.VISIBLE);
                         }
-                        setEnableStartGroup(true);
                         if(isOnline){
                             new CrawlKBYTAsyncTask(this).execute(kbyt_id);
                         }
@@ -445,6 +445,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             AddNewGroupItem(newObj);
                         }
                         groupAdapter.notifyDataSetChanged();
+                        setEnableStartGroup(true);
                     }
 
                 }
