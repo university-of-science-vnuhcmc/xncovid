@@ -13,12 +13,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.hcdc.xncovid.model.LocateInfor;
+import com.hcdc.xncovid.model.Session;
 
 import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 
 public class QRSessionActivity extends AppCompatActivity {
 
@@ -28,19 +33,30 @@ public class QRSessionActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_qrsession);
             Bundle bundle = getIntent().getExtras();
-            String sessionName = bundle.getString("SessionName");
-            Long sessionID = bundle.getLong("SessionID");
-            boolean isNew = bundle.getBoolean("IsNew");
+            Session session = new Gson().fromJson(bundle.getString("Session"), Session.class);
 
-            if(!isNew){
-                ((LinearLayout) findViewById(R.id.success)).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.sessionName)).setText(session.SessionName);
+            ((TextView) findViewById(R.id.location)).setText(session.Address);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+            ((TextView)findViewById(R.id.time)).setText(timeFormat.format(session.getTestingDate()));
+            ((TextView)findViewById(R.id.type)).setText(session.CovidTestingSessionTypeName);
+            ((TextView) findViewById(R.id.leader)).setText(session.Account);
+            if(session.CovidTestingSessionTypeID == 1){
+                ((TextView)findViewById(R.id.cause1)).setText(session.Purpose);
+                ((TextView)findViewById(R.id.target1)).setText(session.CovidTestingSessionObjectName);
+                findViewById(R.id.type1).setVisibility(View.VISIBLE);
+                findViewById(R.id.type2).setVisibility(View.GONE);
+            } else {
+                ((TextView)findViewById(R.id.relativeTarget)).setText(session.Purpose);
+                ((TextView)findViewById(R.id.cause2)).setText(session.DesignatedReasonName);
+                ((TextView)findViewById(R.id.target2)).setText(session.CovidTestingSessionObjectName);
+                findViewById(R.id.type1).setVisibility(View.GONE);
+                findViewById(R.id.type2).setVisibility(View.VISIBLE);
             }
-
-            ((TextView) findViewById(R.id.sessionName)).setText(sessionName);
 
             QRCodeWriter writer = new QRCodeWriter();
             try {
-                BitMatrix bitMatrix = writer.encode(sessionID.toString(), BarcodeFormat.QR_CODE, 300, 300);
+                BitMatrix bitMatrix = writer.encode(String.valueOf(session.SessionID), BarcodeFormat.QR_CODE, 300, 300);
                 int width = bitMatrix.getWidth();
                 int height = bitMatrix.getHeight();
                 Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

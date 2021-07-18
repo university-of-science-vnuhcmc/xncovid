@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
 import com.hcdc.xncovid.adapter.StaffAdapter;
 import com.hcdc.xncovid.model.CheckAccountReq;
 import com.hcdc.xncovid.model.CheckAccountRes;
@@ -130,8 +131,20 @@ public class MainLeaderActivity extends AppCompatActivity {
                         ((TextView)findViewById(R.id.location)).setText(session.Address);
                         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
                         ((TextView)findViewById(R.id.time)).setText(timeFormat.format(session.getTestingDate()));
-                        ((TextView)findViewById(R.id.cause)).setText(session.Purpose);
-                        ((TextView)findViewById(R.id.numberStaff)).setText(String.valueOf(LstUser == null ? 0 : LstUser.length));
+                        ((TextView)findViewById(R.id.type)).setText(session.CovidTestingSessionTypeName);
+                        if(session.CovidTestingSessionTypeID == 1){
+                            ((TextView)findViewById(R.id.cause1)).setText(session.Purpose);
+                            ((TextView)findViewById(R.id.target1)).setText(session.CovidTestingSessionObjectName);
+                            findViewById(R.id.type1).setVisibility(View.VISIBLE);
+                            findViewById(R.id.type2).setVisibility(View.GONE);
+                        } else {
+                            ((TextView)findViewById(R.id.relativeTarget)).setText(session.Purpose);
+                            ((TextView)findViewById(R.id.cause2)).setText(session.DesignatedReasonName);
+                            ((TextView)findViewById(R.id.target2)).setText(session.CovidTestingSessionObjectName);
+                            findViewById(R.id.type1).setVisibility(View.GONE);
+                            findViewById(R.id.type2).setVisibility(View.VISIBLE);
+                        }
+                        ((TextView)findViewById(R.id.numberStaff)).setText(LstUser == null ? "0 nhân viên" : String.valueOf(LstUser.length) + " nhân viên");
                         StaffAdapter adapter = new StaffAdapter(MainLeaderActivity.this, LstUser);
 
                         ListView listView = (ListView) findViewById(R.id.listStaff);
@@ -219,9 +232,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                 return;
             }
             Intent intent = new Intent(this, QRSessionActivity.class);
-            intent.putExtra("SessionName", session.SessionName);
-            intent.putExtra("SessionID", session.SessionID);
-            intent.putExtra("IsNew", false);
+            intent.putExtra("Session", new Gson().toJson(session));
             startActivity(intent);
         } catch (Exception ex){
             Log.w("showQR", ex.toString());

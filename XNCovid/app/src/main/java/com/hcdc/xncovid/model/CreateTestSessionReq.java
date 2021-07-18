@@ -13,4 +13,7 @@ public class CreateTestSessionReq extends APIRequest {
     public long DistrictID;
     public long ProvinceID;
     public long AccountID;
+    public long CovidTestingSessionTypeID;
+    public long CovidTestingSessionObjectID;
+    public long DesignatedReasonID;
 }

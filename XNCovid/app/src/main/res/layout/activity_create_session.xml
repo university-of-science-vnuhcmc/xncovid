@@ -216,6 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18dp"
+                        android:inputType="number"
                         android:hint="HH"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -226,6 +227,7 @@
                         android:id="@+id/minute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:textSize="18dp"
                         android:hint="MM"
                         />
@@ -233,6 +235,7 @@
                         android:id="@+id/day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:layout_marginLeft="40dp"
                         android:textSize="18dp"
                         android:hint="dd"/>
@@ -245,6 +248,7 @@
                         android:id="@+id/month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:textSize="18dp"
                         android:hint="mm"/>
                     <TextView
@@ -257,6 +261,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18dp"
+                        android:inputType="number"
                         android:hint="yyyy"
                         />
                 </LinearLayout>
@@ -295,6 +300,7 @@
                 <LinearLayout android:id="@+id/type1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -303,7 +309,7 @@
                         android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
-                            android:layout_width="180dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
                             android:text="- Đối tượng:"
@@ -353,6 +359,7 @@
                 <LinearLayout android:id="@+id/type2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_marginTop="10dp"
@@ -361,7 +368,7 @@
                         android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
-                            android:layout_width="180dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
                             android:text="- Lý do:"
@@ -392,7 +399,7 @@
                         android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
-                            android:layout_width="180dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
                             android:text="- Đối tượng:"

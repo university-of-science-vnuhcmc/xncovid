@@ -12,8 +12,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-            <LinearLayout android:id="@+id/success"
-                android:layout_marginTop="20dp"
+            <LinearLayout
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center">
@@ -143,6 +143,7 @@
                                 android:textColor="@color/white" />
                         </LinearLayout>
                         <LinearLayout android:id="@+id/type1"
+                            android:visibility="gone"
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -180,7 +181,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/cause"
+                                    android:id="@+id/cause1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="18dp"
@@ -190,6 +191,7 @@
                         </LinearLayout>
                         <LinearLayout android:id="@+id/type2"
                             android:orientation="vertical"
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <LinearLayout
@@ -257,6 +259,7 @@
                             </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
+                            android:layout_marginBottom="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -356,6 +359,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center">
                 <LinearLayout
                     android:layout_width="197dp"
