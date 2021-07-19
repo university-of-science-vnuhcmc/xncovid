@@ -39,6 +39,8 @@ import com.google.zxing.common.HybridBinarizer;
 import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.util.Util;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -58,6 +60,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
     private LinearLayout lReadQR, lInputXNCode;
     public View layout_dialog_add;
     LayoutInflater inflater;
+    private TextView txtScan_title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +100,8 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
             lInputXNCode = (LinearLayout) findViewById(R.id.input_xn_code);
             lInputXNCode.setVisibility(View.GONE);
+
+            txtScan_title = (TextView) findViewById(R.id.txtScan_title);
 
             contentFrame = (ViewGroup) findViewById(R.id.content_frame);
             mScannerView = new ZXingScannerView(this);
@@ -160,6 +165,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
         super.onResume();
         if(scanQRType == 0) //Join Session
         {
+            txtScan_title.setText("Quét mã phiên xét nghiệm");
             lReadQR.setVisibility(View.VISIBLE);
             lInputXNCode.setVisibility(View.GONE);
             lXNInfo.setVisibility(View.GONE);
@@ -176,6 +182,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
         }else  if(scanQRType == 1) // Quet ma XN
         {
+            txtScan_title.setText("Quét mã xét nghiệm");
             lReadQR.setVisibility(View.GONE);
             lInputXNCode.setVisibility(View.VISIBLE);
             lXNInfo.setVisibility(View.GONE);
@@ -187,6 +194,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             });
         }else //QR type == 2
         {
+            txtScan_title.setText("Quét mã định danh");
             lReadQR.setVisibility(View.GONE);
             lInputXNCode.setVisibility(View.GONE);
             lXNInfo.setVisibility(View.VISIBLE);

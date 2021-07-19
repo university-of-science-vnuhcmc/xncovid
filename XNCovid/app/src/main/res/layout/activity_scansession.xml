@@ -30,7 +30,7 @@
             android:layout_marginLeft="17dp"
             android:paddingTop="15dp"
             android:textAlignment="center"
-            android:textAppearance="@style/white_28"
+            android:textAppearance="@style/white_24"
             />
     </LinearLayout>
 
