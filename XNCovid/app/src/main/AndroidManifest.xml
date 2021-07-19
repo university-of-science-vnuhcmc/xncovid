@@ -31,6 +31,15 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainStaffActivity" />
         <activity android:name=".MainLeaderActivity" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.hcdc.xncovid.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
     </application>
 
     <uses-feature android:name="android.hardware.camera" />

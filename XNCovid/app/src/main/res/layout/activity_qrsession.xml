@@ -355,6 +355,7 @@
                             android:text="Chia sẻ"
                             android:textColor="@color/white"
                             android:textStyle="bold"
+                            android:onClick="share"
                             android:gravity="center_horizontal|top"
                             android:layout_gravity="center"
                             />
