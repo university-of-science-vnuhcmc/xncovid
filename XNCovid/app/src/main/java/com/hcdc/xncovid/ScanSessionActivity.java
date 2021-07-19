@@ -36,6 +36,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.hcdc.xncovid.model.Session;
 import com.hcdc.xncovid.util.Util;
 
@@ -142,19 +143,19 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
 
                 LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
                 BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                MultiFormatReader reader = new MultiFormatReader();// use this otherwise
-                try {
-                    Hashtable<DecodeHintType, Object> decodeHints = new Hashtable<DecodeHintType, Object>();
-                    decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-                    decodeHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
 
-                    Result result = reader.decode(bitmap, decodeHints) ;
-                    scanContent =  result.getText().toString();
+                QRCodeReader qrReader = new QRCodeReader();
+                Result result;
+                try {
+                    result = qrReader.decode(bitmap);
+                    scanContent =  result.getText();
                     showResult(false);
                 } catch (NotFoundException e) {
-                    e.printStackTrace();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    Log.e("ScanSessionActivity", e.toString(), e);
+                } catch (ChecksumException e) {
+                    Log.e("ScanSessionActivity", e.toString(), e);
+                } catch (FormatException e) {
+                    Log.e("ScanSessionActivity", e.toString(), e);
                 }
                 break;
         }

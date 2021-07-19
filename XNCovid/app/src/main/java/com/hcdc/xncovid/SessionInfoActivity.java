@@ -33,7 +33,7 @@ public class SessionInfoActivity extends AppCompatActivity {
     String xn_session;
     private TextView tenphien, province, district, ward, address, chooseTime, chooseDate, leader;
     private TextView sessionTypeName, target_xn_giamsat, reason_xn_giamsat, reason_xn_chidinh, target_xn_chidinh, ralative_target;
-     LinearLayout btnConfirm;
+     LinearLayout btnConfirm, ltype1, ltype2;
     private View mLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +52,21 @@ public class SessionInfoActivity extends AppCompatActivity {
             chooseDate=(TextView) findViewById(R.id.chooseDate);
             leader=(TextView) findViewById(R.id.leader);
             btnConfirm = findViewById(R.id.next);
-
             sessionTypeName = (TextView)findViewById(R.id.type);
+
+            //xn giam sat
+            ltype1 = (LinearLayout) findViewById(R.id.type1);
             target_xn_giamsat = (TextView)findViewById(R.id.target1);
             reason_xn_giamsat = (TextView)findViewById(R.id.cause1);
 
+            ltype1.setVisibility(View.GONE);
+
+            //xn chi dinh
+            ltype2 = (LinearLayout) findViewById(R.id.type2);
             reason_xn_chidinh = (TextView)findViewById(R.id.cause2);
             target_xn_chidinh = (TextView)findViewById(R.id.target2);
             ralative_target = (TextView)findViewById(R.id.relativeTarget);
+            ltype2.setVisibility(View.GONE);
             //tenphien.setText(xn_session);
 
             setUIRef();
@@ -105,7 +112,8 @@ public class SessionInfoActivity extends AppCompatActivity {
         reason_xn_chidinh.setVisibility(View.GONE);
         target_xn_chidinh.setVisibility(View.GONE);
         ralative_target.setVisibility(View.GONE);
-
+        ltype1.setVisibility(View.GONE);
+        ltype2.setVisibility(View.GONE);
         getSessionIf();
 
 
@@ -178,6 +186,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                   target_xn_giamsat.setText(res.Data.CovidTestingSessionObjectName);
                                   reason_xn_giamsat.setText(res.Data.Purpose);
 
+                                  ltype1.setVisibility(View.VISIBLE);
                                   target_xn_giamsat.setVisibility(View.VISIBLE);
                                   reason_xn_giamsat.setVisibility(View.VISIBLE);
                               }else if(res.Data.CovidTestingSessionTypeID == 2) //chi dinh
@@ -185,6 +194,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                   reason_xn_chidinh.setText(res.Data.DesignatedReasonName);
                                   target_xn_chidinh.setText(res.Data.CovidTestingSessionObjectName);
                                   ralative_target.setText(res.Data.Purpose);
+                                  ltype2.setVisibility(View.VISIBLE);
                                   reason_xn_chidinh.setVisibility(View.VISIBLE);
                                   target_xn_chidinh.setVisibility(View.VISIBLE);
                                   ralative_target.setVisibility(View.VISIBLE);

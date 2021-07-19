@@ -41,6 +41,7 @@ long accountID;
 private  TextView testName, location, time, leader, sessionTypeName;
 private  TextView target_xn_giamsat, reason_xn_giamsat;
 private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
+private  TextView title_target1, title_cause, title_cause2, title_target2, title_relativeTarget;
     MyApplication myapp = null;
     Session objSession = null;
     UserInfo[] LstUser = null;
@@ -92,19 +93,28 @@ private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
             //xn giam sat
             target_xn_giamsat = (TextView)findViewById(R.id.target1);
             reason_xn_giamsat = (TextView)findViewById(R.id.cause);
+            title_target1 = (TextView)findViewById(R.id.title_target1);
+            title_cause = (TextView)findViewById(R.id.title_cause);
 
             //xn chi dinh
             reason_xn_chidinh = (TextView)findViewById(R.id.cause2);
             target_xn_chidinh = (TextView)findViewById(R.id.target2);
             ralative_target = (TextView)findViewById(R.id.relativeTarget);
+            title_cause2 = (TextView)findViewById(R.id.title_cause2);
+            title_target2 = (TextView)findViewById(R.id.title_target2);
+            title_relativeTarget = (TextView)findViewById(R.id.title_relativeTarget);
 
             target_xn_giamsat.setVisibility(View.GONE);
             reason_xn_giamsat.setVisibility(View.GONE);
+            title_target1.setVisibility(View.GONE);
+            title_cause.setVisibility(View.GONE);
 
             reason_xn_chidinh.setVisibility(View.GONE);
             target_xn_chidinh.setVisibility(View.GONE);
             ralative_target.setVisibility(View.GONE);
-
+            title_cause2.setVisibility(View.GONE);
+            title_target2.setVisibility(View.GONE);
+            title_relativeTarget.setVisibility(View.GONE);
             setUIRef();
 
         } catch (Exception e){
@@ -164,10 +174,15 @@ private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
 
                 target_xn_giamsat.setVisibility(View.VISIBLE);
                 reason_xn_giamsat.setVisibility(View.VISIBLE);
+                title_target1.setVisibility(View.VISIBLE);
+                title_cause.setVisibility(View.VISIBLE);
 
                 reason_xn_chidinh.setVisibility(View.GONE);
                 target_xn_chidinh.setVisibility(View.GONE);
                 ralative_target.setVisibility(View.GONE);
+                title_cause2.setVisibility(View.GONE);
+                title_target2.setVisibility(View.GONE);
+                title_relativeTarget.setVisibility(View.GONE);
 
             }else if(objSession.CovidTestingSessionTypeID == 2)//chi dinh
             {
@@ -177,10 +192,15 @@ private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
 
                 target_xn_giamsat.setVisibility(View.GONE);
                 reason_xn_giamsat.setVisibility(View.GONE);
+                title_target1.setVisibility(View.GONE);
+                title_cause.setVisibility(View.GONE);
 
                 reason_xn_chidinh.setVisibility(View.VISIBLE);
                 target_xn_chidinh.setVisibility(View.VISIBLE);
                 ralative_target.setVisibility(View.VISIBLE);
+                title_cause2.setVisibility(View.VISIBLE);
+                title_target2.setVisibility(View.VISIBLE);
+                title_relativeTarget.setVisibility(View.VISIBLE);
             }
             layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
 
@@ -249,6 +269,11 @@ private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
             reason_xn_chidinh.setVisibility(View.GONE);
             target_xn_chidinh.setVisibility(View.GONE);
             ralative_target.setVisibility(View.GONE);
+            title_cause2.setVisibility(View.GONE);
+            title_target2.setVisibility(View.GONE);
+            title_relativeTarget.setVisibility(View.GONE);
+            title_target1.setVisibility(View.GONE);
+            title_cause.setVisibility(View.GONE);
 
             layoutJoinTest.setEnabled(true);
             layoutJoinTest.setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
