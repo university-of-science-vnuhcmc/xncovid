@@ -46,6 +46,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
     Session objSession = null;
     UserInfo[] LstUser = null;
     private boolean errorFlag = false;
+    SeekBar sb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +116,8 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
             title_cause2.setVisibility(View.GONE);
             title_target2.setVisibility(View.GONE);
             title_relativeTarget.setVisibility(View.GONE);
+
+            sb = findViewById(R.id.endSession);
             setUIRef();
 
         } catch (Exception e){
@@ -205,7 +208,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
             layoutsessioninfo.setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
 
             findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
-            SeekBar sb = findViewById(R.id.endSession);
+
             sb.setVisibility(View.VISIBLE);
             sb.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -452,6 +455,8 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                                                     .setNegativeButton(android.R.string.ok, null)
                                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                                     .show();
+                                            flagSlideButton = false;
+                                            sb.setProgress(0);
                                             hideLoading();
                                             return;
                                         }
@@ -467,6 +472,8 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                                                 .setNegativeButton("OK", null)
                                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                                 .show();
+                                        flagSlideButton = false;
+                                        sb.setProgress(0);
                                         hideLoading();
                                     }
 
@@ -477,7 +484,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try {
-                        SeekBar sb = findViewById(R.id.endSession);
+                        flagSlideButton = false;
                         sb.setProgress(0);
                         hideLoading();
                     } catch (Exception ex){
@@ -492,6 +499,8 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            flagSlideButton = false;
+            sb.setProgress(0);
             hideLoading();
         }
         }

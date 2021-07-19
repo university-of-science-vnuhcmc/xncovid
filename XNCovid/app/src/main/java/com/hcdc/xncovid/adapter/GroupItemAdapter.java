@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.hcdc.xncovid.ListGroupXnActivity;
 import com.hcdc.xncovid.MainStaffActivity;
+import com.hcdc.xncovid.MyApplication;
 import com.hcdc.xncovid.R;
 import com.hcdc.xncovid.model.GroupedUserInfo;
 import com.hcdc.xncovid.util.Util;
@@ -33,11 +34,13 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
     private Context context;
     private SortedSet<String> key;
     private  Hashtable<String, GroupedUserInfo> hashinfo;
+    private  int  _maxGroup = 10;
     public GroupItemAdapter(ArrayList<GroupedUserInfo> list, Context context, SortedSet<String> set, Hashtable<String, GroupedUserInfo> hash) {
         this.list = list;
         this.context = context;
         this.key =set;
         this.hashinfo = hash;
+        _maxGroup = ((MyApplication)  ((Activity) context).getApplication()).getGroupMaxCount();
     }
 
     @Override
@@ -106,6 +109,10 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
                                     ((SeekBar) ((Activity) context).findViewById(R.id.startGroup)).setVisibility(View.GONE);
                                     ((LinearLayout) ((Activity) context).findViewById(R.id.startGroupDisable)).setVisibility(View.VISIBLE);
                                 }
+                                if(getCount() < _maxGroup){
+                                    ((TextView) ((Activity) context).findViewById(R.id.txt_count)).setTextAppearance(R.style.red_20);
+                                    ((RelativeLayout) ((Activity) context).findViewById(R.id.lst_xn_users)).setVisibility(View.VISIBLE);
+                                }
                                 notifyDataSetChanged();
                             }
                         }, null, context);
@@ -118,17 +125,29 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
             holder.txtUID.setTextAppearance(R.style.green_28);
             holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item_manual));
             holder.txtInfo.setVisibility(View.GONE);
+           // RelativeLayout.LayoutParams layoutParams =(RelativeLayout.LayoutParams)holder.txtUID.getLayoutParams();
+           // layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+           // layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+           // holder.txtUID.setLayoutParams(layoutParams);
          }else {
             if(objInfo != null){
                 holder.txtInfo.setText(objInfo.getFullname() +", "+ objInfo.getBirthYear());
-                holder.txtInfo.setTextAppearance(R.style.blue_14);
-                holder.txtUID.setTextAppearance(R.style.blue_14);
+                holder.txtInfo.setTextAppearance(R.style.blue_18);
+                holder.txtUID.setTextAppearance(R.style.blue_18);
                 holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item));
                 holder.txtInfo.setVisibility(View.VISIBLE);
+             //   RelativeLayout.LayoutParams layoutParams =(RelativeLayout.LayoutParams)holder.txtUID.getLayoutParams();
+                //layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+               // layoutParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
+               // holder.txtUID.setLayoutParams(layoutParams);
             }else {
                 holder.txtUID.setTextAppearance(R.style.blue_28);
                 holder.txtIdx.setBackground(view.getResources().getDrawable(R.drawable.rectangle_item));
                 holder.txtInfo.setVisibility(View.GONE);
+               // RelativeLayout.LayoutParams layoutParams =(RelativeLayout.LayoutParams)holder.txtUID.getLayoutParams();
+               // layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+               // layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+               // holder.txtUID.setLayoutParams(layoutParams);
             }
         }
         if(position % 2 == 0){

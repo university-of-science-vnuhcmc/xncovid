@@ -147,6 +147,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     return true;
                 }
             });
+            txt_total.setText("("+groupAdapter.getCount()+"/"+_maxGroup+")");
             setUIRef();
             hideLoading();
         }catch (Exception e){
@@ -222,6 +223,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
         try{
             if(session != null){
                 session_code = session.SessionID + "";
+
             }else {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
@@ -321,6 +323,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
+                            flagSlideButton = false;
+                            startGroup.setProgress(0);
                             isOK[0] = false;
                             isStop = false;
                             setEnableStartGroup(true);
@@ -340,6 +344,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     null,
                                     "OK",
                                     null, null, ListGroupXnActivity.this);
+                            flagSlideButton = false;
+                            startGroup.setProgress(0);
                             isOK[0] = false;
                             isStop = false;
                             setEnableStartGroup(true);
@@ -353,6 +359,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
+                            flagSlideButton = false;
+                            startGroup.setProgress(0);
                             isOK[0] = false;
                             isStop = false;
                             setEnableStartGroup(true);
@@ -365,6 +373,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     .setNegativeButton(android.R.string.ok, null)
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
+                            flagSlideButton = false;
+                            startGroup.setProgress(0);
                             isOK[0] = false;
                             isStop = false;
                             setEnableStartGroup(true);
@@ -377,6 +387,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 .setNegativeButton("OK", null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+                        flagSlideButton = false;
+                        startGroup.setProgress(0);
                         isOK[0] = false;
                         isStop = false;
                         setEnableStartGroup(true);
@@ -395,6 +407,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     .setNegativeButton("OK",  null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            flagSlideButton = false;
+            startGroup.setProgress(0);
             isOK[0] = false;
             isStop = false;
             hideLoading();
@@ -423,7 +437,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
                         new Util().showMessage("Mã gộp đã tồn tại trong các mẫu gộp của phiên.",
                                 "",
-                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p></br>" +
+                                "<p>Mã định danh này đã tồn tại hoặc không hợp lệ.</p>" +
                                         "<p>Vui lòng quay lại để quét mã khác.",
                                 null,
                                 "OK",

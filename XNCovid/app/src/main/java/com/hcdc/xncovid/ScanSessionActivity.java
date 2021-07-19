@@ -275,6 +275,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                                 null,
                                 "OK",
                                 null, null, ScanSessionActivity.this);
+                        onResume();
                         return;
                     }
                     String _luhnCheck =  Util.GetLuhnCheckDigit(tmpArr[1].trim());
@@ -286,6 +287,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                                 null,
                                 "OK",
                                 null, null, ScanSessionActivity.this);
+                        onResume();
                         return;
                     }
                     scanContent = txtScanedResult.trim();

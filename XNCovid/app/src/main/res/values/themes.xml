@@ -206,4 +206,15 @@
         </item>
 
     </style>
+    <style name="blue_18">
+
+        <item name="android:textSize">
+            18sp
+        </item>
+
+        <item name="android:textColor">
+            #293EFB
+        </item>
+
+    </style>
 </resources>
