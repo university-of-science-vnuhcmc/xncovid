@@ -1,17 +1,29 @@
 package com.hcdc.xncovid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -23,17 +35,20 @@ import com.hcdc.xncovid.model.Session;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 
 public class QRSessionActivity extends AppCompatActivity {
-
+    private Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_qrsession);
             Bundle bundle = getIntent().getExtras();
-            Session session = new Gson().fromJson(bundle.getString("Session"), Session.class);
+            session = new Gson().fromJson(bundle.getString("Session"), Session.class);
 
             ((TextView) findViewById(R.id.sessionName)).setText(session.SessionName);
             ((TextView) findViewById(R.id.location)).setText(session.Address);
@@ -89,6 +104,99 @@ public class QRSessionActivity extends AppCompatActivity {
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        }
+    }
+    public void save(View v){
+        try {
+            if(!checkPermission()){
+                requestPermission();
+                return;
+            }
+            saveImage();
+        } catch (Exception ex){
+                Log.w("save", ex.toString());
+                new AlertDialog.Builder(this)
+                        .setMessage("Lỗi xử lý.")
+                        .setNegativeButton("OK", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+        }
+    }
+    private void saveImage(){
+        try {
+            String relativeLocation = Environment.DIRECTORY_PICTURES;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "image-" + System.currentTimeMillis());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+            contentValues.put(MediaStore.Images.Media.TITLE, session.SessionName + " - " + timeFormat.format(session.getTestingDate()));
+            contentValues.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
+            contentValues.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
+                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+            }
+
+            ContentResolver resolver = getContentResolver();
+            View content = getWindow().getDecorView().findViewById(R.id.screen);
+            content.setDrawingCacheEnabled(true);
+            Bitmap bitmap = content.getDrawingCache();
+
+            Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+            try {
+                OutputStream stream = resolver.openOutputStream(uri);
+                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)) {
+                    throw new IOException("Failed to save bitmap.");
+                }
+            } catch (IOException ex) {
+                if (uri != null) {
+                    resolver.delete(uri, null, null);
+                }
+                Log.e("saveImage", ex.toString(), ex);
+                new AlertDialog.Builder(QRSessionActivity.this)
+                        .setMessage("Lỗi xử lý.")
+                        .setNegativeButton("OK", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            } finally {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                }
+            }
+            Toast.makeText(this, "Lưu thành công.", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            Log.e("saveImage", e.toString(), e);
+            new AlertDialog.Builder(QRSessionActivity.this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+    }
+    private boolean checkPermission() {
+        return (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    }
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 2;
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                if (grantResults.length > 0) {
+
+                    boolean accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (!accepted) {
+                        Toast.makeText(getApplicationContext(), "Lưu ảnh không thành công. Không có quyền lưu ảnh.", Toast.LENGTH_LONG).show();
+                    } else
+                    {
+                        saveImage();
+                    }
+                }
+                break;
         }
     }
 }
