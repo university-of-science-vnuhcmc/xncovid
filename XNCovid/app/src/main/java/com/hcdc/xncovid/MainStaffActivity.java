@@ -123,28 +123,28 @@ private  TextView reason_xn_chidinh, target_xn_chidinh, ralative_target;
         super.onResume();
         try{
             showLoading();
-        if(flag == 1){ // tu man hinh gom nhom ve
-            objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
-            if(objSession != null){
-                sessionId = objSession.SessionID + "";
-                SetupActivit(1);//Da co join vao session
-            }else {
-                checkAccount();// chua co thi check account lai
+            if(flag == 1){ // tu man hinh gom nhom ve
+                objSession = ((MyApplication) getApplication()).getSession(); //Kt session trong cache
+                if(objSession != null){
+                    sessionId = objSession.SessionID + "";
+                    SetupActivit(1);//Da co join vao session
+                }else {
+                    checkAccount();// chua co thi check account lai
+                }
+            } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+                myapp.setSession(null); //set la null
+                SetupActivit(0);//chua join
+            } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+                checkAccount();
             }
-        } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
-            myapp.setSession(null); //set la null
-            SetupActivit(0);//chua join
-        } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
-            checkAccount();
+        } catch (Exception e){
+            Log.e("MainStaffActivity", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-    } catch (Exception e){
-        Log.e("MainStaffActivity", e.toString(), e);
-        new AlertDialog.Builder(this)
-                .setMessage("Lỗi xử lý.")
-                .setNegativeButton("OK", null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
     }
     private boolean flagSlideButton = false;
     private  void  SetupActivit(int caseType){

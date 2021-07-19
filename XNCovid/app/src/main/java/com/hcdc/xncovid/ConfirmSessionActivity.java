@@ -198,4 +198,8 @@ public class ConfirmSessionActivity extends AppCompatActivity {
             mLoading.setVisibility(View.GONE);
         }
     }
+
+    public void back(View v){
+        onBackPressed();
+    }
 }

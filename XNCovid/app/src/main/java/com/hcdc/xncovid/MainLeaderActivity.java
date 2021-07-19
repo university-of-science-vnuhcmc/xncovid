@@ -39,9 +39,13 @@ public class MainLeaderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_leader);
+        Intent intent = getIntent();
+        if(intent.getExtras() != null){
+            flag = intent.getExtras().getInt("flag");
+        }
         setUIRef();
     }
-
+    private int flag = 0;
     @Override
     protected void onResume() {
         super.onResume();
@@ -49,7 +53,21 @@ public class MainLeaderActivity extends AppCompatActivity {
             MyApplication myapp = (MyApplication) getApplication();
             TextView nameView = findViewById(R.id.name);
             nameView.setText(myapp.getUserInfo().Name);
-            getCurrentSession();
+            if(flag == 1){ // tu man hinh gom nhom ve
+                session = myapp.getSession(); //Kt session trong cache
+                if(session != null){
+                    setupSession();
+                } else
+                {
+                    getCurrentSession();// chua co thi check account lai
+                }
+            } else if(flag == 2){ // tu man hinh ket thuc phien xet nghiem
+                myapp.setSession(null); //set la null
+                setupSession();
+            } else { // tu MainActivity hoac tu join phien xet nghiem ==> goi check Account
+                getCurrentSession();
+            }
+            flag = 0;
         } catch (Exception ex){
             Log.w("MainLeaderActivity", ex.toString());
             new AlertDialog.Builder(this)
@@ -57,6 +75,67 @@ public class MainLeaderActivity extends AppCompatActivity {
                     .setNegativeButton("OK", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        }
+    }
+    private void setupSession(){
+        if(session != null){
+            findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
+            findViewById(R.id.newGroup).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
+            findViewById(R.id.sessionInfo).setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
+            findViewById(R.id.scanQR).setBackground(getResources().getDrawable( R.drawable.button_scan_qr_session_enable));
+            findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
+            SeekBar sb = findViewById(R.id.endSession);
+            sb.setVisibility(View.VISIBLE);
+            sb.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    try {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
+                                flagSlideButton = true;
+                                sb.onTouchEvent(event);
+                            } else {
+                                flagSlideButton = false;
+                                return false;
+                            }
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                            if (sb.getProgress() > 95 && flagSlideButton) {
+                                endSession();
+                                return true;
+                            }
+                            flagSlideButton = false;
+                            sb.setProgress(0);
+                        } else {
+                            sb.onTouchEvent(event);
+                        }
+                    } catch (Exception ex){
+                        Log.w("MainLeaderActivity", ex.toString());
+                    }
+                    return true;
+                }
+            });
+            ((TextView)findViewById(R.id.sessionName)).setText(session.SessionName);
+            ((TextView)findViewById(R.id.location)).setText(session.Address);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+            ((TextView)findViewById(R.id.time)).setText(timeFormat.format(session.getTestingDate()));
+            ((TextView)findViewById(R.id.type)).setText(session.CovidTestingSessionTypeName);
+            if(session.CovidTestingSessionTypeID == 1){
+                ((TextView)findViewById(R.id.cause1)).setText(session.Purpose);
+                ((TextView)findViewById(R.id.target1)).setText(session.CovidTestingSessionObjectName);
+                findViewById(R.id.type1).setVisibility(View.VISIBLE);
+                findViewById(R.id.type2).setVisibility(View.GONE);
+            } else {
+                ((TextView)findViewById(R.id.relativeTarget)).setText(session.Purpose);
+                ((TextView)findViewById(R.id.cause2)).setText(session.DesignatedReasonName);
+                ((TextView)findViewById(R.id.target2)).setText(session.CovidTestingSessionObjectName);
+                findViewById(R.id.type1).setVisibility(View.GONE);
+                findViewById(R.id.type2).setVisibility(View.VISIBLE);
+            }
+            ((TextView)findViewById(R.id.numberStaff)).setText(LstUser == null ? "0 nhân viên" : String.valueOf(LstUser.length) + " nhân viên");
+            StaffAdapter adapter = new StaffAdapter(MainLeaderActivity.this, LstUser);
+
+            ListView listView = (ListView) findViewById(R.id.listStaff);
+            listView.setAdapter(adapter);
         }
     }
     private boolean flagSlideButton = false;
@@ -91,65 +170,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                         findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
                         findViewById(R.id.newGroup).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
                     }
-                    if(session != null){
-                        findViewById(R.id.createTest).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_disable));
-                        findViewById(R.id.newGroup).setBackground(getResources().getDrawable( R.drawable.rectangle_menu_enable));
-                        findViewById(R.id.sessionInfo).setBackground(getResources().getDrawable( R.drawable.rectangle_main_info));
-                        findViewById(R.id.scanQR).setBackground(getResources().getDrawable( R.drawable.button_scan_qr_session_enable));
-                        findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
-                        SeekBar sb = findViewById(R.id.endSession);
-                        sb.setVisibility(View.VISIBLE);
-                        sb.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View v, MotionEvent event) {
-                                try {
-                                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                        if (sb.getThumb().getBounds().contains((int) event.getX(), (int) event.getY())) {
-                                            flagSlideButton = true;
-                                            sb.onTouchEvent(event);
-                                        } else {
-                                            flagSlideButton = false;
-                                            return false;
-                                        }
-                                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                                        if (sb.getProgress() > 95 && flagSlideButton) {
-                                            endSession();
-                                            return true;
-                                        }
-                                        flagSlideButton = false;
-                                        sb.setProgress(0);
-                                    } else {
-                                        sb.onTouchEvent(event);
-                                    }
-                                } catch (Exception ex){
-                                    Log.w("MainLeaderActivity", ex.toString());
-                                }
-                                return true;
-                            }
-                        });
-                        ((TextView)findViewById(R.id.sessionName)).setText(session.SessionName);
-                        ((TextView)findViewById(R.id.location)).setText(session.Address);
-                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-                        ((TextView)findViewById(R.id.time)).setText(timeFormat.format(session.getTestingDate()));
-                        ((TextView)findViewById(R.id.type)).setText(session.CovidTestingSessionTypeName);
-                        if(session.CovidTestingSessionTypeID == 1){
-                            ((TextView)findViewById(R.id.cause1)).setText(session.Purpose);
-                            ((TextView)findViewById(R.id.target1)).setText(session.CovidTestingSessionObjectName);
-                            findViewById(R.id.type1).setVisibility(View.VISIBLE);
-                            findViewById(R.id.type2).setVisibility(View.GONE);
-                        } else {
-                            ((TextView)findViewById(R.id.relativeTarget)).setText(session.Purpose);
-                            ((TextView)findViewById(R.id.cause2)).setText(session.DesignatedReasonName);
-                            ((TextView)findViewById(R.id.target2)).setText(session.CovidTestingSessionObjectName);
-                            findViewById(R.id.type1).setVisibility(View.GONE);
-                            findViewById(R.id.type2).setVisibility(View.VISIBLE);
-                        }
-                        ((TextView)findViewById(R.id.numberStaff)).setText(LstUser == null ? "0 nhân viên" : String.valueOf(LstUser.length) + " nhân viên");
-                        StaffAdapter adapter = new StaffAdapter(MainLeaderActivity.this, LstUser);
-
-                        ListView listView = (ListView) findViewById(R.id.listStaff);
-                        listView.setAdapter(adapter);
-                    }
+                    setupSession();
                 } catch (Exception ex){
                     Log.w("MainLeaderActivity", ex.toString());
                     new AlertDialog.Builder(MainLeaderActivity.this)
@@ -280,6 +301,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                                         }
                                         session = null;
                                         Intent intent = new Intent(MainLeaderActivity.this, MainLeaderActivity.class);
+                                        intent.putExtra("flag", 2);
                                         startActivity(intent);
                                         finish();
                                     } catch (Exception ex){
@@ -348,6 +370,21 @@ public class MainLeaderActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             Log.e("onBackPressed", e.toString(), e);
+            new AlertDialog.Builder(this)
+                    .setMessage("Lỗi xử lý.")
+                    .setNegativeButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+    }
+    public void newGroup(View v) {
+        try {
+            Intent intent = new Intent(getApplicationContext(), ScanSessionActivity.class);
+            intent.putExtra("scan_qr_type", 1);
+            ((MyApplication)getApplication()).setSession(session);
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e("newGroup", e.toString(), e);
             new AlertDialog.Builder(this)
                     .setMessage("Lỗi xử lý.")
                     .setNegativeButton("OK", null)
