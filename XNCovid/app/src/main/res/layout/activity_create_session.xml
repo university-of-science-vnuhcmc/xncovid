@@ -19,12 +19,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:background="@drawable/rectangle_title_bar">
-
+                <View
+                    android:id="@+id/image_14"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/back"
+                    android:onClick="back"
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tạo phiên xét nghiệm"
+                    android:layout_marginLeft="10dp"
                     android:textSize="30dp"
                     android:textStyle="bold" />
 
@@ -216,6 +224,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@id/minute"
                         android:inputType="number"
                         android:hint="HH"/>
                     <TextView
@@ -228,6 +238,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@id/day"
                         android:textSize="18dp"
                         android:hint="MM"
                         />
@@ -237,7 +249,9 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:layout_marginLeft="40dp"
+                        android:nextFocusForward="@id/month"
                         android:textSize="18dp"
+                        android:imeOptions="actionNext"
                         android:hint="dd"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -249,7 +263,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:nextFocusForward="@id/year"
                         android:textSize="18dp"
+                        android:imeOptions="actionNext"
                         android:hint="mm"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -261,6 +277,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18dp"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:hint="yyyy"
                         />

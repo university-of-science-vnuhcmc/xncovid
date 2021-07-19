@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color">
-    <include
+    <include android:visibility="gone"
         android:id="@+id/my_loading_layout"
         layout="@layout/my_loading_layout" />
     <ScrollView
@@ -132,6 +132,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_gravity="center"
                         android:gravity="center"
+                        android:onClick="newGroup"
                         android:background="@drawable/rectangle_menu_disable">
                         <View
                             android:id="@+id/create_icon"

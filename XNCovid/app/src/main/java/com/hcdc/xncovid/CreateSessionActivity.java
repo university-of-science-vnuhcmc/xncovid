@@ -31,6 +31,11 @@ import com.hcdc.xncovid.model.Reason;
 import com.hcdc.xncovid.util.Caller;
 import com.hcdc.xncovid.util.ICallback;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class CreateSessionActivity extends AppCompatActivity implements IDatePicker, ITimePicker {
     private LocateInfor province;
     private LocateInfor district;
@@ -524,15 +529,78 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                     valid = false;
                 }
             }
+            EditText etHour = findViewById(R.id.hour);
+            EditText etMinute = findViewById(R.id.minute);
+            EditText etDay = findViewById(R.id.day);
+            EditText etMonth = findViewById(R.id.month);
+            EditText etYear = findViewById(R.id.year);
+            if(etHour.getText().toString().trim().length() == 0){
+                etHour.setError("Thiếu giờ.");
+                valid = false;
+            } else {
+                hour = Integer.parseInt(((EditText)findViewById(R.id.hour)).getText().toString());
+            }
+            if(etMinute.getText().toString().trim().length() == 0){
+                etMinute.setError("Thiếu phút.");
+                valid = false;
+            } else {
+                minute = Integer.parseInt(((EditText)findViewById(R.id.minute)).getText().toString());
+            }
+            if(etDay.getText().toString().trim().length() == 0){
+                etDay.setError("Thiếu ngày.");
+                valid = false;
+            } else {
+                day = Integer.parseInt(((EditText)findViewById(R.id.day)).getText().toString());
+            }
+            if(etMonth.getText().toString().trim().length() == 0){
+                etMonth.setError("Thiếu tháng.");
+                valid = false;
+            } else {
+                month = Integer.parseInt(((EditText)findViewById(R.id.month)).getText().toString());
+            }
+            if(etYear.getText().toString().trim().length() == 0){
+                etYear.setError("Thiếu năm.");
+                valid = false;
+            } else {
+                year = Integer.parseInt(((EditText)findViewById(R.id.year)).getText().toString());
+            }
+            if(hour < 0 || hour > 23){
+                etHour.setError("Giờ không hợp lệ.");
+                valid = false;
+            }
+            if(minute < 0 || minute > 59){
+                etMinute.setError("Phút không hợp lệ.");
+                valid = false;
+            }
+            if(day < 1 || day > 31){
+                etDay.setError("Ngày không hợp lệ.");
+                valid = false;
+            }
+            if(month < 1 || month > 12){
+                etMonth.setError("Tháng không hợp lệ.");
+                valid = false;
+            }
+            if(year < 2021){
+                etYear.setError("Năm không hợp lệ.");
+                valid = false;
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setLenient(false);
+            cal.set(year, month - 1, day);
+            try {
+                cal.getTime();
+            }
+            catch (Exception e) {
+                new AlertDialog.Builder(CreateSessionActivity.this)
+                        .setMessage("Ngày/Tháng/Năm không hợp lệ.")
+                        .setNegativeButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                valid = false;
+            }
             if(!valid){
                 return;
             }
-
-            hour = Integer.parseInt(((EditText)findViewById(R.id.hour)).getText().toString());
-            minute = Integer.parseInt(((EditText)findViewById(R.id.minute)).getText().toString());
-            day = Integer.parseInt(((EditText)findViewById(R.id.day)).getText().toString());
-            month = Integer.parseInt(((EditText)findViewById(R.id.month)).getText().toString());
-            year = Integer.parseInt(((EditText)findViewById(R.id.year)).getText().toString());
 
             Intent intent = new Intent(this, ConfirmSessionActivity.class);
             intent.putExtra("SessionName", sessionName.getText().toString());
@@ -667,5 +735,9 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
+    }
+
+    public void back(View v){
+        onBackPressed();
     }
 }

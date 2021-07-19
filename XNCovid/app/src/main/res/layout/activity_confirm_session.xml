@@ -19,8 +19,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:background="@drawable/rectangle_title_bar">
@@ -29,14 +27,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@drawable/back"
+                    android:onClick="back"
                     />
                 <TextView
-                    android:layout_weight="1"
-                    android:paddingLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tạo phiên xét nghiệm"
-                    android:textSize="28dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="30dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
