@@ -86,6 +86,22 @@ public class MainLeaderActivity extends AppCompatActivity {
             findViewById(R.id.endSessionDisable).setVisibility(View.GONE);
             SeekBar sb = findViewById(R.id.endSession);
             sb.setVisibility(View.VISIBLE);
+            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
             sb.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -106,6 +122,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                             flagSlideButton = false;
                             sb.setProgress(0);
                         } else {
+                            sb.setProgress(0);
                             sb.onTouchEvent(event);
                         }
                     } catch (Exception ex){

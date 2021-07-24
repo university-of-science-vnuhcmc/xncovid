@@ -139,6 +139,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             flagSlideButton = false;
                             startGroup.setProgress(0);
                         } else {
+                            startGroup.setProgress(0);
                             startGroup.onTouchEvent(event);
                         }
                     } catch (Exception ex){

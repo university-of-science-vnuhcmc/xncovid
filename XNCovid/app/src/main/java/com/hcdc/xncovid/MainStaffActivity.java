@@ -230,6 +230,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                             flagSlideButton = false;
                             sb.setProgress(0);
                         } else {
+                            sb.setProgress(0);
                             sb.onTouchEvent(event);
                         }
                     } catch (Exception ex){
