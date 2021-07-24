@@ -147,7 +147,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            txt_total.setText("("+groupAdapter.getCount()+"/"+_maxGroup+")");
+            txt_total.setText(groupAdapter.getCount()+"/"+_maxGroup);
             setUIRef();
             hideLoading();
         }catch (Exception e){
@@ -211,6 +211,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                     }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            startGroup.setProgress(0);
                             isStop = false;
                         }
                     }, ListGroupXnActivity.this);
@@ -447,7 +448,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                         newObj = new GroupedUserInfo(kbyt_id, isOnline);
                         list.add(newObj);
                         setUID.add((kbyt_id));
-                        txt_total.setText("("+groupAdapter.getCount()+"/"+_maxGroup+")");
+                        txt_total.setText(groupAdapter.getCount()+"/"+_maxGroup);
                         if(groupAdapter.getCount() >= _maxGroup){
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 txt_total.setTextAppearance(R.style.blue_20);

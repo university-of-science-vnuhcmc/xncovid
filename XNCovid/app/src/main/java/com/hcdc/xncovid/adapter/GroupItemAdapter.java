@@ -93,7 +93,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
                 GroupedUserInfo obj = (GroupedUserInfo) getItem(position);
 
                 String txtUId = "<font color='#08812A'><b>"+obj.getUid()+"</b></font>";
-                String htmlcontent = "<i>Việc này sẽ đôn những người phía sau lên truóc!</i>";
+                String htmlcontent = "<i>Việc này sẽ đôn những người phía sau lên trước!</i>";
                 new Util().showMessage("Xác nhận xóa mã định danh",
                         txtUId,
                         htmlcontent,

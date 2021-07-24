@@ -15,5 +15,8 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:hint="Mã xét nghiệm"
+        android:paddingLeft="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode = "true"
         android:background="@drawable/rectangle_add_xn_code"/>
 </LinearLayout>

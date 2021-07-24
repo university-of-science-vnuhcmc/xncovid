@@ -7,6 +7,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,11 +16,15 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.InputType;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -126,9 +131,15 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
         switch (requestCode) {
             //the case is because you might be handling multiple request codes here
             case 111:
+                if(imageReturnedIntent == null){
+                    return;
+                }
                 Uri selectedImage = imageReturnedIntent.getData();
                 InputStream imageStream = null;
                 try {
+                    if(selectedImage == null){
+                        return;
+                    }
                     //getting the image
                     imageStream = getContentResolver().openInputStream(selectedImage);
                 } catch (FileNotFoundException e) {
@@ -407,19 +418,48 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             public void onClick(DialogInterface dialog, int which) {
                 // lấy dữ liệu người dùng nhập cho vào biến
                scanContent = item_code.getText().toString();
-                // có dữ liệu rồi thì bạn gọi lệnh ghi vào csdl ở đây nhé
-                Toast.makeText(getBaseContext(),"Bạn vừa nhập Mã xét nghiệm: " + scanContent , Toast.LENGTH_SHORT).show();
-                dialog.dismiss(); // tắt dialog
-                showResult(false);
+               if(scanContent != null && scanContent.equals("") == false){
+                   // có dữ liệu rồi thì bạn gọi lệnh ghi vào csdl ở đây nhé
+                   Toast.makeText(getBaseContext(),"Bạn vừa nhập Mã xét nghiệm: " + scanContent , Toast.LENGTH_SHORT).show();
+                   dialog.dismiss(); // tắt dialog
+                   showResult(false);
+                   closeKeyboard();
+               }else {
+                   Toast.makeText(getBaseContext(),"Vui lòng nhập mã xát nghiệm!" , Toast.LENGTH_LONG).show();
+                   dialog.dismiss(); // tắt dialog
+                   closeKeyboard();
+                   InputXNCode();
+               }
+
             }
         });
+        builder.setCancelable(false);
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                closeKeyboard();
                 dialog.dismiss(); // tắt dialog
             }
         });
-       builder.create(); // tạo dialog
+        AlertDialog dialog =  builder.create(); // tạo dialog
         builder.show();
+        item_code.setVisibility(View.VISIBLE);
+        final Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                item_code.requestFocus();
+                showKeyboard();
+            }
+        }, 600);
+    }
+    public void showKeyboard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public void closeKeyboard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 }

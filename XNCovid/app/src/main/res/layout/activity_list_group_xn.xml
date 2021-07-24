@@ -7,10 +7,6 @@
     tools:context=".ListGroupXnActivity"
     android:orientation="vertical"
     android:background="#DCD6D8D6">
-    <!--Full Screen Progress Layout-->
-    <include
-        android:id="@+id/my_loading_layout"
-        layout="@layout/my_loading_layout" />
     <RelativeLayout
         android:id="@+id/relative_top"
         android:layout_width="match_parent"
@@ -203,4 +199,8 @@
             >
         </SeekBar>
     </LinearLayout>
+    <!--Full Screen Progress Layout-->
+    <include
+        android:id="@+id/my_loading_layout"
+        layout="@layout/my_loading_layout" />
 </RelativeLayout>

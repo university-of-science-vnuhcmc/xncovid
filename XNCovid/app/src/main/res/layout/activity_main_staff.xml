@@ -215,7 +215,6 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:singleLine="true"
                                     android:id="@+id/testName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

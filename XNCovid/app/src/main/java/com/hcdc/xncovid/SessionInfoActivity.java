@@ -133,7 +133,7 @@ public class SessionInfoActivity extends AppCompatActivity {
       try{
           Pattern p = Pattern.compile("([0-9]+)");
           Matcher m = p.matcher(xn_session);
-          if(!m.find()){
+          if(m.find() == false){
               new AlertDialog.Builder(SessionInfoActivity.this)
                       .setMessage("Mã phiên xét nghiệm không hợp lệ !")
                       .setNegativeButton(android.R.string.ok,
@@ -145,6 +145,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                               })
                       .setIcon(android.R.drawable.ic_dialog_alert)
                       .show();
+              return;
           }
           GetSessionReq req = new GetSessionReq();
           req.SessionID  = Long.parseLong(xn_session);
@@ -168,6 +169,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                                   })
                                           .setIcon(android.R.drawable.ic_dialog_alert)
                                           .show();
+                                  return;
                               }
                               SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
                               SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -202,6 +204,7 @@ public class SessionInfoActivity extends AppCompatActivity {
 
                               btnConfirm.setOnClickListener(new View.OnClickListener() {
                                   public void onClick(View v) {
+                                      showLoading();
                                       JoinTestSessionReq req = new JoinTestSessionReq();
                                       req.TestSessionID =  Long.parseLong(xn_session);
                                       UserInfo userInfo = ((MyApplication) getApplication()).getUserInfo();
@@ -227,6 +230,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                                               .setNegativeButton(android.R.string.ok, null)
                                                               .setIcon(android.R.drawable.ic_dialog_alert)
                                                               .show();
+                                                      hideLoading();
                                                   }
                                                   else if(res.ReturnCode == -31) //session da ket thuc
                                                   {
@@ -236,6 +240,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                                               .setNegativeButton(android.R.string.ok, null)
                                                               .setIcon(android.R.drawable.ic_dialog_alert)
                                                               .show();
+                                                      hideLoading();
                                                   }
                                                   else{
                                                       Log.e("GroupTest", res.ReturnCode + " - " + res.ReturnMess);
@@ -244,6 +249,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                                               .setNegativeButton(android.R.string.ok, null)
                                                               .setIcon(android.R.drawable.ic_dialog_alert)
                                                               .show();
+                                                      hideLoading();
                                                   }
                                               }catch (Exception e){
                                                   Log.e("SessionInfoActivity", e.toString(), e);
@@ -252,6 +258,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                                           .setNegativeButton("OK", null)
                                                           .setIcon(android.R.drawable.ic_dialog_alert)
                                                           .show();
+                                                  hideLoading();
                                               }
 
                                           }

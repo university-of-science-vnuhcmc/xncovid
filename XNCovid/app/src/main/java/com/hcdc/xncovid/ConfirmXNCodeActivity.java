@@ -60,7 +60,30 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String maxGroup =  _maxGroup.getText().toString();
-                ((MyApplication) getApplication()).setGroupMaxCount(Integer.parseInt(maxGroup));
+                if(maxGroup == null || maxGroup == ""){
+                    new AlertDialog.Builder(ConfirmXNCodeActivity.this)
+                            .setMessage("Vui lòng nhập số lượng tối đa gộp cho mẫu này!")
+                            .setNegativeButton("OK", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
+                int _max =  0;
+                try {
+                    _max =  Integer.parseInt(maxGroup);
+                }catch (Exception e){
+                    _max = 0;
+                }
+
+                if(_max < 1){
+                    new AlertDialog.Builder(ConfirmXNCodeActivity.this)
+                            .setMessage("Vui lòng nhập số lượng tối đa gộp cho mẫu này! (tối thiểu là 1)")
+                            .setNegativeButton("OK", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
+                ((MyApplication) getApplication()).setGroupMaxCount(_max);
                 isDefault = _isDefault.isChecked();
                 ((MyApplication) getApplication()).setDefaultMaxGroup(isDefault);
                 Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);

@@ -37,6 +37,14 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+    </FrameLayout>
     <RelativeLayout
         android:id="@+id/xn_info_progress"
         android:layout_width="match_parent"
@@ -110,13 +118,6 @@
         </RelativeLayout>
 
     </RelativeLayout>
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center">
-
-    </FrameLayout>
     <LinearLayout
         android:id="@+id/uload_qr"
         android:foreground="?android:attr/selectableItemBackground"
