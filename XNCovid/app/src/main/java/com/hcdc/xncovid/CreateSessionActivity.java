@@ -471,61 +471,61 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                 valid = false;
             }
             if(province == null){
-                new AlertDialog.Builder(this)
-                        .setMessage("Vui lòng chọn Tỉnh/Thành phố.")
-                        .setNegativeButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                Spinner provinceSpinner = findViewById(R.id.province);
+                TextView errorText = (TextView)provinceSpinner.getSelectedView();
+                if(errorText != null){
+                    errorText.setError("Thiếu Tỉnh/Thành phố.");
+                }
                 valid = false;
             }
             if(district == null){
-                new AlertDialog.Builder(this)
-                        .setMessage("Vui lòng chọn Quận/Huyện.")
-                        .setNegativeButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                Spinner districtSpinner = findViewById(R.id.district);
+                TextView errorText = (TextView)districtSpinner.getSelectedView();
+                if(errorText != null){
+                    errorText.setError("Thiếu Quận/Huyện.");
+                }
                 valid = false;
             }
             if(ward == null){
-                new AlertDialog.Builder(CreateSessionActivity.this)
-                        .setMessage("Vui lòng chọn Xã/Phường.")
-                        .setNegativeButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                Spinner wardSpinner = findViewById(R.id.ward);
+                TextView errorText = (TextView)wardSpinner.getSelectedView();
+                if(errorText != null){
+                    errorText.setError("Thiếu Quận/Huyện.");
+                }
                 valid = false;
             }
             if(type == null){
-                new AlertDialog.Builder(CreateSessionActivity.this)
-                        .setMessage("Vui lòng chọn Loại xét nghiệm.")
-                        .setNegativeButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                Spinner typeSpinner = findViewById(R.id.type);
+                TextView errorText = (TextView)typeSpinner.getSelectedView();
+                if(errorText != null){
+                    errorText.setError("Thiếu Loại xét nghiệm.");
+                }
                 valid = false;
             }
-            if(type.ID == 1){
+            if(type == null || type.ID == 1){
                 if(target1 == null){
-                    new AlertDialog.Builder(CreateSessionActivity.this)
-                            .setMessage("Vui lòng chọn Đối tượng.")
-                            .setNegativeButton(android.R.string.ok, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    Spinner target1Spinner = findViewById(R.id.target1);
+                    TextView errorText = (TextView)target1Spinner.getSelectedView();
+                    if(errorText != null){
+                        errorText.setError("Thiếu Đối tượng.");
+                    }
                     valid = false;
                 }
             } else {
                 if(cause2 == null){
-                    new AlertDialog.Builder(CreateSessionActivity.this)
-                            .setMessage("Vui lòng chọn Lý do.")
-                            .setNegativeButton(android.R.string.ok, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    Spinner cause2Spinner = findViewById(R.id.cause2);
+                    TextView errorText = (TextView)cause2Spinner.getSelectedView();
+                    if(errorText != null){
+                        errorText.setError("Thiếu Lý do.");
+                    }
                     valid = false;
                 }
                 if(target2 == null){
-                    new AlertDialog.Builder(CreateSessionActivity.this)
-                            .setMessage("Vui lòng chọn Đối tượng.")
-                            .setNegativeButton(android.R.string.ok, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    Spinner target2Spinner = findViewById(R.id.target2);
+                    TextView errorText = (TextView)target2Spinner.getSelectedView();
+                    if(errorText != null){
+                        errorText.setError("Thiếu Đối tượng.");
+                    }
                     valid = false;
                 }
             }
@@ -584,11 +584,29 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                 etYear.setError("Năm không hợp lệ.");
                 valid = false;
             }
+
+            if(!valid){
+                new AlertDialog.Builder(CreateSessionActivity.this)
+                        .setMessage("Vui lòng nhập đầy đủ thông tin.")
+                        .setNegativeButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return;
+            }
+
             Calendar cal = Calendar.getInstance();
             cal.setLenient(false);
-            cal.set(year, month - 1, day);
+            cal.set(year, month - 1, day, hour, minute);
             try {
                 cal.getTime();
+                if(cal.getTime().compareTo(Calendar.getInstance().getTime()) < 0){
+                    new AlertDialog.Builder(CreateSessionActivity.this)
+                            .setMessage("Thời gian phiên xét nghiệm phải sau thời điểm hiện tại.")
+                            .setNegativeButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
             }
             catch (Exception e) {
                 new AlertDialog.Builder(CreateSessionActivity.this)
@@ -596,9 +614,6 @@ public class CreateSessionActivity extends AppCompatActivity implements IDatePic
                         .setNegativeButton(android.R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-                valid = false;
-            }
-            if(!valid){
                 return;
             }
 
