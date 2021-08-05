@@ -3,20 +3,20 @@
 <vector
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="321dp"
-    android:height="80dp"
-    android:viewportWidth="321"
-    android:viewportHeight="80"
+    android:width="211dp"
+    android:height="49dp"
+    android:viewportWidth="211"
+    android:viewportHeight="49"
     >
 
     <group>
 
         <clip-path
-            android:pathData="M10 0H311C316.523 0 321 4.47715 321 10V70C321 75.5228 316.523 80 311 80H10C4.47715 80 0 75.5228 0 70V10C0 4.47715 4.47715 0 10 0Z"
+            android:pathData="M20 0H191C202.046 0 211 8.95431 211 20V29C211 40.0457 202.046 49 191 49H20C8.95431 49 0 40.0457 0 29V20C0 8.95431 8.95431 0 20 0Z"
             />
 
         <path
-            android:pathData="M0 0V80H321V0"
+            android:pathData="M0 0V49H211V0"
             android:fillColor="#FFFFFF"
             />
 

@@ -7,6 +7,7 @@
     tools:context=".MainStaffActivity">
     <!--Full Screen Progress Layout-->
     <include
+        android:visibility="gone"
         android:id="@+id/my_loading_layout_staff"
         layout="@layout/my_loading_layout" />
     <ScrollView
@@ -190,7 +191,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

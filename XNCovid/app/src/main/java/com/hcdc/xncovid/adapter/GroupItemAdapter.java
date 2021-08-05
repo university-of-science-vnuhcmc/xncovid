@@ -104,7 +104,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
                             public void onClick(DialogInterface dialog, int which) {
                                 key.remove(obj.getUid());
                                 list.remove(position); //or some other task
-                                ((TextView) ((Activity) context).findViewById(R.id.txt_count)).setText("("+getCount()+"/10)");
+                                ((TextView) ((Activity) context).findViewById(R.id.txt_count)).setText(getCount()+"/" + _maxGroup);
                                 if(getCount() < 1){
                                     ((SeekBar) ((Activity) context).findViewById(R.id.startGroup)).setVisibility(View.GONE);
                                     ((LinearLayout) ((Activity) context).findViewById(R.id.startGroupDisable)).setVisibility(View.VISIBLE);

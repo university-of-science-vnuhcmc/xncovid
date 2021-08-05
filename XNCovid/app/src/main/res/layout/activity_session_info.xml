@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:background="@color/background_color">
     <include
+        android:visibility="gone"
         android:id="@+id/my_loading_layout_info"
         layout="@layout/my_loading_layout" />
     <ScrollView
@@ -14,7 +15,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
             android:orientation="vertical" >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,6 +34,8 @@
 
             </LinearLayout>
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,6 +61,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -203,6 +207,8 @@
                     />
             </LinearLayout>
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -269,6 +275,8 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -457,6 +465,8 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -481,6 +491,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:layout_marginBottom="10dp"
                 android:layout_width="197dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

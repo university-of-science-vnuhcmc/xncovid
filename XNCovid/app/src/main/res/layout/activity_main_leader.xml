@@ -190,7 +190,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginRight="13dp"
+                android:layout_marginLeft="13dp">
 
                 <LinearLayout android:id="@+id/sessionInfo"
                     android:background="@drawable/rectangle_main_info_disable"
