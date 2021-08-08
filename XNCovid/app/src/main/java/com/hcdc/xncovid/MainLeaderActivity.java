@@ -343,7 +343,7 @@ public class MainLeaderActivity extends AppCompatActivity {
                                 Log.w("endSession", ex.toString());
                             }
                         }
-                    }, MainLeaderActivity.this);
+                    }, MainLeaderActivity.this, null);
         } catch (Exception ex){
             Log.w("endSession", ex.toString());
             new AlertDialog.Builder(this)

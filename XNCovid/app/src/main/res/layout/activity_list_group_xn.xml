@@ -35,16 +35,33 @@
                 android:lineSpacingExtra="7sp"
                 android:translationY="-3.28sp"
                 android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/txt_xncode"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="U07T26200501"
-                android:textAppearance="@style/black_20"
-               android:layout_below="@+id/label_xncode"
-                android:lineSpacingExtra="7sp"
-                android:translationY="-3.28sp"
-                android:textStyle="bold"/>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/label_xncode">
+                <TextView
+                    android:id="@+id/txt_xncode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="U07T26200501"
+                    android:textAppearance="@style/black_20"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentLeft="true"/>
+                <!-- image 7 -->
+                <Button
+                    android:id="@+id/btn_edit_maxn"
+                    android:layout_toRightOf="@+id/txt_xncode"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginLeft="17dp"
+                    android:background="@drawable/ic_pencil"
+                   android:layout_centerInParent="true"
+                    android:translationY="-3.28sp"
+                    />
+            </RelativeLayout>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -66,17 +83,33 @@
                 android:lineSpacingExtra="7sp"
                 android:translationY="-3.28sp"
                 android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/txt_count"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="1/10"
-                android:gravity="center"
-                android:textAppearance="@style/red_20"
-                android:layout_below="@+id/label_count_xn"
-                android:lineSpacingExtra="7sp"
-                android:translationY="-3.28sp"
-                android:textStyle="bold"/>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/label_count_xn">
+                <TextView
+                    android:id="@+id/txt_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/10"
+                    android:gravity="center"
+                    android:textAppearance="@style/red_20"
+                    android:lineSpacingExtra="7sp"
+                    android:translationY="-3.28sp"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"/>
+                <Button
+                    android:id="@+id/btn_edit_count"
+                    android:layout_toRightOf="@+id/txt_count"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginLeft="17dp"
+                    android:background="@drawable/ic_pencil"
+                    android:layout_centerInParent="true"
+                    android:translationY="-3.28sp"
+                    />
+            </RelativeLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>
@@ -126,9 +159,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginEnd="70dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="17dp"
             android:background="@drawable/rectangle_11"
             android:gravity="center_vertical"
@@ -147,12 +180,12 @@
                 android:id="@+id/qu_t_th_m_"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="7dp"
+                android:layout_marginLeft="17dp"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/ic_scan_qr"
-                android:text="+ Quét để thêm ..."
+                android:text="+ Thêm đối tượng lấy mẫu"
                 android:textAppearance="@style/black_18"
-                android:gravity="center"
+                android:gravity="left|center_vertical"
                 />
         </RelativeLayout>
     </RelativeLayout>

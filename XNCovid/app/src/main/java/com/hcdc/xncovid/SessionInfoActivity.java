@@ -219,7 +219,7 @@ public class SessionInfoActivity extends AppCompatActivity {
                                               try{
                                                   JoinTestSessionRes res = (JoinTestSessionRes) response;
                                                   if(res.ReturnCode == 1){
-                                                      ((MyApplication) getApplication()).setGroupMaxCount(0);
+                                                      ((MyApplication) getApplication()).setGroupMaxCount(10);
                                                       ((MyApplication) getApplication()).setDefaultMaxGroup(false);
                                                       StartMainStaffAcitivity();
                                                   }   else if(res.ReturnCode == -32) //session da ket thuc

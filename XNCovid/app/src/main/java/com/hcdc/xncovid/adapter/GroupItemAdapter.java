@@ -115,7 +115,7 @@ public class GroupItemAdapter extends BaseAdapter implements ListAdapter {
                                 }
                                 notifyDataSetChanged();
                             }
-                        }, null, context);
+                        }, null, context, null);
 
 
             }

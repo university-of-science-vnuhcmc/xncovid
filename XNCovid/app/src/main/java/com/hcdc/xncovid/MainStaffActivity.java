@@ -170,6 +170,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
             time.setText(timeFormat.format(objSession.getTestingDate()));
             sessionTypeName.setText(objSession.CovidTestingSessionTypeName);
             leader.setText(objSession.Account);
+
             if(objSession.CovidTestingSessionTypeID == 1) //giam sat
             {
                 target_xn_giamsat.setText(objSession.CovidTestingSessionObjectName);
@@ -377,6 +378,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                                 }
                                 myapp.setSession(objSession);
                                 sessionId = res.Session.SessionID + "";
+                                ((MyApplication) getApplication()).setGroupMaxCount(10);
                                 SetupActivit(res.ReturnCode);
                             }else {
                                 Log.w("checkAccount", "Session return null");
@@ -491,7 +493,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                     } catch (Exception ex){
                         Log.w("endSession", ex.toString());
                     }
-                }}, MainStaffActivity.this);
+                }}, MainStaffActivity.this, null);
 
         }catch (Exception e){
             Log.e("endSession", e.toString(), e);
@@ -542,7 +544,7 @@ private  TextView title_target1, title_cause, title_cause2, title_target2, title
                             public void onClick(DialogInterface dialog, int which) {
                                 return;
                             }
-                            }, MainStaffActivity.this);
+                            }, MainStaffActivity.this, null);
             }
 
 

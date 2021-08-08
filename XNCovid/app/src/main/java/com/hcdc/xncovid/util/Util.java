@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,7 +15,8 @@ import com.hcdc.xncovid.R;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Util  {
-    public void showMessage(String title, String subtitle, String message, String okLabel, String cancelLabel, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener, Context context) {
+    public void showMessage(String title, String subtitle, String message, String okLabel, String cancelLabel, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener, Context context,
+                            Drawable drawIcon) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         // set the custom layout
         final View customLayout
@@ -25,6 +27,14 @@ public class Util  {
         final TextView txtTitle = customLayout.findViewById(R.id.dialog_title);
         final TextView txtSubTitle = customLayout.findViewById(R.id.dialog_subtitle);
         final TextView txtcontent = customLayout.findViewById(R.id.content_1);
+        final  View icDialog = customLayout.findViewById(R.id.ic_dialog);
+       if(icDialog != null){
+           icDialog.setBackground(drawIcon);
+           icDialog.setVisibility(View.VISIBLE);
+       }else {
+           icDialog.setVisibility(View.GONE);
+       }
+
 
         txtTitle.setText(android.text.Html.fromHtml(title));
         txtSubTitle.setText(android.text.Html.fromHtml(subtitle));

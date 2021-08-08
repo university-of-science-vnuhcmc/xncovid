@@ -13,7 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class ConfirmXNCodeActivity extends AppCompatActivity {
-    String xn_session, session_code;
+    String xn_session;
+    int grouped_count;
     private TextView xn_code;
     private Button btnConfirm;
     private EditText _maxGroup;
@@ -32,15 +33,17 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
             //if(getIntent().hasExtra("session_code")){
             //    session_code = getIntent().getExtras().getString("session_code");
             //}
+            grouped_count = getIntent().getExtras().getInt("grouped_count");
             _maxGroup =(EditText) findViewById(R.id.input_max_group);
             _isDefault =(CheckBox) findViewById(R.id.checkbox_id);
             int groupd_count = ((MyApplication) getApplication()).getGroupMaxCount();
             isDefault = ((MyApplication) getApplication()).isDefaultMaxGroup();
-            if(groupd_count < 1 || isDefault == false){
-                _maxGroup.setText(10+"");
-            }else {
-                _maxGroup.setText(groupd_count+"");
-            }
+           // if(groupd_count < 1 || isDefault == false){
+           //     _maxGroup.setText(10+"");
+            // }else {
+           //     _maxGroup.setText(groupd_count+"");
+           // }
+            _maxGroup.setText(groupd_count+"");
             _isDefault.setChecked(isDefault);
         }catch (Exception e){
             Log.e("ConfirmXNCodeActivity", e.toString(), e);
@@ -83,13 +86,25 @@ public class ConfirmXNCodeActivity extends AppCompatActivity {
                             .show();
                     return;
                 }
+
+                if(_max < grouped_count){
+                    new AlertDialog.Builder(ConfirmXNCodeActivity.this)
+                            .setMessage("Vui lòng nhập số lượng mẫu Lớn hơn hoặc bằng số lượngg mẫu đã gộp ("+ grouped_count +" mẫu).")
+                            .setNegativeButton("OK", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
+
                 ((MyApplication) getApplication()).setGroupMaxCount(_max);
                 isDefault = _isDefault.isChecked();
                 ((MyApplication) getApplication()).setDefaultMaxGroup(isDefault);
-                Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);
-                intent.putExtra("xn_session", xn_session);
+               // Intent intent = new Intent(getApplicationContext(), ListGroupXnActivity.class);
+                //intent.putExtra("xn_session", xn_session);
                 //intent.putExtra("session_code", session_code);
-                startActivity(intent);
+                //startActivity(intent);
+                Intent intent=new Intent();
+                setResult(4,intent);
                 finish();
             }
         });

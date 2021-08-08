@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -57,6 +59,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
     RelativeLayout btnScan;
     int _maxGroup;
     private boolean flagSlideButton;
+    Button btnEditXnCode, btnEditCountMax;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +152,29 @@ public class ListGroupXnActivity extends AppCompatActivity {
                 }
             });
             txt_total.setText(groupAdapter.getCount()+"/"+_maxGroup);
+            btnEditXnCode = findViewById(R.id.btn_edit_maxn);
+            btnEditXnCode.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(ListGroupXnActivity.this,ScanSessionActivity.class);
+                    intent.putExtra("scan_qr_type", 3); //scan edit ma xn
+                    startActivityForResult(intent, 3);// Activity is started with requestCode 2
+
+                }
+            });
+
+            btnEditCountMax = findViewById(R.id.btn_edit_count);
+            btnEditCountMax.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(ListGroupXnActivity.this,ConfirmXNCodeActivity.class);
+                    intent.putExtra("xn_session", xn_session); //scan edit so luong toi da gop
+                    intent.putExtra("grouped_count", groupAdapter.getCount()); //scan to khai bao y te
+                    startActivityForResult(intent, 4);// Activity is started with requestCode 2
+
+                }
+            });
+
             setUIRef();
             hideLoading();
         }catch (Exception e){
@@ -164,7 +190,8 @@ public class ListGroupXnActivity extends AppCompatActivity {
 
     public void startGroup() {
 
-        if(groupAdapter.getCount() < _maxGroup){
+        if(groupAdapter.getCount() < _maxGroup)
+        {
             String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
             String htmlcontent = "<font color='#FF0000'><i>! Hiện chỉ mới có "
                     +groupAdapter.getCount()
@@ -189,7 +216,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             startGroup.setProgress(0);
                             isStop = false;
                         }
-                    }, ListGroupXnActivity.this);
+                    }, ListGroupXnActivity.this, this.getResources().getDrawable(R.drawable.ic_warnning));
         }else {
             String txtUId = "<font color='#001AFF'><b>"+xn_session+"</b></font>";
             String htmlcontent = "Đã đủ "
@@ -215,7 +242,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             startGroup.setProgress(0);
                             isStop = false;
                         }
-                    }, ListGroupXnActivity.this);
+                    }, ListGroupXnActivity.this, null);
         }
     }
 
@@ -225,7 +252,14 @@ public class ListGroupXnActivity extends AppCompatActivity {
         try{
             if(session != null){
                 session_code = session.SessionID + "";
-
+                if(_maxGroup == 1){
+                    //neu max 1 thi tu dong quet lun
+                    Intent intent =new Intent(ListGroupXnActivity.this,ScanSessionActivity.class);
+                    intent.putExtra("scan_qr_type", 2); //scan to khai bao y te
+                    intent.putExtra("xn_code", xn_session); //scan to khai bao y te
+                    intent.putExtra("grouped_count", groupAdapter.getCount()); //scan to khai bao y te
+                    startActivityForResult(intent, 2);// Activity is started with requestCode 2
+                }
             }else {
                 new AlertDialog.Builder(ListGroupXnActivity.this)
                         .setMessage("Không tìm thấy phiên xét nghiệm tham gia.")
@@ -345,7 +379,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                     strcontent,
                                     null,
                                     "OK",
-                                    null, null, ListGroupXnActivity.this);
+                                    null, null, ListGroupXnActivity.this, null);
                             flagSlideButton = false;
                             startGroup.setProgress(0);
                             isOK[0] = false;
@@ -443,7 +477,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                         "<p>Vui lòng quay lại để quét mã khác.",
                                 null,
                                 "OK",
-                                null, null, ListGroupXnActivity.this);
+                                null, null, ListGroupXnActivity.this, null);
                     }
                     else {
                         newObj = new GroupedUserInfo(kbyt_id, isOnline);
@@ -467,11 +501,43 @@ public class ListGroupXnActivity extends AppCompatActivity {
                             AddNewGroupItem(newObj);
                         }
                         groupAdapter.notifyDataSetChanged();
-                        setEnableStartGroup(true);
+                        if(groupAdapter.getCount() > 0){
+                            setEnableStartGroup(true);
+                        }
+                        if(groupAdapter.getCount() > 0 && _maxGroup == 1 &&groupAdapter.getCount() == _maxGroup){
+                            startGroup();
+                        }
+
                     }
 
                 }
 
+            }
+            if(requestCode == 3) //Edit Ma XN
+            {
+                xn_session = data.getStringExtra("xn_code");;
+                xn_code.setText(xn_session);
+                groupAdapter.notifyDataSetChanged();
+            }
+
+            if(requestCode == 4) //Edit So luongn gop
+            {
+                _maxGroup = ((MyApplication) getApplication()).getGroupMaxCount();
+                txt_total.setText(groupAdapter.getCount()+"/"+_maxGroup);
+                if(groupAdapter.getCount() >= _maxGroup){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        txt_total.setTextAppearance(R.style.blue_20);
+                    }else {
+                        txt_total.setTextAppearance(this , R.style.blue_20);
+                    }
+                    btnScan.setVisibility(View.GONE);
+                }else {
+                    btnScan.setVisibility(View.VISIBLE);
+                }
+                groupAdapter.notifyDataSetChanged();
+                if(groupAdapter.getCount() > 0){
+                    setEnableStartGroup(true);
+                }
             }
         } catch (Exception e){
             Log.e("onActivityResult", e.toString(), e);

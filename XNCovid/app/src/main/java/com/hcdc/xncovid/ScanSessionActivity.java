@@ -192,7 +192,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                 }
             });
 
-        }else  if(scanQRType == 1) // Quet ma XN
+        }else  if(scanQRType == 1 || scanQRType == 3) // Quet ma XN
         {
             txtScan_title.setText("Quét mã xét nghiệm");
             lReadQR.setVisibility(View.GONE);
@@ -285,7 +285,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                                         "<p>Vui lòng quay lại để quét mã khác.",
                                 null,
                                 "OK",
-                                null, null, ScanSessionActivity.this);
+                                null, null, ScanSessionActivity.this, null);
                         onResume();
                         return;
                     }
@@ -297,7 +297,7 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
                                         "<p>Vui lòng quay lại để quét mã khác.",
                                 null,
                                 "OK",
-                                null, null, ScanSessionActivity.this);
+                                null, null, ScanSessionActivity.this, null);
                         onResume();
                         return;
                     }
@@ -326,12 +326,8 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             case 0:
                 tmpclass = SessionInfoActivity.class;
                 break;
-            case 1:
-                tmpclass = ConfirmXNCodeActivity.class;
-                break;
-
-            case 2:
-                tmpclass = ConfirmXNCodeActivity.class;
+            case 1: //Scan QR ma XN
+                tmpclass = ListGroupXnActivity.class;
                 break;
         }
         if(scanQRType == 2){
@@ -341,14 +337,21 @@ public class ScanSessionActivity extends AppCompatActivity implements ZXingScann
             //intent.putExtra("xn_session", xn_session);
             setResult(2,intent);
             finish();//finishing activity
-        }else {
+        }else if(scanQRType == 3) //edit ma xn
+        {
+            Intent intent=new Intent();
+            intent.putExtra("xn_code", scanContent);
+            //intent.putExtra("xn_session", xn_session);
+            setResult(3,intent);
+            finish();//finishing activity
+        }
+        else {
             Intent intent = new Intent(getApplicationContext(), tmpclass);
             intent.putExtra("xn_session", scanContent);
             //intent.putExtra("session_code", xn_session);
             startActivity(intent);
             finish();
         }
-
     }
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
