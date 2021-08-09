@@ -79,11 +79,26 @@ namespace CovidService.Controllers
                     foreach (DataRow objRow in objDT.Rows)
                     {
                         info.SessionName = objRow["CovidTestingSessionName"].ToString();
-                        info.TestingDate = DateTime.Parse(objRow["CreateDate"].ToString()).ToString("yyyyMMddHHmm");
+                        info.TestingDate = DateTime.Parse(objRow["FromTestingDate"].ToString()).ToString("yyyyMMddHHmm");
                         info.Address = objRow["Address"].ToString();
                         info.Purpose = objRow["Note"].ToString();
                         info.SessionID = long.Parse(objRow["CovidTestingSessionID"].ToString());
                         info.Account = objRow["FullName"].ToString();
+                        if (objRow["CovidTestingSessionType"] != null && objRow["CovidTestingSessionType"] != DBNull.Value)
+                        {
+                            info.CovidTestingSessionTypeID = int.Parse(objRow["CovidTestingSessionType"].ToString());
+                        }
+                        if (objRow["DesignatedReason"] != null && objRow["DesignatedReason"] != DBNull.Value)
+                        {
+                            info.DesignatedReasonID = int.Parse(objRow["DesignatedReason"].ToString());
+                        }
+                        if (objRow["CovidTestingSessionObject"] != null && objRow["CovidTestingSessionObject"] != DBNull.Value)
+                        {
+                            info.CovidTestingSessionObjectID = int.Parse(objRow["CovidTestingSessionObject"].ToString());
+                        }
+                        info.CovidTestingSessionObjectName = objRow["CovidTestingSessionObjectName"] == null || objRow["CovidTestingSessionObjectName"] == DBNull.Value ? "" : objRow["CovidTestingSessionObjectName"].ToString();
+                        info.CovidTestingSessionTypeName = objRow["CovidTestingSessionTypeName"] == null || objRow["CovidTestingSessionTypeName"] == DBNull.Value ? "" : objRow["CovidTestingSessionTypeName"].ToString();
+                        info.DesignatedReasonName = objRow["DesignatedReasonName"] == null || objRow["DesignatedReasonName"] == DBNull.Value ? "" : objRow["DesignatedReasonName"].ToString();
                     }
                     foreach (DataRow objRow in objDT2.Rows)
                     {

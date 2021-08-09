@@ -65,6 +65,7 @@ namespace CovidService.Controllers
                             string strQRCode = GetQRCode(dt);
                             objRes.ReturnCode = intReturnValue;
                             objRes.ReturnMess = strQRCode;
+                            LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GroupTest Response");
                             return objRes;
                         case -17:
                             long loSpecimenID = 0;

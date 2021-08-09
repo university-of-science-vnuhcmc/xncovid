@@ -62,10 +62,11 @@ namespace CovidService.Controllers
                     LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "GetSession Response");
                     return objRes;
                 }
-                Session objSession = new Session();
-                if(dts.Tables.Count > 0)
+                Session objSession = null;
+                DataTable dt = dts.Tables[0];
+                if (dt.Rows.Count > 0)
                 {
-                    DataTable dt = dts.Tables[0];
+                    objSession = new Session();
                     foreach (DataRow item in dt.Rows)
                     {
                         objSession.SessionID = long.Parse(item["CovidTestingSessionID"].ToString());
@@ -77,6 +78,24 @@ namespace CovidService.Controllers
                         objSession.TestingDate = DateTime.Parse(item["FromTestingDate"].ToString()).ToString("yyyyMMddHHmm");
                         objSession.Account = item["FullName"] == null || item["FullName"] == DBNull.Value ? "" : item["FullName"].ToString();
                         objSession.Purpose = item["Note"] == null || item["Note"] == DBNull.Value ? "" : item["Note"].ToString();
+                        objSession.CovidTestingSessionTypeID = int.Parse(item["CovidTestingSessionType"].ToString());
+                        objSession.DesignatedReasonID = int.Parse(item["DesignatedReason"].ToString());
+                        objSession.CovidTestingSessionObjectID = int.Parse(item["CovidTestingSessionObject"].ToString());
+                        objSession.CovidTestingSessionObjectName = item["CovidTestingSessionObjectName"] == null || item["CovidTestingSessionObjectName"] == DBNull.Value ? "" : item["CovidTestingSessionObjectName"].ToString();
+                        objSession.CovidTestingSessionTypeName = item["CovidTestingSessionTypeName"] == null || item["CovidTestingSessionTypeName"] == DBNull.Value ? "" : item["CovidTestingSessionTypeName"].ToString();
+                        objSession.DesignatedReasonName = item["DesignatedReasonName"] == null || item["DesignatedReasonName"] == DBNull.Value ? "" : item["DesignatedReasonName"].ToString();
+                        if (item["CovidTestingSessionType"] != null && item["CovidTestingSessionType"] != DBNull.Value)
+                        {
+                            objSession.CovidTestingSessionTypeID = int.Parse(item["CovidTestingSessionType"].ToString());
+                        }
+                        if (item["DesignatedReason"] != null && item["DesignatedReason"] != DBNull.Value)
+                        {
+                            objSession.DesignatedReasonID = int.Parse(item["DesignatedReason"].ToString());
+                        }
+                        if (item["CovidTestingSessionObject"] != null && item["CovidTestingSessionObject"] != DBNull.Value)
+                        {
+                            objSession.CovidTestingSessionObjectID = int.Parse(item["CovidTestingSessionObject"].ToString());
+                        }
                     }
                 }
                 objRes.Data = objSession;
