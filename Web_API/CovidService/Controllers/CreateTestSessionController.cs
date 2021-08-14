@@ -26,7 +26,7 @@ namespace CovidService.Controllers
                 {
                     objRes.ReturnCode = 99;
                     objRes.ReturnMess = "Invalid Email or Token";
-                    LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
+                    //LogWriter.WriteLogMsg(JsonConvert.SerializeObject(objRes), "CreateTestSession Response");
                     return objRes;
                 }
                 if (objReq == null)
