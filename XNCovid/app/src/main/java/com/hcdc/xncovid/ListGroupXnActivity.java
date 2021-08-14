@@ -375,7 +375,7 @@ public class ListGroupXnActivity extends AppCompatActivity {
                                 strcontent += "<br/><font color='#FF0000'><i>" + uid + "</i></font>";
                             }
                             new Util().showMessage("Mã định danh đã tồn tại trong các mẫu gộp của phiên xét nghiệm.",
-                                    session.SessionName,
+                                    "<font color='#001AFF'><b>"+session.SessionName+"</b></font>",
                                     strcontent,
                                     null,
                                     "OK",
